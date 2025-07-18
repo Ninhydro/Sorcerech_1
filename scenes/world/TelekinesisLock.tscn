@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dovsk1rohufn5"]
+
+[ext_resource type="Script" path="res://scripts/world/TelekinesisLock.gd" id="1_ps6ry"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rml8j"]
+
+[node name="TelekinesisLock" type="Area2D"]
+script = ExtResource("1_ps6ry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rml8j")

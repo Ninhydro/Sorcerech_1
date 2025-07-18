@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c3vbpj5lg7j01"]
+
+[sub_resource type="SystemFont" id="SystemFont_ryvru"]
+
+[resource]
+default_font = SubResource("SystemFont_ryvru")
+default_font_size = 8

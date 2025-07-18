@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1jatthcofpju"]
+
+[ext_resource type="Script" path="res://scripts/UI/MainMenu.gd" id="1_iaon1"]
+
+[node name="MainMenu" type="CanvasLayer" groups=["UI"]]
+layer = 2
+script = ExtResource("1_iaon1")
+
+[node name="UIContainer" type="MarginContainer" parent="." groups=["UI"]]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="UIContainer" groups=["UI"]]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title" type="Label" parent="UIContainer/ButtonContainer" groups=["UI"]]
+layout_mode = 2
+text = "SORCERECH"
+horizontal_alignment = 1
+
+[node name="NewGameButton" type="Button" parent="UIContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../ExitButton")
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_right = NodePath("../ContinueButton")
+focus_neighbor_bottom = NodePath("../ContinueButton")
+focus_next = NodePath("../ContinueButton")
+focus_previous = NodePath("../ExitButton")
+theme_override_font_sizes/font_size = 10
+text = "NEW GAME"
+
+[node name="ContinueButton" type="Button" parent="UIContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../NewGameButton")
+focus_neighbor_top = NodePath("../NewGameButton")
+focus_neighbor_right = NodePath("../OptionButton")
+focus_neighbor_bottom = NodePath("../OptionButton")
+focus_next = NodePath("../OptionButton")
+focus_previous = NodePath("../NewGameButton")
+theme_override_font_sizes/font_size = 10
+text = "CONTINUE"
+
+[node name="OptionButton" type="Button" parent="UIContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../ContinueButton")
+focus_neighbor_top = NodePath("../ContinueButton")
+focus_neighbor_right = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+focus_next = NodePath("../ExitButton")
+focus_previous = NodePath("../ContinueButton")
+theme_override_font_sizes/font_size = 10
+text = "OPTION"
+
+[node name="ExitButton" type="Button" parent="UIContainer/ButtonContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../OptionButton")
+focus_neighbor_top = NodePath("../OptionButton")
+focus_neighbor_right = NodePath("../NewGameButton")
+focus_neighbor_bottom = NodePath("../NewGameButton")
+focus_next = NodePath("../NewGameButton")
+focus_previous = NodePath("../OptionButton")
+theme_override_font_sizes/font_size = 10
+text = "EXIT"

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bs105i3gcljkr"]
+
+[ext_resource type="Script" path="res://scripts/world/SaveSpot.gd" id="1_5qxij"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4road"]
+
+[node name="SaveSpot" type="Area2D"]
+script = ExtResource("1_5qxij")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_4road")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -53.0
+offset_top = -46.0
+offset_right = 62.0
+offset_bottom = -23.0
+text = "Press Yes to Save"

@@ -1,0 +1,1500 @@
+[gd_scene load_steps=192 format=3 uid="uid://cov3kryfnxah6"]
+
+[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_6nqbo"]
+[ext_resource type="Texture2D" uid="uid://cjuodrpw4jqfs" path="res://assets image/placeholder/Characters/Players/Foxy/Spritesheet.png" id="2_r0h1q"]
+[ext_resource type="Script" path="res://scripts/player/TelekinesisController.gd" id="3_epc14"]
+[ext_resource type="PackedScene" uid="uid://bktget78trv7d" path="res://scenes/ui/TelekinesisUI.tscn" id="4_nueqj"]
+[ext_resource type="Texture2D" uid="uid://cfx7o4ov6w8i0" path="res://assets image/placeholder/Props Items and VFX/acorn/Sprites/acorn-2.png" id="5_ultm4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tdn82"]
+size = Vector2(28, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_almx2"]
+size = Vector2(47, 35)
+
+[sub_resource type="Animation" id="Animation_777v1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xyj4e"]
+resource_name = "ability_cyber"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [54, 55, 56, 57]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_omnxe"]
+resource_name = "ability_magus"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [54, 55, 56, 57]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_l8qfp"]
+resource_name = "ability_ult_cyber"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [54, 55, 56, 57]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0.94902, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_65g2e"]
+resource_name = "ability_ult_magus"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [54, 55, 56, 57]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.121569, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qhi0a"]
+resource_name = "attack_cyber"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [18, 19, 20]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4w5gm"]
+resource_name = "attack_magus"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [18, 19, 20]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_pqtmj"]
+resource_name = "attack_ult_cyber"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [18, 19, 20]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0.917647, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4f5ik"]
+resource_name = "attack_ult_magus"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [18, 19, 20]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.0470588, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6t7uv"]
+resource_name = "die_cyber"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [42]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_yte1l"]
+resource_name = "die_magus"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [42]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_uhl5a"]
+resource_name = "die_normal"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [42]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e8cvk"]
+resource_name = "die_ult_cyber"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [42]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.0196078, 0, 0.890196, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qiti0"]
+resource_name = "die_ult_magus"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [42]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.0470588, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fkblh"]
+resource_name = "hurt_cyber"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [24, 25]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2ll8t"]
+resource_name = "hurt_magus"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [24, 25]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_evipm"]
+resource_name = "hurt_normal"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [24, 25]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_iet05"]
+resource_name = "hurt_ult_cyber"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [24, 25]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.0156863, 0.0235294, 0.717647, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tr2gw"]
+resource_name = "hurt_ult_magus"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [24, 25]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.87451, 0.054902, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wl60d"]
+resource_name = "idle_cyber"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.027451, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_yj25c"]
+resource_name = "idle_magus"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_elpdu"]
+resource_name = "idle_normal"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_g5v84"]
+resource_name = "idle_ult_cyber"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0.172549, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_dist3"]
+resource_name = "idle_ult_magus"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.811765, 0.160784, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2cbi2"]
+resource_name = "jump_cyber"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [30]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.027451, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ocsss"]
+resource_name = "jump_magus"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [30]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_n3oc7"]
+resource_name = "jump_normal"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [30]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fk8te"]
+resource_name = "jump_ult_cyber"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [30]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0.243137, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ym8xw"]
+resource_name = "jump_ult_magus"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [30]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.243137, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_jjgji"]
+resource_name = "run_cyber"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.152941, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_oq7wk"]
+resource_name = "run_magus"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5ota3"]
+resource_name = "run_normal"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6pjti"]
+resource_name = "run_ult_cyber"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0.219608, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_erlgn"]
+resource_name = "run_ult_magus"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.156863, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8o4op"]
+_data = {
+"RESET": SubResource("Animation_777v1"),
+"ability_cyber": SubResource("Animation_xyj4e"),
+"ability_magus": SubResource("Animation_omnxe"),
+"ability_ult_cyber": SubResource("Animation_l8qfp"),
+"ability_ult_magus": SubResource("Animation_65g2e"),
+"attack_cyber": SubResource("Animation_qhi0a"),
+"attack_magus": SubResource("Animation_4w5gm"),
+"attack_ult_cyber": SubResource("Animation_pqtmj"),
+"attack_ult_magus": SubResource("Animation_4f5ik"),
+"die_cyber": SubResource("Animation_6t7uv"),
+"die_magus": SubResource("Animation_yte1l"),
+"die_normal": SubResource("Animation_uhl5a"),
+"die_ult_cyber": SubResource("Animation_e8cvk"),
+"die_ult_magus": SubResource("Animation_qiti0"),
+"hurt_cyber": SubResource("Animation_fkblh"),
+"hurt_magus": SubResource("Animation_2ll8t"),
+"hurt_normal": SubResource("Animation_evipm"),
+"hurt_ult_cyber": SubResource("Animation_iet05"),
+"hurt_ult_magus": SubResource("Animation_tr2gw"),
+"idle_cyber": SubResource("Animation_wl60d"),
+"idle_magus": SubResource("Animation_yj25c"),
+"idle_normal": SubResource("Animation_elpdu"),
+"idle_ult_cyber": SubResource("Animation_g5v84"),
+"idle_ult_magus": SubResource("Animation_dist3"),
+"jump_cyber": SubResource("Animation_2cbi2"),
+"jump_magus": SubResource("Animation_ocsss"),
+"jump_normal": SubResource("Animation_n3oc7"),
+"jump_ult_cyber": SubResource("Animation_fk8te"),
+"jump_ult_magus": SubResource("Animation_ym8xw"),
+"run_cyber": SubResource("Animation_jjgji"),
+"run_magus": SubResource("Animation_oq7wk"),
+"run_normal": SubResource("Animation_5ota3"),
+"run_ult_cyber": SubResource("Animation_6pjti"),
+"run_ult_magus": SubResource("Animation_erlgn")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nh1gx"]
+animation = &"ability_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2ss65"]
+animation = &"ability_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_40alg"]
+animation = &"ability_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c14rs"]
+animation = &"ability_ult_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ehsb7"]
+animation = &"attack_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t0lso"]
+animation = &"attack_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5mvtj"]
+animation = &"attack_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mgaux"]
+animation = &"attack_ult_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8tjbv"]
+animation = &"die_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n4eb3"]
+animation = &"die_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e7fy2"]
+animation = &"die_normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4etik"]
+animation = &"die_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b3upu"]
+animation = &"die_ult_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_04drp"]
+animation = &"hurt_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vfdmb"]
+animation = &"hurt_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ku3j1"]
+animation = &"hurt_normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qq2ka"]
+animation = &"hurt_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w5l7r"]
+animation = &"hurt_ult_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fp1si"]
+animation = &"idle_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8c6yt"]
+animation = &"idle_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mb7ah"]
+animation = &"idle_normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0sej0"]
+animation = &"idle_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mfeha"]
+animation = &"idle_ult_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yjk53"]
+animation = &"jump_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yagjc"]
+animation = &"jump_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3jsb1"]
+animation = &"jump_normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mckds"]
+animation = &"jump_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3f4s2"]
+animation = &"jump_ult_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gd7l1"]
+animation = &"run_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b52ib"]
+animation = &"run_magus"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aexxs"]
+animation = &"run_normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0a2g4"]
+animation = &"run_ult_cyber"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wni3u"]
+animation = &"run_ult_magus"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_eknpu"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4my4r"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f6fru"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gywwi"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qnan1"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kdle3"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p570v"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3miky"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wr8rp"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tdj68"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rfu7u"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ck4f5"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bpym0"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h3tgc"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1kq0l"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u1gnr"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ec0fa"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xqnuk"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ntwhd"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r06ch"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3qv82"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_s3p1e"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3vyef"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fnxdi"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_d6bnd"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wsaev"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b5xvi"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_q6wtp"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3y4ei"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_terth"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hj3lh"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xwvbv"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vo3sn"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ixcrb"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_583un"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yolwt"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tj4cq"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h0ljb"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cceaw"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f4kcg"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tul8v"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jjdqf"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qdufs"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pb3ay"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p54f2"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_75swe"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6dkja"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6mfk1"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bs0v7"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f167t"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ag6qn"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_686ry"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tbyr7"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cdc12"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f6mtd"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rbuv8"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4vtty"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kiikj"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2tujh"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nhsko"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bd6t4"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3oooy"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pxblm"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2rlfs"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hn8gx"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dytc8"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_legn6"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_40imj"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cpfyo"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g64b7"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e521m"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jad2c"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gkv5e"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qsp8l"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cwa0f"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v7sbi"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qbxim"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ousgh"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ktkpw"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h0d22"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mnuuu"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p6r31"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y2f2c"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_42son"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jcaig"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3311r"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_boqim"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cngov"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dlyev"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fntlc"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hopdr"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_njj3c"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uubi4"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gspfk"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tei2g"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kddxo"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_acfme"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jm3tf"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qbfgu"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lr4sh"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_i2ta1"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rd6no"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ut3gh"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jxt4c"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nwiia"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_17dsp"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2cm06"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5ikoi"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_famdu"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x0a01"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_po3na"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5ar62"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2l10f"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_u4svu"]
+states/End/position = Vector2(1603, 479)
+states/Start/position = Vector2(165, 449)
+states/ability_cyber/node = SubResource("AnimationNodeAnimation_nh1gx")
+states/ability_cyber/position = Vector2(578, 666)
+states/ability_magus/node = SubResource("AnimationNodeAnimation_2ss65")
+states/ability_magus/position = Vector2(611, 371)
+states/ability_ult_cyber/node = SubResource("AnimationNodeAnimation_40alg")
+states/ability_ult_cyber/position = Vector2(397, 938)
+states/ability_ult_magus/node = SubResource("AnimationNodeAnimation_c14rs")
+states/ability_ult_magus/position = Vector2(428, 146)
+states/attack_cyber/node = SubResource("AnimationNodeAnimation_ehsb7")
+states/attack_cyber/position = Vector2(658, 747)
+states/attack_magus/node = SubResource("AnimationNodeAnimation_t0lso")
+states/attack_magus/position = Vector2(631, 286)
+states/attack_ult_cyber/node = SubResource("AnimationNodeAnimation_5mvtj")
+states/attack_ult_cyber/position = Vector2(491, 1072)
+states/attack_ult_magus/node = SubResource("AnimationNodeAnimation_mgaux")
+states/attack_ult_magus/position = Vector2(467, 35)
+states/die_cyber/node = SubResource("AnimationNodeAnimation_8tjbv")
+states/die_cyber/position = Vector2(1446, 578)
+states/die_magus/node = SubResource("AnimationNodeAnimation_n4eb3")
+states/die_magus/position = Vector2(1409, 398)
+states/die_normal/node = SubResource("AnimationNodeAnimation_e7fy2")
+states/die_normal/position = Vector2(1409, 492)
+states/die_ult_cyber/node = SubResource("AnimationNodeAnimation_4etik")
+states/die_ult_cyber/position = Vector2(1543, 660)
+states/die_ult_magus/node = SubResource("AnimationNodeAnimation_b3upu")
+states/die_ult_magus/position = Vector2(1522, 255)
+states/hurt_cyber/node = SubResource("AnimationNodeAnimation_04drp")
+states/hurt_cyber/position = Vector2(1300, 565)
+states/hurt_magus/node = SubResource("AnimationNodeAnimation_vfdmb")
+states/hurt_magus/position = Vector2(1278, 334)
+states/hurt_normal/node = SubResource("AnimationNodeAnimation_ku3j1")
+states/hurt_normal/position = Vector2(1224, 470)
+states/hurt_ult_cyber/node = SubResource("AnimationNodeAnimation_qq2ka")
+states/hurt_ult_cyber/position = Vector2(1370, 733)
+states/hurt_ult_magus/node = SubResource("AnimationNodeAnimation_w5l7r")
+states/hurt_ult_magus/position = Vector2(1271, 146)
+states/idle_cyber/node = SubResource("AnimationNodeAnimation_fp1si")
+states/idle_cyber/position = Vector2(811, 626)
+states/idle_magus/node = SubResource("AnimationNodeAnimation_8c6yt")
+states/idle_magus/position = Vector2(803, 470)
+states/idle_normal/node = SubResource("AnimationNodeAnimation_mb7ah")
+states/idle_normal/position = Vector2(792, 517)
+states/idle_ult_cyber/node = SubResource("AnimationNodeAnimation_0sej0")
+states/idle_ult_cyber/position = Vector2(696, 846)
+states/idle_ult_magus/node = SubResource("AnimationNodeAnimation_mfeha")
+states/idle_ult_magus/position = Vector2(744, 211)
+states/jump_cyber/node = SubResource("AnimationNodeAnimation_yjk53")
+states/jump_cyber/position = Vector2(1029, 680)
+states/jump_magus/node = SubResource("AnimationNodeAnimation_yagjc")
+states/jump_magus/position = Vector2(976, 341)
+states/jump_normal/node = SubResource("AnimationNodeAnimation_3jsb1")
+states/jump_normal/position = Vector2(915, 565)
+states/jump_ult_cyber/node = SubResource("AnimationNodeAnimation_mckds")
+states/jump_ult_cyber/position = Vector2(976, 1036)
+states/jump_ult_magus/node = SubResource("AnimationNodeAnimation_3f4s2")
+states/jump_ult_magus/position = Vector2(1022, 126)
+states/run_cyber/node = SubResource("AnimationNodeAnimation_gd7l1")
+states/run_cyber/position = Vector2(941, 755)
+states/run_magus/node = SubResource("AnimationNodeAnimation_b52ib")
+states/run_magus/position = Vector2(915, 286)
+states/run_normal/node = SubResource("AnimationNodeAnimation_aexxs")
+states/run_normal/position = Vector2(696, 565)
+states/run_ult_cyber/node = SubResource("AnimationNodeAnimation_0a2g4")
+states/run_ult_cyber/position = Vector2(993, 888)
+states/run_ult_magus/node = SubResource("AnimationNodeAnimation_wni3u")
+states/run_ult_magus/position = Vector2(900, 35)
+transitions = ["Start", "idle_normal", SubResource("AnimationNodeStateMachineTransition_eknpu"), "Start", "idle_cyber", SubResource("AnimationNodeStateMachineTransition_4my4r"), "Start", "idle_magus", SubResource("AnimationNodeStateMachineTransition_f6fru"), "Start", "idle_ult_cyber", SubResource("AnimationNodeStateMachineTransition_gywwi"), "Start", "idle_ult_magus", SubResource("AnimationNodeStateMachineTransition_qnan1"), "idle_normal", "jump_normal", SubResource("AnimationNodeStateMachineTransition_kdle3"), "jump_normal", "idle_normal", SubResource("AnimationNodeStateMachineTransition_p570v"), "idle_normal", "run_normal", SubResource("AnimationNodeStateMachineTransition_3miky"), "run_normal", "idle_normal", SubResource("AnimationNodeStateMachineTransition_wr8rp"), "idle_cyber", "ability_cyber", SubResource("AnimationNodeStateMachineTransition_tdj68"), "ability_cyber", "idle_cyber", SubResource("AnimationNodeStateMachineTransition_rfu7u"), "idle_cyber", "attack_cyber", SubResource("AnimationNodeStateMachineTransition_ck4f5"), "attack_cyber", "idle_cyber", SubResource("AnimationNodeStateMachineTransition_bpym0"), "idle_cyber", "jump_cyber", SubResource("AnimationNodeStateMachineTransition_h3tgc"), "jump_cyber", "idle_cyber", SubResource("AnimationNodeStateMachineTransition_1kq0l"), "idle_cyber", "run_cyber", SubResource("AnimationNodeStateMachineTransition_u1gnr"), "run_cyber", "idle_cyber", SubResource("AnimationNodeStateMachineTransition_ec0fa"), "idle_ult_cyber", "ability_ult_cyber", SubResource("AnimationNodeStateMachineTransition_xqnuk"), "ability_ult_cyber", "idle_ult_cyber", SubResource("AnimationNodeStateMachineTransition_ntwhd"), "idle_ult_cyber", "attack_ult_cyber", SubResource("AnimationNodeStateMachineTransition_r06ch"), "attack_ult_cyber", "idle_ult_cyber", SubResource("AnimationNodeStateMachineTransition_3qv82"), "idle_ult_cyber", "jump_ult_cyber", SubResource("AnimationNodeStateMachineTransition_s3p1e"), "jump_ult_cyber", "idle_ult_cyber", SubResource("AnimationNodeStateMachineTransition_3vyef"), "idle_ult_cyber", "run_ult_cyber", SubResource("AnimationNodeStateMachineTransition_fnxdi"), "run_ult_cyber", "idle_ult_cyber", SubResource("AnimationNodeStateMachineTransition_d6bnd"), "idle_magus", "ability_magus", SubResource("AnimationNodeStateMachineTransition_wsaev"), "ability_magus", "idle_magus", SubResource("AnimationNodeStateMachineTransition_b5xvi"), "idle_magus", "attack_magus", SubResource("AnimationNodeStateMachineTransition_q6wtp"), "attack_magus", "idle_magus", SubResource("AnimationNodeStateMachineTransition_3y4ei"), "idle_magus", "jump_magus", SubResource("AnimationNodeStateMachineTransition_terth"), "jump_magus", "idle_magus", SubResource("AnimationNodeStateMachineTransition_hj3lh"), "idle_magus", "run_magus", SubResource("AnimationNodeStateMachineTransition_xwvbv"), "run_magus", "idle_magus", SubResource("AnimationNodeStateMachineTransition_vo3sn"), "idle_ult_magus", "ability_ult_magus", SubResource("AnimationNodeStateMachineTransition_ixcrb"), "ability_ult_magus", "idle_ult_magus", SubResource("AnimationNodeStateMachineTransition_583un"), "idle_ult_magus", "attack_ult_magus", SubResource("AnimationNodeStateMachineTransition_yolwt"), "attack_ult_magus", "idle_ult_magus", SubResource("AnimationNodeStateMachineTransition_tj4cq"), "idle_ult_magus", "jump_ult_magus", SubResource("AnimationNodeStateMachineTransition_h0ljb"), "jump_ult_magus", "idle_ult_magus", SubResource("AnimationNodeStateMachineTransition_cceaw"), "idle_ult_magus", "run_ult_magus", SubResource("AnimationNodeStateMachineTransition_f4kcg"), "run_ult_magus", "idle_ult_magus", SubResource("AnimationNodeStateMachineTransition_tul8v"), "idle_ult_cyber", "hurt_ult_cyber", SubResource("AnimationNodeStateMachineTransition_jjdqf"), "hurt_ult_cyber", "idle_ult_cyber", SubResource("AnimationNodeStateMachineTransition_qdufs"), "hurt_ult_cyber", "die_ult_cyber", SubResource("AnimationNodeStateMachineTransition_pb3ay"), "die_ult_cyber", "End", SubResource("AnimationNodeStateMachineTransition_p54f2"), "idle_cyber", "hurt_cyber", SubResource("AnimationNodeStateMachineTransition_75swe"), "hurt_cyber", "idle_cyber", SubResource("AnimationNodeStateMachineTransition_6dkja"), "hurt_cyber", "die_cyber", SubResource("AnimationNodeStateMachineTransition_6mfk1"), "die_cyber", "End", SubResource("AnimationNodeStateMachineTransition_bs0v7"), "idle_normal", "hurt_normal", SubResource("AnimationNodeStateMachineTransition_f167t"), "hurt_normal", "idle_normal", SubResource("AnimationNodeStateMachineTransition_ag6qn"), "hurt_normal", "die_normal", SubResource("AnimationNodeStateMachineTransition_686ry"), "die_normal", "End", SubResource("AnimationNodeStateMachineTransition_tbyr7"), "idle_magus", "hurt_magus", SubResource("AnimationNodeStateMachineTransition_cdc12"), "hurt_magus", "idle_magus", SubResource("AnimationNodeStateMachineTransition_f6mtd"), "hurt_magus", "die_magus", SubResource("AnimationNodeStateMachineTransition_rbuv8"), "die_magus", "End", SubResource("AnimationNodeStateMachineTransition_4vtty"), "die_ult_magus", "End", SubResource("AnimationNodeStateMachineTransition_kiikj"), "run_ult_cyber", "jump_ult_cyber", SubResource("AnimationNodeStateMachineTransition_2tujh"), "run_ult_cyber", "attack_ult_cyber", SubResource("AnimationNodeStateMachineTransition_nhsko"), "run_ult_cyber", "ability_ult_cyber", SubResource("AnimationNodeStateMachineTransition_bd6t4"), "jump_ult_cyber", "run_ult_cyber", SubResource("AnimationNodeStateMachineTransition_3oooy"), "jump_ult_cyber", "attack_ult_cyber", SubResource("AnimationNodeStateMachineTransition_pxblm"), "jump_ult_cyber", "ability_ult_cyber", SubResource("AnimationNodeStateMachineTransition_2rlfs"), "attack_ult_cyber", "jump_ult_cyber", SubResource("AnimationNodeStateMachineTransition_hn8gx"), "attack_ult_cyber", "run_ult_cyber", SubResource("AnimationNodeStateMachineTransition_dytc8"), "ability_ult_cyber", "jump_ult_cyber", SubResource("AnimationNodeStateMachineTransition_legn6"), "ability_ult_cyber", "run_ult_cyber", SubResource("AnimationNodeStateMachineTransition_40imj"), "run_cyber", "jump_cyber", SubResource("AnimationNodeStateMachineTransition_cpfyo"), "jump_cyber", "run_cyber", SubResource("AnimationNodeStateMachineTransition_g64b7"), "run_cyber", "attack_cyber", SubResource("AnimationNodeStateMachineTransition_e521m"), "attack_cyber", "run_cyber", SubResource("AnimationNodeStateMachineTransition_jad2c"), "run_cyber", "ability_cyber", SubResource("AnimationNodeStateMachineTransition_gkv5e"), "ability_cyber", "run_cyber", SubResource("AnimationNodeStateMachineTransition_qsp8l"), "jump_cyber", "ability_cyber", SubResource("AnimationNodeStateMachineTransition_cwa0f"), "ability_cyber", "jump_cyber", SubResource("AnimationNodeStateMachineTransition_v7sbi"), "jump_cyber", "attack_cyber", SubResource("AnimationNodeStateMachineTransition_qbxim"), "attack_cyber", "jump_cyber", SubResource("AnimationNodeStateMachineTransition_ousgh"), "run_normal", "jump_normal", SubResource("AnimationNodeStateMachineTransition_ktkpw"), "jump_normal", "run_normal", SubResource("AnimationNodeStateMachineTransition_h0d22"), "run_magus", "jump_magus", SubResource("AnimationNodeStateMachineTransition_mnuuu"), "jump_magus", "run_magus", SubResource("AnimationNodeStateMachineTransition_p6r31"), "jump_magus", "attack_magus", SubResource("AnimationNodeStateMachineTransition_y2f2c"), "attack_magus", "jump_magus", SubResource("AnimationNodeStateMachineTransition_42son"), "ability_magus", "jump_magus", SubResource("AnimationNodeStateMachineTransition_jcaig"), "jump_magus", "ability_magus", SubResource("AnimationNodeStateMachineTransition_3311r"), "attack_magus", "run_magus", SubResource("AnimationNodeStateMachineTransition_boqim"), "run_magus", "attack_magus", SubResource("AnimationNodeStateMachineTransition_cngov"), "ability_magus", "run_magus", SubResource("AnimationNodeStateMachineTransition_dlyev"), "run_magus", "ability_magus", SubResource("AnimationNodeStateMachineTransition_fntlc"), "run_ult_magus", "jump_ult_magus", SubResource("AnimationNodeStateMachineTransition_hopdr"), "jump_ult_magus", "run_ult_magus", SubResource("AnimationNodeStateMachineTransition_njj3c"), "jump_ult_magus", "ability_ult_magus", SubResource("AnimationNodeStateMachineTransition_uubi4"), "ability_ult_magus", "jump_ult_magus", SubResource("AnimationNodeStateMachineTransition_gspfk"), "jump_ult_magus", "attack_ult_magus", SubResource("AnimationNodeStateMachineTransition_tei2g"), "attack_ult_magus", "jump_ult_magus", SubResource("AnimationNodeStateMachineTransition_kddxo"), "attack_ult_magus", "run_ult_magus", SubResource("AnimationNodeStateMachineTransition_acfme"), "run_ult_magus", "attack_ult_magus", SubResource("AnimationNodeStateMachineTransition_jm3tf"), "ability_ult_magus", "run_ult_magus", SubResource("AnimationNodeStateMachineTransition_qbfgu"), "run_ult_magus", "ability_ult_magus", SubResource("AnimationNodeStateMachineTransition_lr4sh"), "jump_magus", "hurt_magus", SubResource("AnimationNodeStateMachineTransition_i2ta1"), "run_magus", "hurt_magus", SubResource("AnimationNodeStateMachineTransition_rd6no"), "jump_normal", "hurt_normal", SubResource("AnimationNodeStateMachineTransition_ut3gh"), "run_normal", "hurt_normal", SubResource("AnimationNodeStateMachineTransition_jxt4c"), "jump_cyber", "hurt_cyber", SubResource("AnimationNodeStateMachineTransition_nwiia"), "run_cyber", "hurt_cyber", SubResource("AnimationNodeStateMachineTransition_17dsp"), "run_ult_cyber", "hurt_ult_cyber", SubResource("AnimationNodeStateMachineTransition_2cm06"), "jump_ult_cyber", "hurt_ult_cyber", SubResource("AnimationNodeStateMachineTransition_5ikoi"), "idle_ult_magus", "hurt_ult_magus", SubResource("AnimationNodeStateMachineTransition_famdu"), "hurt_ult_magus", "idle_ult_magus", SubResource("AnimationNodeStateMachineTransition_x0a01"), "jump_ult_magus", "hurt_ult_magus", SubResource("AnimationNodeStateMachineTransition_po3na"), "run_ult_magus", "hurt_ult_magus", SubResource("AnimationNodeStateMachineTransition_5ar62"), "hurt_ult_magus", "die_ult_magus", SubResource("AnimationNodeStateMachineTransition_2l10f")]
+graph_offset = Vector2(247, -132.982)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ak7ds"]
+size = Vector2(13, 14)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vlnm0"]
+
+[node name="Player" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+script = ExtResource("1_6nqbo")
+move_speed = 100.0
+
+[node name="Hitbox" type="Area2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hitbox"]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_tdn82")
+
+[node name="AttackArea" type="Area2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/AttackArea"]
+position = Vector2(-0.5, -6.5)
+shape = SubResource("RectangleShape2D_almx2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_8o4op")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_8o4op")
+}
+tree_root = SubResource("AnimationNodeStateMachine_u4svu")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(-0.5, 3)
+shape = SubResource("RectangleShape2D_ak7ds")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+modulate = Color(1, 1, 0, 1)
+material = SubResource("ShaderMaterial_vlnm0")
+position = Vector2(-4.76837e-07, 0)
+scale = Vector2(0.606061, 0.625)
+texture = ExtResource("2_r0h1q")
+hframes = 6
+vframes = 12
+frame = 1
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="GrappleLine" type="Line2D" parent="Player"]
+width = 5.0
+
+[node name="TelekinesisController" type="Node2D" parent="Player"]
+visible = false
+script = ExtResource("3_epc14")
+
+[node name="TelekinesisUI" parent="Player/TelekinesisController" instance=ExtResource("4_nueqj")]
+visible = false
+
+[node name="AimUI" type="Sprite2D" parent="Player"]
+visible = false
+position = Vector2(11, 0)
+scale = Vector2(1, 1.64286)
+texture = ExtResource("5_ultm4")
+
+[node name="FormCooldownTimer" type="Timer" parent="Player"]
+wait_time = 3.0
+one_shot = true
+
+[node name="AttackCooldownTimer" type="Timer" parent="Player"]
+one_shot = true
+
+[node name="SkillCooldownTimer" type="Timer" parent="Player"]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="animation_finished" from="Player/AnimationTree" to="Player" method="_on_animation_tree_animation_finished"]
+[connection signal="timeout" from="Player/FormCooldownTimer" to="Player" method="_on_form_cooldown_timer_timeout"]
+[connection signal="timeout" from="Player/AttackCooldownTimer" to="Player" method="_on_attack_cooldown_timer_timeout"]
+[connection signal="timeout" from="Player/SkillCooldownTimer" to="Player" method="_on_skill_cooldown_timer_timeout"]

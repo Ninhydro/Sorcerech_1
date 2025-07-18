@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://bktget78trv7d"]
+
+[ext_resource type="Script" path="res://scripts/UI/TelekinesisUI.gd" id="1_5k5h0"]
+
+[node name="TelekinesisUI" type="CanvasLayer"]
+script = ExtResource("1_5k5h0")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 328.0
+offset_bottom = 195.0
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ObjectList" type="ItemList" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PreviewSprite" type="TextureRect" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ObjectName" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

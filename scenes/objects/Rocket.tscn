@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://gqj3lx11r1ga"]
+
+[ext_resource type="Script" path="res://scripts/objects/Rocket.gd" id="1_atjbi"]
+[ext_resource type="Texture2D" uid="uid://dpt41kojpl8jr" path="res://assets image/placeholder/Characters/Enemies and NPC/flying-bird/Sprites/flying-creature-cycle-skin1.png" id="2_uw51b"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gts6h"]
+radius = 3.0
+
+[node name="Rocket" type="Area2D"]
+collision_layer = 8
+collision_mask = 14
+script = ExtResource("1_atjbi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_gts6h")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-9.53674e-07, -2.38419e-07)
+scale = Vector2(0.195313, 0.205645)
+texture = ExtResource("2_uw51b")
+
+[node name="Timer" type="Timer" parent="."]

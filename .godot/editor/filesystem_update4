@@ -1,0 +1,11 @@
+res://scenes/ui/MainMenu.tscn
+res://dialogic/Style1.tres
+res://scenes/tileset/Placeholder_new_tile_set.tres
+res://scenes/ui/pause_menu.tscn
+res://scenes/ui/load_game_menu.tscn
+res://scenes/ui/save_game_menu.tscn
+res://scenes/player/player.tscn
+res://scenes/world/World.tscn
+res://scenes/world/cutscene_manager.tscn
+res://scenes/rooms/Room_AerendaleJunkyard.tscn
+res://scenes/world/SaveSpot.tscn

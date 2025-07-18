@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://cov3kryfnxah6"]
+
+[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_6nqbo"]
+[ext_resource type="Texture2D" uid="uid://v0v70s0klskn" path="res://assets image/placeholder/icon.svg" id="2_vdbga"]
+[ext_resource type="Script" path="res://scripts/player/TelekinesisController.gd" id="3_epc14"]
+[ext_resource type="PackedScene" uid="uid://bktget78trv7d" path="res://scenes/ui/TelekinesisUI.tscn" id="4_nueqj"]
+[ext_resource type="Texture2D" uid="uid://cfx7o4ov6w8i0" path="res://assets image/placeholder/Props Items and VFX/acorn/Sprites/acorn-2.png" id="5_ultm4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ak7ds"]
+
+[node name="Player" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+script = ExtResource("1_6nqbo")
+move_speed = 100.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+position = Vector2(12, 1.5)
+scale = Vector2(0.140625, 0.148438)
+texture = ExtResource("2_vdbga")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(11, 1)
+shape = SubResource("RectangleShape2D_ak7ds")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="GrappleLine" type="Line2D" parent="Player"]
+width = 5.0
+
+[node name="TelekinesisController" type="Node2D" parent="Player"]
+script = ExtResource("3_epc14")
+
+[node name="TelekinesisUI" parent="Player/TelekinesisController" instance=ExtResource("4_nueqj")]
+
+[node name="AimUI" type="Sprite2D" parent="Player"]
+visible = false
+position = Vector2(11, 0)
+scale = Vector2(1, 1.64286)
+texture = ExtResource("5_ultm4")

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqe2806456nq5"]
+
+[ext_resource type="Script" path="res://scripts/world/CanonBounce.gd" id="1_373mv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hj8s6"]
+size = Vector2(20, 72)
+
+[node name="CanonBounce" type="StaticBody2D"]
+script = ExtResource("1_373mv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 26)
+shape = SubResource("RectangleShape2D_hj8s6")

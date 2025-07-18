@@ -1,0 +1,182 @@
+[gd_scene load_steps=14 format=3 uid="uid://fm7uhcj7tcrq"]
+
+[ext_resource type="Script" path="res://scripts/enemies/Enemy.gd" id="1_wn72v"]
+[ext_resource type="Texture2D" uid="uid://b68njlo1v4ham" path="res://assets image/placeholder/Characters/Enemies and NPC/enemy-ghost/Spritesheets/transparent-no-particles.png" id="2_crx32"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mo267"]
+
+[sub_resource type="Animation" id="Animation_a6itw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_xjc00"]
+resource_name = "attack"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"attack_frame"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2r7oh"]
+resource_name = "death"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+
+[sub_resource type="Animation" id="Animation_evimy"]
+resource_name = "hurt"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_h6kap"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_4olnp"]
+resource_name = "run"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l2ty1"]
+_data = {
+"RESET": SubResource("Animation_a6itw"),
+"attack": SubResource("Animation_xjc00"),
+"death": SubResource("Animation_2r7oh"),
+"hurt": SubResource("Animation_evimy"),
+"idle": SubResource("Animation_h6kap"),
+"run": SubResource("Animation_4olnp")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljdqk"]
+size = Vector2(48, 35)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a7b8b"]
+size = Vector2(28, 26)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4pq4r"]
+radius = 71.0
+
+[node name="Enemy" type="CharacterBody2D" groups=["Enemies"]]
+collision_layer = 5
+collision_mask = 9
+script = ExtResource("1_wn72v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mo267")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_crx32")
+hframes = 6
+frame = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l2ty1")
+}
+
+[node name="DirectionTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_ljdqk")
+
+[node name="DealAttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DealAttackArea"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_a7b8b")
+
+[node name="RangeChase" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeChase"]
+shape = SubResource("CircleShape2D_4pq4r")
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_entered" from="DealAttackArea" to="." method="_on_deal_attack_area_area_entered"]
+[connection signal="area_exited" from="DealAttackArea" to="." method="_on_deal_attack_area_area_exited"]
+[connection signal="body_entered" from="RangeChase" to="." method="_on_range_chase_body_entered"]
+[connection signal="body_exited" from="RangeChase" to="." method="_on_range_chase_body_exited"]

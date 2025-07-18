@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dawiya4upgoxx"]
+
+[ext_resource type="Script" path="res://scripts/world/test_dialog.gd" id="1_lw10w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xwwtj"]
+
+[node name="Test_dialog" type="Area2D"]
+script = ExtResource("1_lw10w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_xwwtj")

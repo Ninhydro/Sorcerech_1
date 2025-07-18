@@ -10,15 +10,19 @@ extends Node2D
 
 @export var pause_menu_scene: PackedScene = preload("res://scenes/ui/pause_menu.tscn")
 
+@onready var canvas_modulate: CanvasModulate = $CanvasModulate # Adjust path if different
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("menu"):
-		if get_tree().paused:
-			pass # Do nothing if already paused (or handle unpausing)
-		else:
+		if not get_tree().paused: # Only open if game is not already paused
+			print("World: 'menu' pressed, opening pause menu.")
 			var pause_menu_instance = pause_menu_scene.instantiate()
-			get_tree().root.add_child(pause_menu_instance)
-			get_viewport().set_input_as_handled()
+			add_child(pause_menu_instance)
+			get_tree().paused = true # Pause the game when menu opens
+			get_viewport().set_input_as_handled() # <--- THIS IS THE KEY LINE!
+		#else: # This block is for if you press "menu" again while paused
+			# If the pause menu is already open, it will handle closing itself
+			# You generally don't want to close it from here if PauseMenu.gd has _unhandled_input
 
 func _ready():
 	print("World: _ready() called. Global.play_intro_cutscene = ", Global.play_intro_cutscene)
@@ -28,6 +32,12 @@ func _ready():
 	Global.set_current_game_scene_path(self.scene_file_path)
 	print("World: Scene path set in Global: " + Global.current_scene_path)
 	# --- END CRITICAL ---
+
+	# Connect to the Global signal when the scene is ready
+	Global.brightness_changed.connect(_on_global_brightness_changed)
+	# Apply initial brightness setting from Global when scene loads
+	_on_global_brightness_changed(Global.brightness)
+
 
 	# Validate essential nodes exist
 	if not player_spawn_point_junkyard:
@@ -181,3 +191,15 @@ func setup_camera_following():
 			print("World: Camera positioned directly to player (fallback).")
 	else:
 		print("❌ World: Camera or player_instance not found for camera setup.")
+
+func _on_global_brightness_changed(new_brightness_value: float):
+	# Ensure the value is within a reasonable range (e.g., 0.0 to 2.0 or so)
+	# Godot's Color values are typically 0.0 to 1.0, but for brightness,
+	# you might want to allow going above 1.0 for "super bright" effects.
+	# For a simple brightness control, clamping between 0 and 1 is usually fine.
+	var clamped_brightness = clampi(new_brightness_value, 0.0, 2.0) # Adjust max as needed
+
+	# Set the color of the CanvasModulate node
+	canvas_modulate.color = Color(clamped_brightness, clamped_brightness, clamped_brightness, 1.0)
+	print("World: CanvasModulate brightness updated to: ", clamped_brightness)
+	

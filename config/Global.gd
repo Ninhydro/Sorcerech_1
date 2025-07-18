@@ -78,6 +78,8 @@ var current_scene_path: String = ""
 var current_loaded_player_data: Dictionary = {}
 var current_game_state_data: Dictionary = {}
 
+signal brightness_changed(new_brightness_value) # Add this line
+
 func _init():
 	# Set initial default values for settings here
 	fullscreen_on = false
@@ -211,6 +213,10 @@ func apply_graphics_settings():
 	DisplayServer.window_set_vsync_mode(vsync_on)
 
 	# Brightness (Requires a CanvasModulate node in your main scene)
+
+	brightness_changed.emit(brightness) # Emit the signal here
+
+ 
 	# You would typically have a CanvasModulate node in your main scene (e.g., world.tscn)
 	# and control its 'color' property.
 	# Example in world.gd: $CanvasModulate.color = Color(brightness, brightness, brightness, 1.0)
@@ -221,12 +227,12 @@ func apply_graphics_settings():
 	# This usually affects how textures are rendered (e.g., sharp for pixel art, linear for smooth).
 	# It's a Project Setting and often requires a restart or scene reload to fully apply globally.
 	# For dynamic changes, you might need a custom viewport setup.
-	if pixel_smoothing:
-		ProjectSettings.set_setting("rendering/textures/default_filters/texture_filter", 1)  # 1 = Linear
-		print("Global: Pixel Smoothing set to LINEAR (smooth).")
-	else:
-		ProjectSettings.set_setting("rendering/textures/default_filters/texture_filter", 0)  # 0 = Nearest
-		ProjectSettings.save() # Save project settings so it persists across runs
+	#if pixel_smoothing:
+	#	ProjectSettings.set_setting("rendering/textures/default_filters/texture_filter", 1)  # 1 = Linear
+	#	print("Global: Pixel Smoothing set to LINEAR (smooth).")
+	#else:
+	#	ProjectSettings.set_setting("rendering/textures/default_filters/texture_filter", 0)  # 0 = Nearest
+	#	ProjectSettings.save() # Save project settings so it persists across runs
 	
 	# FPS Limit
 	Engine.set_max_fps(fps_limit)

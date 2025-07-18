@@ -1,8 +1,10 @@
+ConfirmationDialog
+Button
+CanvasModulate
 Label
 Control
 VBoxContainer
 HBoxContainer
-Button
 HSlider
 OptionButton
 CheckBox

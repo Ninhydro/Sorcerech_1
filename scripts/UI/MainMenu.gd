@@ -12,12 +12,20 @@ extends CanvasLayer
 @export var load_game_menu_scene: PackedScene = preload("res://scenes/ui/load_game_menu.tscn") # Make sure this path is correct!
 @export var option_menu_scene: PackedScene 
 
+@onready var confirmation_dialog_exit_game = $ConfirmationDialog # Adjust path if it's nested
+
+
 func _ready():
 	new_game_button.pressed.connect(_on_new_game_button_pressed)
 	load_game_button.pressed.connect(_on_continue_button_pressed) 
 	option_button.pressed.connect(_on_option_button_pressed) 
 	exit_button.pressed.connect(_on_exit_button_pressed) 
 	
+	 # --- Connect the Confirmation Dialog's signals ---
+	confirmation_dialog_exit_game.confirmed.connect(_on_confirmation_dialog_exit_game_confirmed)
+	confirmation_dialog_exit_game.canceled.connect(_on_confirmation_dialog_exit_game_canceled) # Optional
+
+
 	_set_main_menu_buttons_enabled(true) # Ensure buttons are enabled on start
 
 	new_game_button.grab_focus()
@@ -71,8 +79,6 @@ func _on_option_button_pressed():
 	_set_main_menu_buttons_enabled(false) # Disable MainMenu buttons while Options is open
 
 
-func _on_exit_button_pressed():
-	get_tree().quit()
 
 func _on_new_game_button_gui_input(event: InputEvent):
 	print("GUI INPUT RECEIVED ON NEW GAME BUTTON: ", event)
@@ -86,3 +92,20 @@ func _on_new_game_button_gui_input(event: InputEvent):
 		pass
 		
 		
+# --- NEW: Callback for when the Exit Button is pressed ---
+func _on_exit_button_pressed():
+	print("MainMenu: Exit button pressed. Showing exit confirmation dialog.")
+	confirmation_dialog_exit_game.popup_centered()
+
+
+# --- NEW: Callback for when the Exit Confirmation Dialog is CONFIRMED ---
+func _on_confirmation_dialog_exit_game_confirmed():
+	print("MainMenu: Player confirmed exit. Quitting game.")
+	get_tree().quit() # This is the action to exit the game
+
+
+# --- NEW: Callback for when the Exit Confirmation Dialog is CANCELED (Optional) ---
+func _on_confirmation_dialog_exit_game_canceled():
+	print("MainMenu: Player canceled exit.")
+	exit_button.grab_focus() # Good UX: refocus the exit button
+	

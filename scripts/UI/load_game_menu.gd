@@ -16,7 +16,7 @@ func _ready():
 		slot_buttons[0].grab_focus()
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("menu"):
 		print("LoadGameMenu: ESC pressed. Current paused state: ", get_tree().paused)
 		_on_back_button_pressed()
 		get_viewport().set_input_as_handled()

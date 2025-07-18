@@ -422,3 +422,5 @@ metadata/_edit_lock_ = true
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(189, 1435)
 metadata/_edit_lock_ = true
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]

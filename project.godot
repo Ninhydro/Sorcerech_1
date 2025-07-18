@@ -27,12 +27,9 @@ SaveLoadManager="*res://config/SaveLoadManager.gd"
 
 directories/dch_directory={
 "character1": "res://dialogic/characters/character1.dch",
-"character2": "res://dialogic/characters/character2.dch",
-"characters/character1": "res://fresh_copy/dialogic/characters/character1.dch",
-"characters/character2": "res://fresh_copy/dialogic/characters/character2.dch"
+"character2": "res://dialogic/characters/character2.dch"
 }
 directories/dtl_directory={
-"timeline/timeline1": "res://fresh_copy/dialogic/timeline/timeline1.dtl",
 "timeline1": "res://dialogic/timeline/timeline1.dtl",
 "timeline2": "res://timeline2.dtl"
 }

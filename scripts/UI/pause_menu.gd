@@ -10,7 +10,8 @@ extends CanvasLayer
 @onready var exit_button = $MenuPanel/ButtonContainer/ExitButton
 
 @export var save_game_menu_scene: PackedScene
-@export var load_game_menu_scene: PackedScene = preload("res://scenes/ui/load_game_menu.tscn")
+@export var load_game_menu_scene: PackedScene 
+@export var option_menu_scene: PackedScene 
 
 # Remove this line: var _active_dialogic_node_on_pause: Node = null # Not needed in this reverted version
 
@@ -68,7 +69,12 @@ func _on_load_button_pressed():
 
 
 func _on_option_button_pressed():
-	print("PauseMenu: Opening Option Menu (Placeholder)...")
+	print("PauseMenu: Opening Option Menu")
+	var option_menu_instance = option_menu_scene.instantiate()
+	add_child(option_menu_instance)
+	menu_panel.hide()
+	background_dimmer.hide()
+	print("PauseMenu: Save Menu opened. Game should still be paused: ", get_tree().paused)
 
 
 func _on_back_to_title_button_pressed():

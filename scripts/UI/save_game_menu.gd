@@ -49,6 +49,37 @@ func _add_slot_button(button_text: String, slot_name_to_save: String):
 	button.text = button_text
 	button.flat = false
 
+	# --- MODIFIED: Set custom minimum size and size flags for smaller buttons ---
+	# For a 320px wide window, 180px width is more reasonable.
+	# Height of 40-50px should accommodate two lines of text with a small font.
+	button.set_custom_minimum_size(Vector2(240, 10)) # Adjusted size for 4 buttons
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER # Center horizontally
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER # Center vertically
+	# --- END MODIFIED ---
+
+	# --- MODIFIED: Create a custom theme for the button to control font size ---
+	var button_theme = Theme.new()
+	var font_size = 10 # Adjust this value (e.g., 8, 10, 12) for desired text size
+	
+	# Try to get the default font from the project or a parent theme
+	var default_font: Font = slot_buttons_container.get_theme_font("font") 
+	if default_font == null:
+		default_font = ProjectSettings.get_setting("gui/theme/default_font") # Fallback to project default
+	
+	if default_font:
+		# Set the font for the "Button" type within this custom theme
+		button_theme.set_font("font", "Button", default_font)
+		# Set the font size for the "Button" type within this custom theme
+		button_theme.set_font_size("font_size", "Button", font_size) # Directly set font size on theme
+		print("LoadGameMenu: Applied custom font size " + str(font_size) + " to button: " + button_text)
+	else:
+		printerr("LoadGameMenu: No default font found. Button font size might not change.")
+		# As a fallback for SystemFont or missing FontFile, you can try setting a dynamic font
+		# if you have one preloaded or available. However, direct size control on SystemFont is limited.
+	
+	button.theme = button_theme
+	# --- END MODIFIED ---
+	
 	var slot_info = SaveLoadManager.get_save_slot_info(slot_name_to_save)
 	var timestamp_text = "Empty Slot"
 	

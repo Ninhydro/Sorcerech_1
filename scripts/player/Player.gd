@@ -175,6 +175,9 @@ func _physics_process(delta):
 	
 	#unlock_state("Cyber")
 	#unlock_state("Magus")
+	
+	Global.current_form = get_current_form_id()
+	
 	if _should_apply_loaded_position:
 		print("Player._physics_process: Applying loaded position (one-time).")
 		global_position = Vector2(Global.current_loaded_player_data.get("position_x"), Global.current_loaded_player_data.get("position_y"))
@@ -566,8 +569,8 @@ func get_save_data() -> Dictionary:
 		"current_state_name": get_current_form_id(),
 		"unlocked_states": unlocked_states,
 		"selected_form_index": Global.selected_form_index,
-		"inventory": inventory, # Directly save inventory
-		"money": money
+		"inventory": inventory # Directly save inventory
+		
 	}
 	return player_data
 

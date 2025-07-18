@@ -1,4 +1,13 @@
-CollisionShape2D
-Area2D
+Label
+Control
+VBoxContainer
+HBoxContainer
+Button
+HSlider
+OptionButton
+CheckBox
+HSeparator
 Panel
 CanvasLayer
+CollisionShape2D
+Area2D

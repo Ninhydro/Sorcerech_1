@@ -10,12 +10,15 @@ extends CanvasLayer
 @export var main_game_scene: PackedScene = preload("res://scenes/world/World.tscn")
 @export var cutscene_scene: PackedScene = preload("res://scenes/world/cutscene_manager.tscn")
 @export var load_game_menu_scene: PackedScene = preload("res://scenes/ui/load_game_menu.tscn") # Make sure this path is correct!
+@export var option_menu_scene: PackedScene 
 
 func _ready():
 	new_game_button.pressed.connect(_on_new_game_button_pressed)
 	load_game_button.pressed.connect(_on_continue_button_pressed) 
 	option_button.pressed.connect(_on_option_button_pressed) 
 	exit_button.pressed.connect(_on_exit_button_pressed) 
+	
+	_set_main_menu_buttons_enabled(true) # Ensure buttons are enabled on start
 
 	new_game_button.grab_focus()
 
@@ -48,16 +51,25 @@ func _on_continue_button_pressed():
 
 
 # NEW HELPER FUNCTION: To enable/disable main menu buttons
-func _set_main_menu_buttons_enabled(enable: bool):
-	new_game_button.disabled = !enable
-	load_game_button.disabled = !enable if SaveLoadManager.any_save_exists() else true # Re-check load button state
-	option_button.disabled = !enable
-	exit_button.disabled = !enable
-	new_game_button.grab_focus()
+func _set_main_menu_buttons_enabled(enabled: bool):
+	# Implement this to enable/disable your MainMenu buttons
+	# Example:
+	# $VBoxContainer/NewGameButton.disabled = not enabled
+	# $VBoxContainer/LoadGameButton.disabled = not enabled
+	# $VBoxContainer/OptionsButton.disabled = not enabled
+	# $VBoxContainer/ExitButton.disabled = not enabled
+	print("MainMenu: Buttons enabled state set to: " + str(enabled))
 
 
 func _on_option_button_pressed():
-	print("Opening option menu")
+	print("MainMenu: Opening Options Menu...")
+	var options_menu_instance = option_menu_scene.instantiate()
+	get_tree().root.add_child(options_menu_instance) # Add to root so it's on top
+	# --- THIS IS THE CRITICAL LINE TO CHECK ---
+	options_menu_instance.set_parent_menu_reference(self) # Pass reference to MainMenu itself
+	# --- END CRITICAL LINE ---
+	_set_main_menu_buttons_enabled(false) # Disable MainMenu buttons while Options is open
+
 
 func _on_exit_button_pressed():
 	get_tree().quit()

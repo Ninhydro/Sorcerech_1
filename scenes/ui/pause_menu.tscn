@@ -1,13 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://coimgb8yw667t"]
+[gd_scene load_steps=5 format=3 uid="uid://coimgb8yw667t"]
 
 [ext_resource type="Script" path="res://scripts/UI/pause_menu.gd" id="1_60cy2"]
 [ext_resource type="PackedScene" uid="uid://pgnmvv3qc1pw" path="res://scenes/ui/save_game_menu.tscn" id="2_k6x2g"]
+[ext_resource type="PackedScene" uid="uid://bgbr8anu85v5h" path="res://scenes/ui/load_game_menu.tscn" id="3_kt5o1"]
+[ext_resource type="PackedScene" uid="uid://dnpcxpgwcmnxp" path="res://scenes/ui/option_menu.tscn" id="4_6klgk"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
 layer = 3
 script = ExtResource("1_60cy2")
 save_game_menu_scene = ExtResource("2_k6x2g")
+load_game_menu_scene = ExtResource("3_kt5o1")
+option_menu_scene = ExtResource("4_6klgk")
 
 [node name="BackgroundDimmer" type="ColorRect" parent="."]
 anchors_preset = 15

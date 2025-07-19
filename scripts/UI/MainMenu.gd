@@ -81,7 +81,7 @@ func _on_option_button_pressed():
 
 
 func _on_new_game_button_gui_input(event: InputEvent):
-	print("GUI INPUT RECEIVED ON NEW GAME BUTTON: ", event)
+	#print("GUI INPUT RECEIVED ON NEW GAME BUTTON: ", event)
 	if event is InputEventMouseButton:
 		print("DEBUG: Mouse Button event on NewGameButton: ", event)
 		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():

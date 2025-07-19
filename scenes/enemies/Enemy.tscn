@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://fm7uhcj7tcrq"]
 
 [ext_resource type="Script" path="res://scripts/enemies/Enemy.gd" id="1_wn72v"]
-[ext_resource type="Texture2D" uid="uid://b68njlo1v4ham" path="res://assets image/placeholder/Characters/Enemies and NPC/enemy-ghost/Spritesheets/transparent-no-particles.png" id="2_crx32"]
+[ext_resource type="Texture2D" uid="uid://b68njlo1v4ham" path="res://assets_image/placeholder/Characters/Enemies and NPC/enemy-ghost/Spritesheets/transparent-no-particles.png" id="2_crx32"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mo267"]
 

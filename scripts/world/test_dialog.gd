@@ -38,7 +38,10 @@ func _on_body_entered(body: Node2D):
 	# Check if the entering body is the player by checking its group
 	if body.is_in_group("player"):
 		player_in_range = true
-
+		body.unlock_state("Magus")
+		body.unlock_state("Cyber")
+		body.unlock_state("UltimateMagus")
+		body.unlock_state("UltimateCyber")
 		Dialogic.start("timeline2", false)
 
 # Called when a body (e.g., player) exits the Area2D

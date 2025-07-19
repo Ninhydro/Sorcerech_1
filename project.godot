@@ -14,7 +14,7 @@ config/name="Sorcerech"
 config/version="0.1"
 run/main_scene="res://scenes/ui/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-config/icon="res://assets image/Sorcerech_Fini_small.svg"
+config/icon="res://assets_image/Sorcerech_Fini_small.svg"
 
 [autoload]
 
@@ -31,7 +31,7 @@ directories/dch_directory={
 }
 directories/dtl_directory={
 "timeline1": "res://dialogic/timeline/timeline1.dtl",
-"timeline2": "res://timeline2.dtl"
+"timeline2": "res://dialogic/timeline/timeline2.dtl"
 }
 extensions_folder="res://addons/dialogic_additions"
 text/letter_speed=0.01
@@ -65,7 +65,6 @@ window/size/viewport_height=180
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
 window/per_pixel_transparency/allowed=true
 

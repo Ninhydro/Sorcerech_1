@@ -26,17 +26,24 @@ func _unhandled_input(event: InputEvent):
 
 func _ready():
 	print("World: _ready() called. Global.play_intro_cutscene = ", Global.play_intro_cutscene)
+	#Global.kills = 1
+	#Global.affinity = 0
+	#print(Global.affinity)
 	
-	# --- CRITICAL: Set the current game scene path in Global immediately ---
+
 	# This line tells the Global singleton which scene the player is currently in.
 	Global.set_current_game_scene_path(self.scene_file_path)
 	print("World: Scene path set in Global: " + Global.current_scene_path)
-	# --- END CRITICAL ---
+
 
 	# Connect to the Global signal when the scene is ready
 	Global.brightness_changed.connect(_on_global_brightness_changed)
 	# Apply initial brightness setting from Global when scene loads
 	_on_global_brightness_changed(Global.brightness)
+	
+
+	print("Main Scene _ready() finished. Global.playerBody should be set now: ", Global.playerBody)
+	
 
 
 	# Validate essential nodes exist
@@ -49,6 +56,10 @@ func _ready():
 	if player_instance and is_instance_valid(player_instance):
 		Global.playerBody = player_instance
 		print("✅ World: Pre-existing player assigned to Global.playerBody.")
+		#player_instance.unlock_state("Magus")
+		#player_instance.unlock_state("Cyber")
+		#player_instance.unlock_state("UltimateMagus")
+		#player_instance.unlock_state("UltimateCyber")
 	else:
 		print("❌ World: Pre-existing player node not found or invalid! Check @onready var player_instance path.")
 		# Handle this as a fatal error or spawn a new player as fallback
@@ -81,7 +92,10 @@ func _ready():
 		teleport_player_and_enable(false) # Pass 'false' to NOT force a default position
 		print("✅ World: Player setup completed for loaded game.")
 
-
+	#Global.playerBody = player_instance
+	#print(Global.playerBody)
+	#print("Main Scene _ready() finished. Global.playerBody should be set now: ", Global.playerBody)
+	
 func setup_intro_cutscene():
 	# Position camera for cutscene if spawn point exists
 	if player_spawn_point_initial:
@@ -173,8 +187,10 @@ func teleport_player_and_enable(position_player: bool = true):
 		player_instance.set_process(true)
 		player_instance.set_physics_process(true)
 	
+	
 	# Make sure the camera follows the player
 	setup_camera_following()
+	
 	
 	print("✅ World: Player visibility, input, and camera setup completed.")
 
@@ -191,6 +207,7 @@ func setup_camera_following():
 			print("World: Camera positioned directly to player (fallback).")
 	else:
 		print("❌ World: Camera or player_instance not found for camera setup.")
+	#Global.playerBody = player_instance
 
 func _on_global_brightness_changed(new_brightness_value: float):
 	# Ensure the value is within a reasonable range (e.g., 0.0 to 2.0 or so)

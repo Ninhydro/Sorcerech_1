@@ -6,12 +6,11 @@ extends Node
 # If you need to store completed events by dialogue_id, declare it like this:
 var completed_events: Dictionary = {}
 
-# ... (rest of your Global.gd code) ...
-
 # Your existing Global.gd code with `current_scene_path` changes:
 var gameStarted: bool
 var autosave_timer: Timer = Timer.new()
 var autosave_interval_seconds: float = 60.0
+
 var is_dialog_open := false
 var attacking := false
 
@@ -32,9 +31,27 @@ func _on_dialog_ended():
 	is_dialog_open = false
 	
 var play_intro_cutscene := false
-var playerBody: CharacterBody2D
+var playerBody: CharacterBody2D # This is the variable the ProfileScene is looking for
 var selected_form_index: int
-var current_form:String
+
+# --- MODIFIED: current_form property with setter and signal (Godot 4.x syntax) ---
+# Use a private backing variable for the actual value.
+var current_form: String = "Normal" # Initialize with default value for the backing variable
+
+# Declare the signal
+signal current_form_changed(new_form_id: String)
+
+# Public setter function that emits the signal
+func set_player_form(value: String):
+	if current_form != value:
+		current_form = value
+		current_form_changed.emit(current_form)
+		print("Global: Player form changed to: " + current_form)
+
+# Public getter function
+func get_player_form() -> String:
+	return current_form
+# --- END MODIFIED ---
 
 var playerAlive :bool
 var playerDamageZone: Area2D
@@ -48,13 +65,9 @@ var enemyADamageAmount: int
 var enemyAdealing: bool
 var enemyAknockback := Vector2.ZERO
 
-# Added default save values for common gameplay elements
-#var player_experience := 0
-#var player_level := 1
-#var player_skills := []
-
-var kills: int
-var affinity: int
+var kills: int = 0 # Initialize kills
+var affinity: int = 0 # Initialize affinity
+var player_status: String = "Normal" # NEW: Player status
 
 var active_quests := []
 var completed_quests := []
@@ -78,7 +91,7 @@ var current_scene_path: String = ""
 var current_loaded_player_data: Dictionary = {}
 var current_game_state_data: Dictionary = {}
 
-signal brightness_changed(new_brightness_value) # Add this line
+signal brightness_changed(new_brightness_value)
 
 func _init():
 	# Set initial default values for settings here
@@ -91,6 +104,12 @@ func _init():
 	bgm_vol = -10.0
 	sfx_vol = -10.0
 	voice_vol = -10.0
+	
+	# Initialize profile data defaults
+	kills = 0
+	affinity = 0
+	player_status = "Normal"
+	current_form = "Normal" # Initialize the backing variable
 	
 func set_current_game_scene_path(path: String):
 	current_scene_path = path
@@ -112,12 +131,12 @@ func get_save_data() -> Dictionary:
 		"voice_vol": voice_vol,
 
 		"selected_form_index": selected_form_index,
-		"current_form": current_form,
+		"current_form": get_player_form(), # Use the getter for saving
 		"playerAlive": playerAlive,
 
-		
-		"kills": kills,
-		"affinity": affinity,
+		"kills": kills, # Save kills
+		"affinity": affinity, # Save affinity
+		"player_status": player_status, # NEW: Save player status
 		
 		"completed_events": completed_events,
 		"active_quests": active_quests,
@@ -145,12 +164,13 @@ func apply_load_data(data: Dictionary):
 	voice_vol = data.get("voice_vol", -10.0)
 	
 	selected_form_index = data.get("selected_form_index", 0)
-	current_form = data.get("current_form", "")
+	# This assignment will now correctly call the set_player_form setter, emitting the signal
+	set_player_form(data.get("current_form", "Normal")) 
 	playerAlive = data.get("playerAlive", true)
 
-	
-	kills = data.get("kills", 0)
-	affinity = data.get("affinity", 0)
+	kills = data.get("kills", 0) # Load kills
+	affinity = data.get("affinity", 0) # Load affinity
+	player_status = data.get("player_status", "Normal") # NEW: Load player status
 	
 	completed_events = data.get("completed_events", {})
 	active_quests = data.get("active_quests", [])
@@ -185,8 +205,11 @@ func reset_to_defaults():
 	sfx_vol = -10.0
 	voice_vol = -10
 	
-	kills = 0
-	affinity = 0
+	kills = 0 # Reset kills
+	affinity = 0 # Reset affinity
+	player_status = "Normal" # NEW: Reset player status
+	# Reset the form using the setter
+	set_player_form("Normal") 
 	
 	completed_events = {}
 
@@ -213,7 +236,6 @@ func apply_graphics_settings():
 	DisplayServer.window_set_vsync_mode(vsync_on)
 
 	# Brightness (Requires a CanvasModulate node in your main scene)
-
 	brightness_changed.emit(brightness) # Emit the signal here
 
  

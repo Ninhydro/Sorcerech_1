@@ -1,7 +1,7 @@
 [gd_scene load_steps=24 format=3 uid="uid://bsj8x1oxp0cqn"]
 
 [ext_resource type="Script" path="res://scripts/world/World.gd" id="1_w1wil"]
-[ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_jl4ii"]
+[ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets_image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_yoo7y"]
 [ext_resource type="PackedScene" uid="uid://cov3kryfnxah6" path="res://scenes/player/player.tscn" id="3_pp1my"]
 [ext_resource type="PackedScene" uid="uid://dho52j1svafa7" path="res://scenes/rooms/Room_AerendaleTown.tscn" id="4_6wqko"]
 [ext_resource type="PackedScene" uid="uid://cnkwa1lnnfamm" path="res://scenes/rooms/Room_AerendaleJunkyard.tscn" id="5_d2ced"]
@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://bew4rnh5f46sy" path="res://scenes/world/cutscene_manager.tscn" id="21_k330t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ipdlw"]
-texture = ExtResource("2_jl4ii")
+texture = ExtResource("2_yoo7y")
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0

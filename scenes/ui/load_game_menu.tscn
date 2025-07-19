@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/UI/load_game_menu.gd" id="1_564hi"]
 
 [node name="LoadGameMenu" type="CanvasLayer"]
+process_mode = 3
 layer = 4
 script = ExtResource("1_564hi")
 

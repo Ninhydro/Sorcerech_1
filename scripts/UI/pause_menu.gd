@@ -14,6 +14,8 @@ extends CanvasLayer
 @export var save_game_menu_scene: PackedScene
 @export var load_game_menu_scene: PackedScene
 @export var option_menu_scene: PackedScene
+@export var profile_scene: PackedScene 
+
 
 func _ready():
 	print("PauseMenu _ready() called! Current paused state on entry: ", get_tree().paused)
@@ -124,7 +126,15 @@ func _on_confirmation_dialog_back_to_title_canceled():
 
 
 func _on_profile_button_pressed():
-	print("Profile")
+	print("PauseMenu: Opening Profile Menu...")
+	var profile_scene_instance = profile_scene.instantiate()
+	add_child(profile_scene_instance)
+	profile_scene_instance.set_parent_menu_reference(self) # Pass reference to self
+	menu_panel.hide()
+	background_dimmer.hide()
+	print("PauseMenu: Profile Menu opened. Game should still be paused: ", get_tree().paused)
+
+
 
 func show_pause_menu():
 	print("PauseMenu: show_pause_menu() called. Game should still be paused: ", get_tree().paused)

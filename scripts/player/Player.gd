@@ -103,7 +103,7 @@ var _should_apply_loaded_position: bool = false
 func _ready():
 	Global.playerBody = self
 	Global.playerAlive = true
-	
+	print(Global.playerBody)
 	dead = false
 	can_take_damage = true
 	
@@ -149,7 +149,7 @@ func _ready():
 		
 		
 		inventory = Global.current_loaded_player_data.get("inventory", [])
-		money = Global.current_loaded_player_data.get("money", 0)
+		#money = Global.current_loaded_player_data.get("money", 0)
 
 		var loaded_state_name = Global.current_loaded_player_data.get("current_state_name", "Normal")
 		switch_state(loaded_state_name)
@@ -172,12 +172,18 @@ func _ready():
 
 func _physics_process(delta):
 	# --- APPLY LOADED POSITION (ONE-TIME) ---
-	
+	Global.playerBody = self
+	#print(Global.playerBody)
 	#unlock_state("Cyber")
 	#unlock_state("Magus")
+	Global.set_player_form(get_current_form_id())
+	#Global.current_form = get_current_form_id()
 	
-	Global.current_form = get_current_form_id()
-	
+	#unlock_state("Magus")
+	#unlock_state("Cyber")
+	#unlock_state("UltimateMagus")
+	#unlock_state("UltimateCyber")
+		
 	if _should_apply_loaded_position:
 		print("Player._physics_process: Applying loaded position (one-time).")
 		global_position = Vector2(Global.current_loaded_player_data.get("position_x"), Global.current_loaded_player_data.get("position_y"))

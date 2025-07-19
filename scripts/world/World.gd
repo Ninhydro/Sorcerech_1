@@ -26,76 +26,79 @@ func _unhandled_input(event: InputEvent):
 
 func _ready():
 	print("World: _ready() called. Global.play_intro_cutscene = ", Global.play_intro_cutscene)
-	#Global.kills = 1
-	#Global.affinity = 0
-	#print(Global.affinity)
 	
-
-	# This line tells the Global singleton which scene the player is currently in.
 	Global.set_current_game_scene_path(self.scene_file_path)
 	print("World: Scene path set in Global: " + Global.current_scene_path)
 
-
-	# Connect to the Global signal when the scene is ready
 	Global.brightness_changed.connect(_on_global_brightness_changed)
-	# Apply initial brightness setting from Global when scene loads
 	_on_global_brightness_changed(Global.brightness)
 	
-
-	print("Main Scene _ready() finished. Global.playerBody should be set now: ", Global.playerBody)
-	
-
-
-	# Validate essential nodes exist
 	if not player_spawn_point_junkyard:
 		print("❌ World: player_spawn_point_junkyard not found! Check node path: $Room_AerendaleJunkyard/Marker2D")
-		# Consider a fallback or error handling if a critical node is missing
 		return
 	
-	# IMPORTANT: Assign the pre-existing player to Global.playerBody immediately
 	if player_instance and is_instance_valid(player_instance):
 		Global.playerBody = player_instance
 		print("✅ World: Pre-existing player assigned to Global.playerBody.")
-		#player_instance.unlock_state("Magus")
-		#player_instance.unlock_state("Cyber")
-		#player_instance.unlock_state("UltimateMagus")
-		#player_instance.unlock_state("UltimateCyber")
 	else:
 		print("❌ World: Pre-existing player node not found or invalid! Check @onready var player_instance path.")
-		# Handle this as a fatal error or spawn a new player as fallback
-		return # Cannot proceed without a player instance
+		return
 
 	if not cutscene_manager:
 		print("❌ World: cutscene_manager not found! Check node path: $CutsceneManager")
-		# If no cutscene manager, proceed as if cutscene finished
-		# In this scenario, it's either a new game without cutscene or a loaded game.
-		# We'll rely on Global.play_intro_cutscene to differentiate.
 		if Global.play_intro_cutscene:
-			# If it's supposed to be a new game with intro, but cutscene manager is missing,
-			# then directly set player to default start position.
 			print("World: No cutscene manager, treating as new game without cutscene.")
-			teleport_player_and_enable(true) # Force default position for new game
+			teleport_player_and_enable(true)
 		else:
-			# If no cutscene manager and not new game, it's a loaded game.
 			print("World: No cutscene manager, treating as loaded game.")
-			teleport_player_and_enable(false) # Don't force position, Player.gd handles it
-		return # Exit _ready as we've handled the missing manager
+			teleport_player_and_enable(false)
+		return
 
-	# --- Logic for New Game vs. Loaded Game ---
-	if Global.play_intro_cutscene:
-		print("World: Starting intro cutscene for new game...")
-		setup_intro_cutscene()
-	else:
-		print("World: Not a new game (loaded game or scene transition). Player.gd will apply loaded position.")
-		# For loaded games, Player.gd's _ready() will apply the saved position.
-		# This function just ensures player is visible, enabled, and camera follows.
-		teleport_player_and_enable(false) # Pass 'false' to NOT force a default position
-		print("✅ World: Player setup completed for loaded game.")
+	# Determine if this is a NEW GAME start or a LOADED GAME/SCENE CHANGE
+	var is_loaded_game = not Global.current_loaded_player_data.is_empty()
 
-	#Global.playerBody = player_instance
-	#print(Global.playerBody)
-	#print("Main Scene _ready() finished. Global.playerBody should be set now: ", Global.playerBody)
+	# --- IMPORTANT: Clear any active Dialogic dialog on scene load/start ---
+	# Use end_timeline() as it's the official public method to stop and clear the dialog.
+	# It internally handles hiding the layout node.
 	
+	# We should check if a timeline is actually running to avoid unnecessary calls
+	# The DialogicGameHandler has 'current_timeline' property.
+	if Dialogic.current_timeline != null:
+		print("World: Active Dialogic timeline detected. Calling Dialogic.end_timeline().")
+		Dialogic.end_timeline()
+	else:
+		print("World: No active Dialogic timeline on scene load/start.")
+	
+	# If you also want to completely reset Dialogic's internal state (e.g., clear variables)
+	# even if no timeline was running, you can call clear() here.
+	# Be mindful if you want variables to persist across scene loads.
+	# If Dialogic.clear() is needed, ensure it's called after end_timeline() if a timeline was active.
+	# Dialogic.clear(Dialogic.ClearFlags.FULL_CLEAR)
+	# print("World: Also called Dialogic.clear(FULL_CLEAR) to reset full Dialogic state.")
+	# ---------------------------------------------------------------------
+
+	if is_loaded_game:
+		# LOADED GAME/SCENE CHANGE LOGIC
+		print("World: Loaded game or scene transition. Player.gd will apply loaded position.")
+		teleport_player_and_enable(false) # Player.gd handles position
+		print("✅ World: Player setup completed for loaded game.")
+		
+		# Dialogic resume logic temporarily commented out as per your request.
+		# ... (your commented out Dialogic resume code) ...
+
+	else:
+		# NEW GAME LOGIC (or scene changes NOT from a load)
+		if Global.play_intro_cutscene:
+			print("World: Starting intro cutscene for new game...")
+			setup_intro_cutscene()
+		else:
+			print("World: Not a new game. Player will be placed at default spawn.")
+			teleport_player_and_enable(true)
+			print("✅ World: Player setup completed for non-cutscene new game.")
+
+	print("Main Scene _ready() finished.")
+
+
 func setup_intro_cutscene():
 	# Position camera for cutscene if spawn point exists
 	if player_spawn_point_initial:

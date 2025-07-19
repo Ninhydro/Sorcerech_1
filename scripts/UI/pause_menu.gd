@@ -33,7 +33,7 @@ func _ready():
 	# Important: Do NOT connect 'canceled' here if it's causing an immediate trigger.
 	# We will connect it dynamically when popup_centered() is called.
 	
-	save_button.grab_focus()
+	profile_button.grab_focus()
 
 	get_tree().paused = true
 	print("PauseMenu: Game paused. Paused state now: ", get_tree().paused)

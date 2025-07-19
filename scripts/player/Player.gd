@@ -580,6 +580,7 @@ func get_save_data() -> Dictionary:
 	}
 	return player_data
 
+#Not used currently
 func apply_load_data(data: Dictionary):
 	# This function is now ONLY for applying data AFTER the deferred position.
 	# Position is applied directly in _physics_process on the first frame.

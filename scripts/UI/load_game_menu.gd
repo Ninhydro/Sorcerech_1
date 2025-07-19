@@ -7,6 +7,7 @@ extends CanvasLayer
 var slot_buttons: Array[Button] = []
 
 func _ready():
+	
 	print("LoadGameMenu _ready() called! Current paused state: ", get_tree().paused)
 	back_button.pressed.connect(_on_back_button_pressed)
 	_populate_save_slots()
@@ -143,6 +144,7 @@ func _on_save_slot_button_pressed(slot_name: String):
 		Global.current_game_state_data = {}
 		Global.current_scene_path = ""
 		pass # Keep menu open for user to try again
+	queue_free()
 
 func _on_back_button_pressed():
 	print("LoadGameMenu: Closing Load Game Menu pop-up.")

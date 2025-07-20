@@ -98,7 +98,6 @@ func _ready():
 
 	print("Main Scene _ready() finished.")
 
-
 func setup_intro_cutscene():
 	# Position camera for cutscene if spawn point exists
 	if player_spawn_point_initial:

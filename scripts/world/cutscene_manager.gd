@@ -1,5 +1,5 @@
 extends Node
-
+#Cutscene intro, this is CGs
 @onready var black_overlay = $BlackOverlay
 @onready var timer = $Timer # This timer is used for holding the black screen, if needed.
 

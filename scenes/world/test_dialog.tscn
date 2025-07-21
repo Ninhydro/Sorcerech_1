@@ -1,11 +1,49 @@
-[gd_scene load_steps=3 format=3 uid="uid://dawiya4upgoxx"]
+[gd_scene load_steps=6 format=3 uid="uid://dawiya4upgoxx"]
 
 [ext_resource type="Script" path="res://scripts/world/test_dialog.gd" id="1_lw10w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xwwtj"]
+
+[sub_resource type="Animation" id="Animation_3uu3n"]
+resource_name = "cutscene1"
+length = 5.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(4.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_start_dialogic_from_animation"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_x330y"]
+resource_name = "cutscene2"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cywr2"]
+_data = {
+"cutscene1": SubResource("Animation_3uu3n"),
+"cutscene2": SubResource("Animation_x330y")
+}
 
 [node name="Test_dialog" type="Area2D"]
 script = ExtResource("1_lw10w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xwwtj")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cywr2")
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-2, -27)
+zoom = Vector2(2, 2)
+
+[node name="npc1" type="Sprite2D" parent="."]

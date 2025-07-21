@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://djx4sn2eal13h" path="res://scenes/rooms/Room_ExactlyionMainframe.tscn" id="18_rdbnv"]
 [ext_resource type="PackedScene" uid="uid://c8nfmopkmdkk7" path="res://scenes/rooms/Room_ExactlyionValentina.tscn" id="19_ojk8u"]
 [ext_resource type="PackedScene" uid="uid://ci44hikud0mu" path="res://scenes/world/transition_manager.tscn" id="20_7o6hr"]
-[ext_resource type="PackedScene" uid="uid://bew4rnh5f46sy" path="res://scenes/world/cutscene_manager.tscn" id="21_k330t"]
+[ext_resource type="PackedScene" uid="uid://bew4rnh5f46sy" path="res://scenes/world/cutscene_intro.tscn" id="21_exdw8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ipdlw"]
 texture = ExtResource("2_yoo7y")
@@ -369,7 +369,7 @@ position = Vector2(-269, 1391)
 metadata/_edit_lock_ = true
 
 [node name="Marker2D" type="Marker2D" parent="Room_AerendaleJunkyard"]
-position = Vector2(-277, 25)
+position = Vector2(-542, 29)
 
 [node name="Room_AerendaleBattlefield" parent="." instance=ExtResource("6_t47eu")]
 position = Vector2(-322, 3343)
@@ -415,7 +415,7 @@ position = Vector2(3475, 1418)
 
 [node name="TransitionManager" parent="." instance=ExtResource("20_7o6hr")]
 
-[node name="CutsceneManager" parent="." instance=ExtResource("21_k330t")]
+[node name="CutsceneIntro" parent="." instance=ExtResource("21_exdw8")]
 position = Vector2(25, 1350)
 metadata/_edit_lock_ = true
 

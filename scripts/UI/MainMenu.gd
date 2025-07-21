@@ -8,9 +8,9 @@ extends CanvasLayer
 #@onready var background_dimmer = $BackgroundDimmer # NEW: Reference to the dimmer
 
 @export var main_game_scene: PackedScene = preload("res://scenes/world/World.tscn")
-@export var cutscene_scene: PackedScene = preload("res://scenes/world/cutscene_manager.tscn")
+@export var cutscene_scene: PackedScene = preload("res://scenes/world/cutscene_intro.tscn")
 @export var load_game_menu_scene: PackedScene = preload("res://scenes/ui/load_game_menu.tscn") # Make sure this path is correct!
-@export var option_menu_scene: PackedScene 
+@export var option_menu_scene: PackedScene = preload("res://scenes/ui/option_menu.tscn") #
 
 @onready var confirmation_dialog_exit_game = $ConfirmationDialog # Adjust path if it's nested
 

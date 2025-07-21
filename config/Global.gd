@@ -14,6 +14,9 @@ var autosave_interval_seconds: float = 60.0
 var is_dialog_open := false
 var attacking := false
 
+# ADD THIS LINE:
+var is_cutscene_active := false # <--- NEW: Flag to indicate if a cutscene is active
+
 func _ready():
 	Dialogic.connect("dialog_started", Callable(self, "_on_dialog_started"))
 	Dialogic.connect("dialog_ended", Callable(self, "_on_dialog_ended"))
@@ -88,23 +91,23 @@ var voice_vol = -10.0
 
 # Add to graphics variables
 
-var resolution_index: int = 2  # Default to 1280x720 (index 2)
+var resolution_index: int = 2 # Default to 1280x720 (index 2)
 var base_resolution = Vector2(320, 180)
 var available_resolutions = [
-	base_resolution * 2,  # 0: 640x360
-	base_resolution * 3,  # 1: 960x540
-	base_resolution * 4,  # 2: 1280x720
-	base_resolution * 6   # 3: 1920x1080
+	base_resolution * 2, # 0: 640x360
+	base_resolution * 3, # 1: 960x540
+	base_resolution * 4, # 2: 1280x720
+	base_resolution * 6  # 3: 1920x1080
 ]
 
 
 var current_scene_path: String = "" 
 
-#var player_position_before_dialog: Vector2 = playerBody.global_position
-#var scene_path_before_dialog: String = "" 
-
 var current_loaded_player_data: Dictionary = {}
 var current_game_state_data: Dictionary = {}
+
+var cutscene_name: String = ""
+var cutscene_playback_position: float = 0.0
 
 signal brightness_changed(new_brightness_value)
 
@@ -135,25 +138,6 @@ func set_current_game_scene_path(path: String):
 	print("Global: Current game scene path set to: " + current_scene_path)
 
 func get_save_data() -> Dictionary:
-	
-	#var dialogic_state_to_save = {}
-	
-	# Corrected check for active dialog and getting full state for Alpha-16
-	# DialogicGameHandler has get_full_state()
-	#dialogic_state_to_save = Dialogic.get_full_state()
-	#print("Global: Retrieved Dialogic full state.")
-
-	# You might want to add a check here if Dialogic.current_timeline is null
-	# to only save a "full" state if a timeline was truly active.
-	# However, get_full_state() usually handles this internally by returning an empty/minimal dict.
-	#if Dialogic.current_timeline == null:
-	#	print("Global: No active Dialogic timeline. Saving minimal state.")
-		# If no timeline, get_full_state might still contain variable data,
-		# but you might want to specifically only save variables:
-	#	dialogic_state_to_save = { "variables": Dialogic.VAR.get_all() } # Using VAR subsystem
-
-
-
 	
 	var data = {
 		"gameStarted": gameStarted,
@@ -186,7 +170,10 @@ func get_save_data() -> Dictionary:
 			"x": player_position_before_dialog.x,
 			"y": player_position_before_dialog.y
 		},
-		"scene_path_before_dialog": scene_path_before_dialog
+		"scene_path_before_dialog": scene_path_before_dialog,
+		"is_cutscene_active": is_cutscene_active, # NEW: Save cutscene active state
+		"cutscene_name": cutscene_name,
+		"cutscene_playback_position": cutscene_playback_position
 		
 	}
 	print("Global: Gathering full save data.")
@@ -220,20 +207,15 @@ func apply_load_data(data: Dictionary):
 	completed_events = data.get("completed_events", {})
 	active_quests = data.get("active_quests", [])
 	completed_quests = data.get("completed_quests", [])
+	
+	is_cutscene_active = data.get("is_cutscene_active", false)
+	cutscene_name = data.get("cutscene_name", "")
+	cutscene_playback_position = data.get("cutscene_playback_position", 0.0)
 
-	#var dialogic_loaded_state = data.get("dialogic_full_state", {})
-	#if not dialogic_loaded_state.is_empty():
-		# This should load variables as well if `get_full_state` correctly saved them.
-	#	Dialogic.load_full_state(dialogic_loaded_state)
-	#	print("Global: Applied loaded Dialogic state.")
-	#else:
-	#	print("Global: No Dialogic state found in save data or it was empty. Clearing Dialogic state.")
-	#	Dialogic.clear() # Use with caution - resets all of Dialogic
-		# Alternatively, if you only want to reset variables:
-		# Dialogic.VAR.reset() # This resets only Dialogic variables
 	var loaded_pos_dict = data.get("player_position_before_dialog", {"x": 0.0, "y": 0.0})
 	player_position_before_dialog = Vector2(loaded_pos_dict.x, loaded_pos_dict.y)
 	scene_path_before_dialog = data.get("scene_path_before_dialog", "")
+
 	
 	print("Global: All saved data applied successfully.")
 
@@ -259,7 +241,7 @@ func reset_to_defaults():
 	bgm_vol = -10.0
 	sfx_vol = -10.0
 	voice_vol = -10
-	resolution_index = 2  # Reset to default index
+	resolution_index = 2 # Reset to default index
 	
 	kills = 0 # Reset kills
 	affinity = 0 # Reset affinity
@@ -275,6 +257,11 @@ func reset_to_defaults():
 	dialog_timeline = ""
 	dialog_current_index = 0
 	dialogic_variables = {}
+	is_cutscene_active = false # NEW: Reset cutscene active state
+	
+
+	cutscene_name = ""
+	cutscene_playback_position = 0.0
 
 	if autosave_timer.is_running():
 		autosave_timer.stop()
@@ -298,23 +285,11 @@ func apply_graphics_settings():
 	# Brightness (Requires a CanvasModulate node in your main scene)
 	brightness_changed.emit(brightness) # Emit the signal here
 
- 
 	# You would typically have a CanvasModulate node in your main scene (e.g., world.tscn)
 	# and control its 'color' property.
 	# Example in world.gd: $CanvasModulate.color = Color(brightness, brightness, brightness, 1.0)
 	print("Global: Applied graphics settings: Fullscreen=" + str(fullscreen_on) + 
 		  ", VSync=" + str(vsync_on) + ", Brightness (value stored)=" + str(brightness))
-	
-	# Pixel Smoothing (Texture Filter)
-	# This usually affects how textures are rendered (e.g., sharp for pixel art, linear for smooth).
-	# It's a Project Setting and often requires a restart or scene reload to fully apply globally.
-	# For dynamic changes, you might need a custom viewport setup.
-	#if pixel_smoothing:
-	#	ProjectSettings.set_setting("rendering/textures/default_filters/texture_filter", 1)  # 1 = Linear
-	#	print("Global: Pixel Smoothing set to LINEAR (smooth).")
-	#else:
-	#	ProjectSettings.set_setting("rendering/textures/default_filters/texture_filter", 0)  # 0 = Nearest
-	#	ProjectSettings.save() # Save project settings so it persists across runs
 	
 	# FPS Limit
 	Engine.set_max_fps(fps_limit)

@@ -1,3 +1,6 @@
+Sprite2D
+Camera2D
+AnimationPlayer
 ProgressBar
 TextureProgressBar
 HBoxContainer
@@ -10,5 +13,3 @@ CanvasLayer
 ConfirmationDialog
 Button
 CanvasModulate
-Control
-HSlider

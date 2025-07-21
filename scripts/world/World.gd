@@ -4,13 +4,18 @@ extends Node2D
 @onready var player_spawn_point_junkyard: Marker2D = $Room_AerendaleJunkyard/Marker2D # Player's actual spawn after the cutscene
 
 # IMPORTANT: Reference the player that is ALREADY IN THE SCENE TREE
-@onready var player_instance: Node2D = $Player # Adjust this path if your Player node is not directly named "Player" or is a child of something else. E.g., "$Characters/Player"
+@onready var player_root_node: Node2D = $Player # Adjust this path if your Player node is not directly named "Player" or is a child of something else. E.g., "$Characters/Player"
 
-@onready var cutscene_manager: Node = $CutsceneManager # Path to your CutsceneManager node
+@onready var cutscene_manager: Node = $CutsceneIntro# Path to your CutsceneManager node
 
 @export var pause_menu_scene: PackedScene = preload("res://scenes/ui/pause_menu.tscn")
 
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate # Adjust path if different
+
+@onready var _player_camera: Camera2D = null # This will be assigned in _ready when player_instance is valid
+
+# Removed the @onready var cutscene_camera_node as we're using the player's camera
+
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("menu"):
@@ -20,205 +25,218 @@ func _unhandled_input(event: InputEvent):
 			add_child(pause_menu_instance)
 			get_tree().paused = true # Pause the game when menu opens
 			get_viewport().set_input_as_handled() # <--- THIS IS THE KEY LINE!
-		#else: # This block is for if you press "menu" again while paused
-			# If the pause menu is already open, it will handle closing itself
-			# You generally don't want to close it from here if PauseMenu.gd has _unhandled_input
 
 func _ready():
 	print("World: _ready() called. Global.play_intro_cutscene = ", Global.play_intro_cutscene)
 	
+	# --- Player Node and Camera Setup (Existing Logic) ---
+	# This section ensures the player node and its camera are correctly referenced.
+	print("World: Debug: @onready player_root_node resolved to: ", player_root_node)
+	if not is_instance_valid(player_root_node):
+		printerr("World: WARNING: @onready player_root_node is NULL or INVALID in initial _ready. Attempting to find it again dynamically.")
+		player_root_node = get_node_or_null("Player")
+		if not is_instance_valid(player_root_node):
+			player_root_node = find_child("Player", true)
+			if not is_instance_valid(player_root_node):
+				printerr("World: CRITICAL ERROR: Could not find 'Player' Node2D dynamically either. Scene setup for player will be skipped in this _ready call.")
+				print("World: Debug: EXITING _ready() - player_root_node not found.")
+				return
+			else:
+				print("World: Debug: Successfully found player_root_node dynamically after initial null: ", player_root_node)
+		else:
+			print("World: Debug: Successfully re-obtained player_root_node via get_node_or_null after initial null: ", player_root_node)
+
+	var actual_player_body: CharacterBody2D = null
+	if player_root_node:
+		actual_player_body = player_root_node.get_node_or_null("Player")
+
+	if not is_instance_valid(actual_player_body) or not (actual_player_body is CharacterBody2D):
+		printerr("World: CRITICAL ERROR: Could not find or cast CharacterBody2D named 'Player' under PlayerRoot_Node2D! Check your player scene structure.")
+		print("World: Debug: EXITING _ready() - actual_player_body not found or invalid.")
+		return
+
+	print("World: Debug: About to assign actual_player_body to Global.playerBody: ", actual_player_body)
+	Global.playerBody = actual_player_body
+	print("World: Debug: Finished assignment. Global.playerBody now (should be): ", Global.playerBody)
+
+	# --- Safely assign _player_camera ---
+	if Global.playerBody and is_instance_valid(Global.playerBody):
+		_player_camera = Global.playerBody.get_node_or_null("Camera2D")
+		if not _player_camera:
+			printerr("World: ERROR: Player's Camera2D not found at 'Camera2D' under playerBody!")
+	else:
+		printerr("World: ERROR: Global.playerBody is null or invalid, cannot assign _player_camera!")
+
+	if not is_instance_valid(Global.playerBody):
+		printerr("World: CRITICAL ERROR: Global.playerBody is NULL or INVALID IMMEDIATELY AFTER ASSIGNMENT in World.gd! Something cleared it.")
+		print("World: Debug: EXITING _ready() - Global.playerBody invalid after assignment.")
+		return
+
 	Global.set_current_game_scene_path(self.scene_file_path)
 	print("World: Scene path set in Global: " + Global.current_scene_path)
 
 	Global.brightness_changed.connect(_on_global_brightness_changed)
 	_on_global_brightness_changed(Global.brightness)
-	
-	if not player_spawn_point_junkyard:
-		print("❌ World: player_spawn_point_junkyard not found! Check node path: $Room_AerendaleJunkyard/Marker2D")
-		return
-	
-	if player_instance and is_instance_valid(player_instance):
-		Global.playerBody = player_instance
-		print("✅ World: Pre-existing player assigned to Global.playerBody.")
-	else:
-		print("❌ World: Pre-existing player node not found or invalid! Check @onready var player_instance path.")
+
+	if not player_spawn_point_junkyard or not is_instance_valid(player_spawn_point_junkyard):
+		printerr("❌ World: player_spawn_point_junkyard not found or invalid! Check node path: $Room_AerendaleJunkyard/Marker2D")
 		return
 
-	if not cutscene_manager:
-		print("❌ World: cutscene_manager not found! Check node path: $CutsceneManager")
-		if Global.play_intro_cutscene:
-			print("World: No cutscene manager, treating as new game without cutscene.")
-			teleport_player_and_enable(true)
-		else:
-			print("World: No cutscene manager, treating as loaded game.")
-			teleport_player_and_enable(false)
-		return
-
-	# Determine if this is a NEW GAME start or a LOADED GAME/SCENE CHANGE
 	var is_loaded_game = not Global.current_loaded_player_data.is_empty()
 
-	# --- IMPORTANT: Clear any active Dialogic dialog on scene load/start ---
-	# Use end_timeline() as it's the official public method to stop and clear the dialog.
-	# It internally handles hiding the layout node.
-	
-	# We should check if a timeline is actually running to avoid unnecessary calls
-	# The DialogicGameHandler has 'current_timeline' property.
-	if Dialogic.current_timeline != null:
-		print("World: Active Dialogic timeline detected. Calling Dialogic.end_timeline().")
-		Dialogic.end_timeline()
-	else:
-		print("World: No active Dialogic timeline on scene load/start.")
-	
-	# If you also want to completely reset Dialogic's internal state (e.g., clear variables)
-	# even if no timeline was running, you can call clear() here.
-	# Be mindful if you want variables to persist across scene loads.
-	# If Dialogic.clear() is needed, ensure it's called after end_timeline() if a timeline was active.
-	# Dialogic.clear(Dialogic.ClearFlags.FULL_CLEAR)
-	# print("World: Also called Dialogic.clear(FULL_CLEAR) to reset full Dialogic state.")
-	# ---------------------------------------------------------------------
-
-	if is_loaded_game:
-		# LOADED GAME/SCENE CHANGE LOGIC
-		print("World: Loaded game or scene transition. Player.gd will apply loaded position.")
-		teleport_player_and_enable(false) # Player.gd handles position
-		print("✅ World: Player setup completed for loaded game.")
-		
-		# Dialogic resume logic temporarily commented out as per your request.
-		# ... (your commented out Dialogic resume code) ...
-
-	else:
-		# NEW GAME LOGIC (or scene changes NOT from a load)
+	# --- Cutscene / Game Start Logic ---
+	if not is_loaded_game: # This is a new game (or a scene change within a new game session)
 		if Global.play_intro_cutscene:
-			print("World: Starting intro cutscene for new game...")
-			setup_intro_cutscene()
-		else:
-			print("World: Not a new game. Player will be placed at default spawn.")
-			teleport_player_and_enable(true)
-			print("✅ World: Player setup completed for non-cutscene new game.")
+			print("World: New Game detected. Initiating intro cutscene.")
+			# Ensure cutscene manager is valid
+			if not is_instance_valid(cutscene_manager):
+				printerr("❌ World: CutsceneManager node not found or invalid! Path: $CutsceneManager")
+				# Fallback: if cutscene manager is missing, just spawn player
+				teleport_player_and_enable(true)
+				Global.play_intro_cutscene = false # Reset the flag
+				return
+
+			# Connect the cutscene_finished signal from the CutsceneManager
+			if not cutscene_manager.cutscene_finished.is_connected(Callable(self, "_on_cutscene_finished")):
+				cutscene_manager.cutscene_finished.connect(Callable(self, "_on_cutscene_finished"))
+
+			# Disable player input and hide player until cutscene finishes
+			if Global.playerBody.has_method("disable_input"):
+				Global.playerBody.disable_input()
+			elif Global.playerBody.has_method("set_input_enabled"):
+				Global.playerBody.set_input_enabled(false)
+			else:
+				Global.playerBody.set_process(false)
+				Global.playerBody.set_physics_process(false)
+			Global.playerBody.visible = false
+			print("World: Player disabled and hidden for cutscene.")
+
+			# Use the player's camera for the cutscene, temporarily moving it
+			if is_instance_valid(_player_camera):
+				_player_camera.global_position = player_spawn_point_initial.global_position
+				_player_camera.make_current()
+				print("World: Player camera moved to initial spawn point for cutscene.")
+			else:
+				printerr("World: No valid player camera found for cutscene!")
+
+			# Start the cutscene using the CutsceneManager
+			cutscene_manager.start_cutscene()
+			print("World: CutsceneManager.start_cutscene() called.")
+
+			# Reset the global flag immediately. This prevents the cutscene from playing
+			# again if you change scenes within the same "new game" session.
+			Global.play_intro_cutscene = false
+			print("World: Global.play_intro_cutscene reset to false.")
+
+		else: # This branch is for new games that are NOT the initial intro cutscene (e.g., scene changes within a new game session)
+			if Dialogic.current_timeline != null:
+				print("World: New game/Scene change. Active Dialogic timeline detected. Calling Dialogic.end_timeline().")
+				Dialogic.end_timeline()
+			else:
+				print("World: New game/Scene change. No active Dialogic timeline. Proceeding.")
+			teleport_player_and_enable(true) # Place player at default spawn
+			print("✅ World: Player setup completed for non-intro new game (scene change).")
+
+	else: # This branch is for loaded games
+		print("World: Loaded game. Player.gd will apply loaded position.")
+		teleport_player_and_enable(false) # Player position will be handled by load data
+		print("✅ World: Player setup completed for loaded game.")
 
 	print("Main Scene _ready() finished.")
 
-func setup_intro_cutscene():
-	# Position camera for cutscene if spawn point exists
-	if player_spawn_point_initial:
-		var camera = get_viewport().get_camera_2d()
-		if camera:
-			camera.global_position = player_spawn_point_initial.global_position
-			camera.zoom = Vector2(1, 1) # Reset zoom for cutscene if needed
-			print("World: Camera positioned for cutscene")
-		else:
-			print("❌ World: No camera found in viewport for cutscene setup.")
-	
-	# Hide player and disable input during cutscene
-	if player_instance and is_instance_valid(player_instance):
-		player_instance.visible = false
-		# Assuming Player.gd has a method to control its input processing
-		if player_instance.has_method("set_input_enabled"):
-			player_instance.set_input_enabled(false)
-		else:
-			player_instance.set_physics_process(false)
-			player_instance.set_process(false)
-		print("World: Player hidden and input disabled for cutscene.")
-
-	# Connect to cutscene finished signal
-	if cutscene_manager.has_signal("cutscene_finished"):
-		# Disconnect any old connections to prevent duplicate calls
-		if cutscene_manager.cutscene_finished.is_connected(_on_cutscene_manager_finished):
-			cutscene_manager.cutscene_finished.disconnect(_on_cutscene_manager_finished)
-		
-		cutscene_manager.cutscene_finished.connect(_on_cutscene_manager_finished)
-		print("World: Connected to cutscene_finished signal.")
-		
-		if cutscene_manager.has_method("start_cutscene"):
-			cutscene_manager.start_cutscene()
-			print("World: Cutscene started.")
-		else:
-			print("❌ World: CutsceneManager missing 'start_cutscene' method. Proceeding without cutscene.")
-			# If cutscene manager exists but can't start cutscene, treat as finished
-			_on_cutscene_manager_finished() # Manually call finished logic
-	else:
-		print("❌ World: CutsceneManager missing 'cutscene_finished' signal. Proceeding without cutscene.")
-		_on_cutscene_manager_finished() # Manually call finished logic
+# NEW: Function to handle when the cutscene finishes
+func _on_cutscene_finished():
+	print("World: _on_cutscene_finished() called. Enabling player and switching camera.")
+	# Now that the cutscene is over, position the player, enable their input, and switch to their camera.
+	teleport_player_and_enable(true) # This will position player at junkyard, enable input, and switch to player camera
+	print("✅ World: Player enabled and camera switched after cutscene.")
 
 
-func _on_cutscene_manager_finished():
-	print("✅ World: Cutscene finished signal received!")
-	
-	Global.play_intro_cutscene = false # Set this to false after intro cutscene finishes
-	print("World: Global.play_intro_cutscene set to false.")
-	
-	# Now, teleport and enable the *existing* player to its default starting position
-	teleport_player_and_enable(true) # Pass 'true' to force default position for new game
-	print("✅ World: Player setup completed successfully after cutscene!")
-
-
-# This function now handles teleporting and enabling the EXISTING player.
-# 'position_player' argument determines if the player's position should be set by this function.
 func teleport_player_and_enable(position_player: bool = true):
 	print("World: teleport_player_and_enable() called with position_player_arg: " + str(position_player))
 
-	
-	if not player_instance or not is_instance_valid(player_instance):
-		print("❌ World: Cannot teleport player - player_instance is null or invalid!")
+	if not Global.playerBody or not is_instance_valid(Global.playerBody):
+		printerr("❌ World: Cannot teleport player - Global.playerBody is null or invalid!")
 		return
 
-	if not player_spawn_point_junkyard:
-		print("❌ World: Cannot teleport player - junkyard spawn point not found!")
+	if not player_spawn_point_junkyard or not is_instance_valid(player_spawn_point_junkyard):
+		printerr("❌ World: Cannot teleport player - junkyard spawn point not found or invalid!")
 		return
-	
-	# --- Conditional Player Positioning ---
+
 	if position_player:
-		player_instance.global_position = player_spawn_point_junkyard.global_position
-		print("✅ World: Player positioned at default spawn point: ", player_instance.global_position)
+		Global.playerBody.global_position = player_spawn_point_junkyard.global_position
+		print("✅ World: Player positioned at default spawn point: ", Global.playerBody.global_position)
 	else:
-		# If not positioning, assume Player.gd's _ready() has already applied loaded data.
-		print("✅ World: Player's position assumed to be set by Player.gd load: ", player_instance.global_position)
-	# --- End Conditional Player Positioning ---
-	
-	# Ensure player is visible and enabled
-	player_instance.visible = true
-	player_instance.set_process_mode(Node.PROCESS_MODE_INHERIT) # Ensure processing is inherited
-	
-	# Enable player input
-	if player_instance.has_method("enable_input"): # If your Player script has a custom enable_input method
-		player_instance.enable_input()
-	elif player_instance.has_method("set_input_enabled"): # If it has a set_input_enabled method
-		player_instance.set_input_enabled(true)
+		print("✅ World: Player's position assumed to be set by Player.gd load: ", Global.playerBody.global_position)
+
+	Global.playerBody.visible = true
+	Global.playerBody.set_process_mode(Node.PROCESS_MODE_INHERIT)
+
+	if Global.playerBody.has_method("enable_input"):
+		Global.playerBody.enable_input()
+	elif Global.playerBody.has_method("set_input_enabled"):
+		Global.playerBody.set_input_enabled(true)
 	else:
-		# Fallback for generic Node2D if no specific input enabling method
-		player_instance.set_process(true)
-		player_instance.set_physics_process(true)
-	
-	
-	# Make sure the camera follows the player
-	setup_camera_following()
-	
-	
+		Global.playerBody.set_process(true)
+		Global.playerBody.set_physics_process(true)
+
+	# Always switch to player camera when enabling player
+	Callable(self, "switch_to_player_camera").call_deferred()
+
 	print("✅ World: Player visibility, input, and camera setup completed.")
 
 
 func setup_camera_following():
-	var camera = get_viewport().get_camera_2d()
-	if camera and player_instance:
-		if camera.has_method("set_target"): # If your custom camera script has set_target
-			camera.set_target(player_instance)
-			print("World: Camera set_target to player.")
-		else:
-			# Fallback: Directly position camera. This might be jerky if player moves.
-			camera.global_position = player_instance.global_position
-			print("World: Camera positioned directly to player (fallback).")
-	else:
-		print("❌ World: Camera or player_instance not found for camera setup.")
-	#Global.playerBody = player_instance
+	print("World: setup_camera_following() called, deferring to switch_to_player_camera.")
+	Callable(self, "switch_to_player_camera").call_deferred()
 
 func _on_global_brightness_changed(new_brightness_value: float):
-	# Ensure the value is within a reasonable range (e.g., 0.0 to 2.0 or so)
-	# Godot's Color values are typically 0.0 to 1.0, but for brightness,
-	# you might want to allow going above 1.0 for "super bright" effects.
-	# For a simple brightness control, clamping between 0 and 1 is usually fine.
-	var clamped_brightness = clampi(new_brightness_value, 0.0, 2.0) # Adjust max as needed
+	var clamped_brightness = clampi(new_brightness_value, 0.0, 2.0)
+	if canvas_modulate:
+		canvas_modulate.color = Color(clamped_brightness, clamped_brightness, clamped_brightness, 1.0)
+		print("World: CanvasModulate brightness updated to: ", clamped_brightness)
+	else:
+		printerr("World: WARNING: canvas_modulate is null, cannot update brightness.")
 
-	# Set the color of the CanvasModulate node
-	canvas_modulate.color = Color(clamped_brightness, clamped_brightness, clamped_brightness, 1.0)
-	print("World: CanvasModulate brightness updated to: ", clamped_brightness)
-	
+# This function is no longer needed as we're not switching to a separate cutscene camera.
+# The player's camera is simply repositioned.
+func switch_to_cutscene_camera(cutscene_cam: Camera2D):
+	print("World.gd: Attempting to switch to cutscene camera: ", cutscene_cam.name if is_instance_valid(cutscene_cam) else "null")
+
+	if not is_instance_valid(cutscene_cam):
+		printerr("World.gd: Failed to activate cutscene camera: Invalid reference.")
+		return
+
+	if is_instance_valid(_player_camera):
+		if _player_camera.is_current():
+			print("World.gd: Deactivating player camera before activating cutscene camera.")
+			_player_camera.enabled = false
+			_player_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
+	else:
+		printerr("World.gd: Player camera (_player_camera) is not a valid instance when attempting to deactivate it.")
+
+	cutscene_cam.enabled = true
+	cutscene_cam.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	Callable(cutscene_cam, "make_current").call_deferred()
+	print("✅ World.gd: Cutscene camera activation deferred: ", cutscene_cam.name)
+
+func switch_to_player_camera():
+	print("World.gd: Attempting to switch to player camera.")
+
+	if not is_instance_valid(_player_camera): # Always check validity first
+		printerr("World.gd: Failed to activate player camera: Invalid reference or not found.")
+		return
+
+	# Explicitly deactivate any other camera that might be current.
+	var current_viewport_camera = get_viewport().get_camera_2d()
+	if is_instance_valid(current_viewport_camera) and current_viewport_camera != _player_camera:
+		print("World.gd: Deactivating current viewport camera before activating player camera:", current_viewport_camera.name)
+		current_viewport_camera.enabled = false
+		current_viewport_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
+
+	# Ensure the player camera is visible/enabled and current
+	_player_camera.enabled = true
+	_player_camera.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	# Use call_deferred for make_current to ensure it happens after current frame processing
+	Callable(_player_camera, "make_current").call_deferred()
+	print("✅ World.gd: Player camera activation deferred.")

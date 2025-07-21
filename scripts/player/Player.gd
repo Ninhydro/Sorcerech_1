@@ -100,6 +100,21 @@ var inventory = []
 var _should_apply_loaded_position: bool = false 
 # --- END NEW FLAG ---
 
+# Method to disable player input
+func disable_input():
+	print("Player: Input disabled.")
+	set_physics_process(false) # Stop _physics_process from running normal movement
+	set_process(false) # Stop _process if you have non-physics input in it
+	# You might also set Global.is_cutscene_active = true from the Cutscene Area2D directly,
+	# and have your player's input check this global variable.
+
+# Method to enable player input
+func enable_input():
+	print("Player: Input enabled.")
+	set_physics_process(true)
+	set_process(true)
+
+
 func _ready():
 	Global.playerBody = self
 	Global.playerAlive = true
@@ -170,20 +185,16 @@ func _ready():
 		combat_fsm.change_state(IdleState.new(self))
 	# --- END MODIFIED _ready() LOGIC ---
 
+# This is your main physics processing loop
 func _physics_process(delta):
 	# --- APPLY LOADED POSITION (ONE-TIME) ---
+	# Assign self to Global.playerBody here ensures it's always up-to-date
+	# This should ideally be done once at load/spawn, not every physics frame.
+	# But if you move Global.playerBody assignment to _ready,
+	# make sure it happens *before* any other scripts try to access it.
 	Global.playerBody = self
-	#print(Global.playerBody)
-	#unlock_state("Cyber")
-	#unlock_state("Magus")
 	Global.set_player_form(get_current_form_id())
-	#Global.current_form = get_current_form_id()
-	
-	#unlock_state("Magus")
-	#unlock_state("Cyber")
-	#unlock_state("UltimateMagus")
-	#unlock_state("UltimateCyber")
-		
+
 	if _should_apply_loaded_position:
 		print("Player._physics_process: Applying loaded position (one-time).")
 		global_position = Vector2(Global.current_loaded_player_data.get("position_x"), Global.current_loaded_player_data.get("position_y"))
@@ -193,97 +204,128 @@ func _physics_process(delta):
 		print("Player.gd: Position set to loaded: ", global_position)
 	# --- END APPLY LOADED POSITION ---
 
+	# --- CUTSCENE OVERRIDE ---
+	# If a cutscene is active, player's direct input is ignored.
+	# Movement and animations are handled by external calls (AnimationPlayer methods).
+	if Global.is_cutscene_active:
+		velocity = Vector2.ZERO # Ensure no residual input-based movement
+		# Do NOT return here. We still need gravity, knockback, and move_and_slide().
+		# External calls will set velocity or global_position directly.
+	# --- END CUTSCENE OVERRIDE ---
+
+	# Your existing FSM updates
 	if combat_fsm:
 		combat_fsm.update_physics(delta)
-	
 	if current_state:
 		current_state.physics_process(delta)
-		
-	Global.playerDamageZone = AreaAttack
-	Global.playerHitbox = Hitbox
-	
-	if telekinesis_controller.is_ui_open == true:
+
+	Global.playerDamageZone = AreaAttack # Assuming AreaAttack is your damage area node
+	Global.playerHitbox = Hitbox # Assuming Hitbox is your hitbox node
+
+	# Telekinesis UI state management
+	if telekinesis_controller and telekinesis_controller.is_ui_open:
 		UI_telekinesis = true
-	elif telekinesis_controller.is_ui_open == false:
+	else:
 		UI_telekinesis = false
-		
-	var input_dir = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	if Input.is_action_pressed("move_right") and not wall_jump_just_happened and Global.is_dialog_open == false:
-		facing_direction = 1
-	elif Input.is_action_pressed("move_left") and not wall_jump_just_happened and Global.is_dialog_open == false:
-		facing_direction = -1
-		
-	if wall_jump_timer > 0:
-		wall_jump_timer -= delta
-		if wall_jump_timer <= 0:
-			wall_jump_just_happened = false
-	
-	if !dead:
+
+	# --- Player Input and Movement (Only if NOT in a cutscene and NOT dead) ---
+	if not dead and not Global.is_cutscene_active: # <-- IMPORTANT: Add Global.is_cutscene_active check here
+		var input_dir = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+
+		# Facing direction based on input
+		if Input.is_action_pressed("move_right") and not wall_jump_just_happened and not Global.is_dialog_open:
+			facing_direction = 1
+		elif Input.is_action_pressed("move_left") and not wall_jump_just_happened and not Global.is_dialog_open:
+			facing_direction = -1
+
+		# Wall jump timer decrement
+		if wall_jump_timer > 0:
+			wall_jump_timer -= delta
+			if wall_jump_timer <= 0:
+				wall_jump_just_happened = false
+
+		# Knockback (applied even during cutscene if set externally)
 		if knockback_timer > 0:
 			velocity = knockback_velocity
 			knockback_timer -= delta
-		elif canon_enabled == true && !is_launched: # Only stop movement if in cannon mode and NOT launched yet
+		# Special states where player input is overridden
+		elif canon_enabled and not is_launched:
 			scale = Vector2(0.5,0.5)
 			velocity = Vector2.ZERO
-		elif telekinesis_enabled == true :
+		elif telekinesis_enabled:
 			velocity = Vector2.ZERO
-		else: # Normal movement
-			if facing_direction == -1 and !dead:
+		else: # Normal movement and input processing
+			if facing_direction == -1: # No need for !dead check here, already done above
 				sprite.flip_h = true
 			else:
 				sprite.flip_h = false
-				
-			if not wall_jump_just_happened and Global.is_dialog_open == false and Global.attacking == false:
-				velocity.x = input_dir * move_speed
-			elif Global.is_dialog_open == true:
-				velocity.x = 0
-			if is_on_floor() and Input.is_action_just_pressed("move_up") and Global.is_dialog_open == false and Global.attacking == false:
+
+			# Apply horizontal movement based on input (only if not wall-jumping, dialog, or attacking)
+			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking:
+				velocity.x = input_dir * move_speed # Use 'speed' here for normal movement
+			else:
+				velocity.x = 0 # Stop horizontal movement if dialog is open or attacking
+
+			# Jumping (only if on floor, no dialog, no attacking)
+			if is_on_floor() and Input.is_action_just_pressed("move_up") and not Global.is_dialog_open and not Global.attacking:
 				velocity.y = -jump_force
-	
-		if Input.is_action_just_pressed("yes") and can_attack and get_current_form_id() != "Normal" and get_current_form_id() != "UltimateMagus" and get_current_form_id() != "UltimateCyber" and Global.is_dialog_open == false:
-			can_attack = false
-			attack_cooldown_timer.start(2.0)
-			#print("start cooldonw 2")
-		elif Input.is_action_just_pressed("yes") and can_attack and get_current_form_id() != "Normal" and get_current_form_id() != "UltimateMagus" and get_current_form_id() == "UltimateCyber" and Global.is_dialog_open == false:
-			can_attack = false
-			attack_cooldown_timer.start(5.0)
-			#print("start cooldonw 5")
-		elif get_current_form_id() == "UltimateMagus" and can_attack and Input.is_action_just_pressed("yes") and get_current_form_id() != "Normal" and get_current_form_id() != "UltimateCyber"  and combo_timer_flag == true and Global.is_dialog_open == false:
-			combo_timer_flag = false
-			combo_timer.start(0.5)
-			#print("start cooldonw 0.5")
-		
-		#print(get_current_form_id())
-		if Input.is_action_just_pressed("no") and can_skill and get_current_form_id() != "Normal" and get_current_form_id() != "Cyber" and get_current_form_id() != "Magus" and get_current_form_id() != "UltimateCyberState" and Global.is_dialog_open == false:
-			can_skill = false
-			skill_cooldown_timer.start(2.0)
-		
-		elif Input.is_action_just_pressed("no") and can_skill and  get_current_form_id() != "Normal"  and get_current_form_id() == "Cyber" and get_current_form_id() != "Magus" and get_current_form_id() != "UltimateCyberState" and Global.is_dialog_open == false:
-			can_skill = false
-			skill_cooldown_timer.start(0.1)
+
+		# Attack input (only if not dialog open)
+		if Input.is_action_just_pressed("yes") and can_attack and not Global.is_dialog_open:
+			var current_form = get_current_form_id()
+			var attack_started = false
+			if current_form != "Normal" and current_form != "UltimateMagus" and current_form != "UltimateCyber":
+				attack_cooldown_timer.start(2.0)
+				attack_started = true
+			elif current_form == "UltimateCyber":
+				attack_cooldown_timer.start(5.0)
+				attack_started = true
+			elif current_form == "UltimateMagus" and combo_timer_flag:
+				combo_timer_flag = false
+				combo_timer.start(0.5)
+				attack_started = true
 			
+			if attack_started:
+				can_attack = false
+				# Add your attack logic here (e.g., combat_fsm.change_state(AttackState.new(self)))
+
+		# Skill input (only if not dialog open)
+		if Input.is_action_just_pressed("no") and can_skill and not Global.is_dialog_open:
+			var current_form = get_current_form_id()
+			var skill_started = false
+			if current_form == "UltimateMagus": # Check for UltimateMagus first
+				skill_cooldown_timer.start(2.0)
+				skill_started = true
+			elif current_form == "Cyber":
+				skill_cooldown_timer.start(0.1)
+				skill_started = true
+			elif current_form == "Magus":
+				skill_cooldown_timer.start(10.0)
+				skill_started = true
+			elif current_form == "UltimateCyberState": # Assuming this is different from "UltimateCyber"
+				skill_cooldown_timer.start(15.0)
+				skill_started = true
 			
-		elif Input.is_action_just_pressed("no") and can_skill and  get_current_form_id() != "Normal"  and get_current_form_id() != "Cyber" and get_current_form_id() == "Magus" and get_current_form_id() != "UltimateCyberState" and Global.is_dialog_open == false:
-			can_skill = false
-			skill_cooldown_timer.start(10.0)
-			
-		elif Input.is_action_just_pressed("no") and can_skill and  get_current_form_id() != "Normal"  and get_current_form_id() != "Cyber" and get_current_form_id() == "UltimateCyberState" and get_current_form_id() != "Magus" and Global.is_dialog_open == false:
-			can_skill = false
-			skill_cooldown_timer.start(15.0)
-		
-		
-		check_hitbox()
-	elif dead:
+			if skill_started:
+				can_skill = false
+				# Add your skill logic here (e.g., combat_fsm.change_state(SkillState.new(self)))
+
+		check_hitbox() # Call your hitbox update logic
+
+	# --- Dead state ---
+	if dead:
 		velocity = Vector2.ZERO # Stop all movement if dead
-	
-	# --- CANNON AIMING AND LAUNCHING LOGIC ---
+
+	# --- CANNON AIMING AND LAUNCHING LOGIC (Can override cutscene if desired, or add Global.is_cutscene_active here too) ---
+	# For simplicity, assuming cannon can still be controlled during a cutscene if desired.
+	# If cutscene should disable cannon input, add 'and not Global.is_cutscene_active' to these Input checks.
 	if is_aiming:
 		if Input.is_action_pressed("move_left"):
 			aim_angle_deg = clamp(aim_angle_deg - 1, -170, -10) # restrict angle
 		elif Input.is_action_pressed("move_right"):
 			aim_angle_deg = clamp(aim_angle_deg + 1, -170, -10)
 		update_aim_ui(aim_angle_deg)
-	
+
 	if is_in_cannon and is_aiming and Input.is_action_just_pressed("yes"):
 		print("FIRE!")
 		launch_direction = Vector2.RIGHT.rotated(deg_to_rad(aim_angle_deg)) # Calculate launch direction from aim angle
@@ -291,7 +333,7 @@ func _physics_process(delta):
 		is_launched = true # Player is now launched
 		is_in_cannon = false # No longer in the cannon
 		show_aim_ui(false)
-		# sprite.play("flying") # TODO: change to appropriate flying sprite animation
+		#animation_player.play("flying") # Play player's own flying animation
 		
 	if is_launched:
 		# Apply the current launch velocity
@@ -309,23 +351,19 @@ func _physics_process(delta):
 			var collision = get_slide_collision(i)
 			var collider = collision.get_collider()
 
-			# Always process bounce if it's a bounce spot, regardless of protection timer
-			# The timer is now only for preventing premature stopping.
 			if collider and collider.has_method("get_bounce_data"):
 				var bounce_data = collider.get_bounce_data()
 				var bounce_normal = bounce_data.normal
 				var bounce_power = bounce_data.power
 
-				# Only bounce if the normal is valid and not zero
 				if bounce_normal.length() > 0.01:
 					bounce_normal = bounce_normal.normalized()
-					# Reflect the current velocity based on the bounce normal
 					launch_direction = velocity.bounce(bounce_normal).normalized()
-					velocity = launch_direction * launch_speed * bounce_power # Apply new velocity
+					velocity = launch_direction * launch_speed * bounce_power
 					print("BOUNCED! New direction: ", launch_direction, " New velocity: ", velocity)
-					bounced_this_frame = true # Set flag that a bounce occurred
-					bounced_recently() # Activate bounce protection (to prevent immediate stopping)
-					break # Stop checking after the first bounceable collision
+					bounced_this_frame = true
+					bounced_recently()
+					break
 				else:
 					print("Invalid bounce normal: ", bounce_normal)
 
@@ -333,40 +371,38 @@ func _physics_process(delta):
 		if not is_on_floor():
 			velocity.y += gravity * delta
 
-		# Stopping condition:
-		# Stop if we are on a solid surface (floor, ceiling, or wall)
-		# AND we have NOT bounced recently (bounced_protection_timer is 0 or less).
-		# This allows the player to continue moving after a bounce, even if they briefly touch a non-bounce surface.
 		if (is_on_floor() or is_on_ceiling() or is_on_wall()) and bounced_protection_timer <= 0:
 			is_launched = false
 			velocity = Vector2.ZERO # Stop movement
 			canon_enabled = false # Exit cannon mode
 			print("Player stopped on a non-bounce surface or came to rest.")
 	else:
-		# This else block handles normal gravity application when not launched
-		if not is_on_floor() and !is_in_cannon && !telekinesis_enabled:
-			velocity.y += gravity * delta	
-			
+		# This else block handles normal gravity application when not launched, not in cannon, not telekinesis
+		if not is_on_floor() and not is_in_cannon and not telekinesis_enabled and not Global.is_cutscene_active: # <-- Add cutscene check
+			velocity.y += gravity * delta
+
 	# IMPORTANT: Only one move_and_slide() call per _physics_process frame.
 	# This should be at the very end of _physics_process after all velocity calculations.
 	move_and_slide()
-	
-	# --- FORM ROTATION ---
-	if Input.is_action_just_pressed("form_next"):
-		Global.selected_form_index = (Global.selected_form_index + 1) % unlocked_states.size()
-		print("Selected form: " + unlocked_states[Global.selected_form_index])
 
-	if Input.is_action_just_pressed("form_prev"):
-		Global.selected_form_index = (Global.selected_form_index - 1 + unlocked_states.size()) % unlocked_states.size()
-		print("Selected form: " + unlocked_states[Global.selected_form_index])
+	# --- FORM ROTATION (Only if NOT in a cutscene) ---
+	if not Global.is_cutscene_active: # <-- IMPORTANT: Add Global.is_cutscene_active check here
+		if Input.is_action_just_pressed("form_next"):
+			Global.selected_form_index = (Global.selected_form_index + 1) % unlocked_states.size()
+			print("Selected form: " + unlocked_states[Global.selected_form_index])
 
-	if Input.is_action_just_pressed("form_apply") and !dead and Global.is_dialog_open == false:
-		if Global.selected_form_index != current_state_index:
-			current_state_index = Global.selected_form_index
-			switch_state(unlocked_states[current_state_index])
-			combat_fsm.change_state(IdleState.new(self))
-			can_switch_form = false
-			form_cooldown_timer.start(3)
+		if Input.is_action_just_pressed("form_prev"):
+			Global.selected_form_index = (Global.selected_form_index - 1 + unlocked_states.size()) % unlocked_states.size()
+			print("Selected form: " + unlocked_states[Global.selected_form_index])
+
+		if Input.is_action_just_pressed("form_apply") and not dead and not Global.is_dialog_open:
+			if Global.selected_form_index != current_state_index:
+				current_state_index = Global.selected_form_index
+				switch_state(unlocked_states[current_state_index])
+				combat_fsm.change_state(IdleState.new(self))
+				can_switch_form = false
+				form_cooldown_timer.start(3)
+
 	
 func get_current_form_id() -> String:
 	if current_state_index >= 0 and current_state_index < unlocked_states.size():
@@ -619,3 +655,31 @@ func apply_load_data(data: Dictionary):
 
 func bounced_recently():
 	bounced_protection_timer = BOUNCE_GRACE
+	
+	
+# This function will be called by the AnimationPlayer to make the player move
+func move_during_cutscene(target_position: Vector2, duration: float):
+	print("Player: move_during_cutscene called. Target: ", target_position, ", Duration: ", duration)
+	# Use a Tween for smooth movement during a cutscene
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", target_position, duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Connect to the tween's finished signal if you need to do something after this specific move
+	# tween.finished.connect(Callable(self, "_on_cutscene_move_finished"))
+
+# This function could be called to play an animation (e.g., 'walk', 'run', 'idle')
+func play_player_animation(anim_name: String):
+	if $AnimationPlayer and $AnimationPlayer.has_animation(anim_name):
+		$AnimationPlayer.play(anim_name)
+		print("Player: Playing animation: ", anim_name)
+	else:
+		printerr("Player: AnimationPlayer not found or animation '", anim_name, "' does not exist!")
+
+# This function could be called to make the player face a certain direction
+func set_player_direction(direction_vector: Vector2):
+	# Assuming your player's sprite is flipped based on direction
+	if direction_vector.x < 0:
+		$Sprite2D.flip_h = true
+	elif direction_vector.x > 0:
+		$Sprite2D.flip_h = false
+	print("Player: Facing direction: ", direction_vector)

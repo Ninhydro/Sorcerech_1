@@ -15,7 +15,7 @@ extends Node2D
 @onready var _player_camera: Camera2D = null # This will be assigned in _ready when player_instance is valid
 
 # Removed the @onready var cutscene_camera_node as we're using the player's camera
-
+var actual_player_body: Player = null # <--- CHANGE this type hint
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("menu"):
@@ -48,9 +48,9 @@ func _ready():
 
 	var actual_player_body: CharacterBody2D = null
 	if player_root_node:
-		actual_player_body = player_root_node.get_node_or_null("Player")
+		actual_player_body = player_root_node.get_node_or_null("Player") as Player
 
-	if not is_instance_valid(actual_player_body) or not (actual_player_body is CharacterBody2D):
+	if not is_instance_valid(actual_player_body) or not (actual_player_body is Player):
 		printerr("World: CRITICAL ERROR: Could not find or cast CharacterBody2D named 'Player' under PlayerRoot_Node2D! Check your player scene structure.")
 		print("World: Debug: EXITING _ready() - actual_player_body not found or invalid.")
 		return

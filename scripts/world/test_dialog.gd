@@ -23,6 +23,7 @@ var _waiting_for_cutscene2_to_end: bool = false
 var _player_animation_player: AnimationPlayer = null # Reference to the player's AnimationPlayer
 
 const CUTSCENE_DIALOG_TIMELINE_NAME = "timeline2"
+var player_node_ref: Player  = null
 
 func _ready():
 	print("Cutscene Area2D: Debug: @onready animation_player resolved to: ", animation_player)
@@ -55,6 +56,7 @@ func _ready():
 	print("Cutscene Area2D is ready. Waiting for player interaction.")
 
 func _on_body_entered(body: Node2D):
+	print("Player position: ",player_node_ref.global_position)
 	if body.is_in_group("player") and not _has_been_triggered:
 		print("Player entered cutscene trigger area. Starting cutscene.")
 
@@ -244,7 +246,9 @@ func end_cutscene(cutscene_name_finished: String):
 		Dialogic.dialog_ended.disconnect(Callable(self, "_on_dialogic_ended_in_cutscene"))
 
 	cutscene_finished.emit(cutscene_name_finished)
-
+	# NEW: Call proxy to enable player input
+	proxy_enable_player_input_after_cutscene()
+	
 	if Global.playerBody and is_instance_valid(Global.playerBody):
 		Global.playerBody.visible = true
 		if Global.playerBody.has_method("enable_input"):
@@ -273,3 +277,62 @@ func end_cutscene(cutscene_name_finished: String):
 	if not target_scene_path.is_empty():
 		print("Cutscene Area2D: Teleporting player to %s at %s" % [target_scene_path, target_position_in_scene])
 		Global.playerBody.global_position = target_position_in_scene
+
+# NEW: Function to set player reference (called from World.gd)
+func set_player_reference(player: Player):
+	if is_instance_valid(player):
+		player_node_ref = player
+		print("player_node_ref",player_node_ref)
+		print("Test_dialog: Player reference received: ", player_node_ref.name)
+	else:
+		printerr("Test_dialog: Received invalid player reference!")
+
+# NEW: Proxy methods for AnimationPlayer to call methods on the Player node
+# These methods are on Test_dialog.gd, and *they* call the actual methods on player_node_ref
+
+func proxy_disable_player_input_for_cutscene():
+	if player_node_ref and is_instance_valid(player_node_ref):
+		# --- NEW DIAGNOSTIC PRINTS ---
+		print(str("DEBUG FROM TEST_DIALOG: player_node_ref actual type: ", player_node_ref.get_class()))
+		print(str("DEBUG FROM TEST_DIALOG: player_node_ref script path: ", player_node_ref.get_script().resource_path if player_node_ref.get_script() else "NO SCRIPT ATTACHED!"))
+		print(str("DEBUG FROM TEST_DIALOG: player_node_ref has 'Player' class_name: ", player_node_ref is Player))
+		print(str("DEBUG FROM TEST_DIALOG: player_node_ref has method 'disable_player_input_for_cutscene': ", player_node_ref.has_method("disable_player_input_for_cutscene")))
+		# --- END NEW DIAGNOSTIC PRINTS ---
+
+		player_node_ref.disable_player_input_for_cutscene()
+	else:
+		printerr("Test_dialog: Cannot disable player input, player_node_ref is invalid!")
+
+func proxy_move_player_to_position(target_pos: Vector2, duration: float, ease_type_int: int, trans_type_int: int):
+	if player_node_ref and is_instance_valid(player_node_ref):
+		# CORRECTED: Pass the raw integers. The implicit conversion will happen
+		# when player_node_ref.move_player_to_position receives them,
+		# because that function's signature is now correctly type-hinted with enums.
+		player_node_ref.move_player_to_position(target_pos, duration, ease_type_int, trans_type_int)
+	else:
+		printerr("Test_dialog: Cannot move player, player_node_ref is invalid!")
+
+func proxy_set_player_cutscene_velocity(direction_x: float, direction_y: float, speed_multiplier: float = 1.0):
+	if player_node_ref and is_instance_valid(player_node_ref):
+		player_node_ref.set_player_cutscene_velocity(Vector2(direction_x, direction_y), speed_multiplier)
+	else:
+		printerr("Test_dialog: Cannot set player velocity, player_node_ref is invalid!")
+
+func proxy_play_player_visual_animation(anim_name: String):
+	if player_node_ref and is_instance_valid(player_node_ref):
+		player_node_ref.play_player_visual_animation(anim_name)
+	else:
+		printerr("Test_dialog: Cannot play player animation, player_node_ref is invalid!")
+
+func proxy_set_player_face_direction(direction: int):
+	if player_node_ref and is_instance_valid(player_node_ref):
+		player_node_ref.set_player_face_direction(direction)
+	else:
+		printerr("Test_dialog: Cannot set player face direction, player_node_ref is invalid!")
+
+func proxy_enable_player_input_after_cutscene():
+	if player_node_ref and is_instance_valid(player_node_ref):
+		player_node_ref.enable_player_input_after_cutscene()
+	else:
+		printerr("Test_dialog: Cannot enable player input, player_node_ref is invalid!")
+

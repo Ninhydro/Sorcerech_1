@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cnkwa1lnnfamm"]
+[gd_scene load_steps=7 format=3 uid="uid://cnkwa1lnnfamm"]
 
 [ext_resource type="TileSet" uid="uid://dckcj5o6bchxt" path="res://scenes/tileset/Placeholder_new_tile_set.tres" id="1_56olx"]
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_i5ly2"]
+[ext_resource type="Script" path="res://scripts/rooms/Room_AerendaleJunkyard.gd" id="1_xsv6q"]
 [ext_resource type="PackedScene" uid="uid://bs105i3gcljkr" path="res://scenes/world/SaveSpot.tscn" id="3_p25pu"]
 [ext_resource type="PackedScene" uid="uid://dawiya4upgoxx" path="res://scenes/world/test_dialog.tscn" id="4_gr75u"]
 
@@ -9,6 +10,7 @@
 size = Vector2(25, 31)
 
 [node name="RoomAerendaleJunkyard" type="Node2D"]
+script = ExtResource("1_xsv6q")
 
 [node name="TileMap" type="TileMap" parent="." groups=["Platforms"]]
 tile_set = ExtResource("1_56olx")

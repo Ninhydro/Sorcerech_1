@@ -14,6 +14,12 @@ extends CanvasLayer
 
 @onready var confirmation_dialog_exit_game = $ConfirmationDialog # Adjust path if it's nested
 
+#Object needed in world/room
+#1. player, npcs, enemies
+#2. cyber canon spot & bounce wall
+#3. magus teleport/telekinesis spot & lock check
+#4. grappling hook spot
+#5. cutscene, etc
 
 func _ready():
 	new_game_button.pressed.connect(_on_new_game_button_pressed)

@@ -683,3 +683,131 @@ func set_player_direction(direction_vector: Vector2):
 	elif direction_vector.x > 0:
 		$Sprite2D.flip_h = false
 	print("Player: Facing direction: ", direction_vector)
+
+# NEW: Call this from your Cutscene Animation (Call Method Track via Test_dialog proxy)
+# to make the player move to a specific global position using a Tween
+func move_player_to_position(target_pos: Vector2, duration: float, ease_type: Tween.EaseType = Tween.EASE_IN_OUT, trans_type: Tween.TransitionType = Tween.TRANS_SINE):
+	if not is_instance_valid(self): return # Safety check
+	if not Global.is_cutscene_active:
+		printerr("Player: Attempted cutscene movement but Global.is_cutscene_active is false!")
+		return
+
+	print("Player: Moving to ", target_pos, " over ", duration, " seconds.")
+	var tween = create_tween()
+	# NO EXPLICIT CASTING HERE. The parameters 'ease_type' and 'trans_type' are already
+	# the correct enum types because of the type hints in the function signature,
+	# assuming the values passed into this function were valid integers that Godot converted.
+	tween.tween_property(self, "global_position", target_pos, duration)\
+		.set_ease(ease_type).set_trans(trans_type)
+  
+	# Connect to a signal if you need to know when this specific move finishes
+	# tween.finished.connect(Callable(self, "_on_cutscene_move_finished_specific"))
+
+# NEW: Call this from your Cutscene Animation (Call Method Track via Test_dialog proxy)
+# to set a continuous velocity for a duration (e.g., walking, running)
+func set_player_cutscene_velocity(direction_vector: Vector2, speed_multiplier: float = 1.0):
+	if not is_instance_valid(self): return
+	if not Global.is_cutscene_active:
+		printerr("Player: Attempted cutscene velocity but Global.is_cutscene_active is false!")
+		return
+	
+	velocity = direction_vector.normalized() * (move_speed * speed_multiplier) # Use player's base speed
+	print("Player: Setting cutscene velocity to: ", velocity)
+	
+	# Update visual direction if your sprite needs it
+	if direction_vector.x < 0:
+		sprite.flip_h = true
+	elif direction_vector.x > 0:
+		sprite.flip_h = false
+
+# NEW: Call this from your Cutscene Animation (Call Method Track via Test_dialog proxy)
+# to play a visual animation on the player's own AnimationPlayer
+func play_player_visual_animation(anim_name: String):
+	if not is_instance_valid(self): return
+	
+	if combat_fsm and is_instance_valid(combat_fsm):
+		# Attempt to find the corresponding state in your FSM
+		# You'll need a way for your FSM to transition to a state that plays the desired animation.
+		# This might be more complex than a direct state name mapping.
+		# Example: If anim_name is "idle", you'd want to go to IdleState.
+		# If anim_name is "walk", you'd want to go to WalkState.
+		
+		# This is a conceptual example. You'll need to adapt it to your FSM's actual state classes.
+		match anim_name:
+			"idle":
+				combat_fsm.change_state(IdleState.new(self))
+			"run":
+				combat_fsm.change_state(RunState.new(self))
+			"jump":
+				combat_fsm.change_state(JumpState.new(self))
+			"hurt":
+				combat_fsm.change_state(HurtState.new(self))
+			"die":
+				combat_fsm.change_state(DieState.new(self))
+			"attack":
+				combat_fsm.change_state(AttackState.new(self))
+			"skill":
+				combat_fsm.change_state(SkillState.new(self))
+			# ... add other cases as needed ...
+			_:
+				printerr("Player: FSM has no direct state for animation '", anim_name, "'. Playing directly.")
+				if animation_player and animation_player.has_animation(anim_name):
+					animation_player.play(anim_name)
+				else:
+					printerr("Player: Cannot play visual animation '", anim_name, "'. AnimationPlayer missing or animation not found.")
+	else:
+		# Fallback: if no FSM or FSM is invalid, play animation directly
+		if animation_player and animation_player.has_animation(anim_name):
+			animation_player.play(anim_name)
+			print("Player: Playing visual animation: ", anim_name)
+		else:
+			printerr("Player: Cannot play visual animation '", anim_name, "'. AnimationPlayer missing or animation not found.")
+
+# NEW: Call this from your Cutscene Animation (Call Method Track via Test_dialog proxy)
+# to make the player face a certain direction instantly
+func set_player_face_direction(direction: int): # 1 for right, -1 for left
+	if not is_instance_valid(self): return
+	facing_direction = direction
+	if facing_direction == -1:
+		sprite.flip_h = true
+	else:
+		sprite.flip_h = false
+	print("Player: Facing direction set to: ", direction)
+
+# This function is called by the Test_dialog Area2D script
+# when a cutscene begins, via its proxy.
+func disable_player_input_for_cutscene():
+	Global.is_cutscene_active = true # Set the global flag
+	print("Player: Input and direct control disabled for cutscene.")
+	# Stop normal physics processing (movement, input handling)
+	set_physics_process(false)
+	set_process(false) # If you have non-physics input in _process
+	velocity = Vector2.ZERO # Stop any current player movement
+	# You might also want to temporarily hide the player or switch to a cutscene-specific animation.
+	# visible = false # Example: if player should disappear
+	# animation_player.play("cutscene_idle") # Example: play a special idle during cutscene
+
+# This function is called by the Test_dialog Area2D script's end_cutscene (via proxy)
+# or from the final Call Method Track in your Cutscene Animation (via proxy)
+func enable_player_input_after_cutscene():
+	Global.is_cutscene_active = false # Clear the global flag
+	print("Player: Input and direct control enabled after cutscene.")
+	# Reset any temporary cutscene velocity
+	velocity.x = 0
+	
+	# Re-enable physics and process
+	set_physics_process(true)
+	set_process(true)
+
+	# Ensure FSM goes back to idle state
+	if combat_fsm and is_instance_valid(combat_fsm):
+		combat_fsm.change_state(IdleState.new(self)) # Assuming IdleState is the default after cutscene
+	else:
+		# Fallback if FSM is not used or not valid
+		if animation_player:
+			# Note: You had `combat_fsm.change_state(IdleState.new(self))` here again,
+			# which would error if combat_fsm is null. Changed to direct animation play.
+			animation_player.play("idle")
+	
+	# visible = true # Example: if player was hidden
+	

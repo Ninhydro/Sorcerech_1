@@ -34,7 +34,7 @@ func _on_dialog_ended():
 	is_dialog_open = false
 	
 var play_intro_cutscene := false
-var playerBody: CharacterBody2D # This is the variable the ProfileScene is looking for
+var playerBody: Player = null # This is the variable the ProfileScene is looking for
 var selected_form_index: int
 
 # --- MODIFIED: current_form property with setter and signal (Godot 4.x syntax) ---

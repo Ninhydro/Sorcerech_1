@@ -141,6 +141,8 @@ func _start_dialogic_from_animation():
 	Dialogic.start(CUTSCENE_DIALOG_TIMELINE_NAME, false)
 	_dialog_triggered_for_this_cutscene = true
 	_waiting_for_dialogic_to_end = true
+	#Dialogic.Portraits.change_portrait("Player", "Normal_Sad")
+
 
 func _on_dialogic_started_in_cutscene(dialog_timeline_name_passed: String = ""):
 	print("Cutscene Area2D: _on_dialogic_started_in_cutscene called!")

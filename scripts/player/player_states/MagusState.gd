@@ -112,7 +112,7 @@ func physics_process(delta):
 	if player.canon_enabled == true or player.telekinesis_enabled == true:
 		player.velocity = Vector2.ZERO
 	else:
-		player.scale = Vector2(1,1)
+		#player.scale = Vector2(1,1)
 		
 		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive:
 			player.shoot_fireball()

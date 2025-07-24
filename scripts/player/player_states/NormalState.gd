@@ -28,8 +28,8 @@ func physics_process(delta):
 	if player.canon_enabled == true or player.telekinesis_enabled == true:
 		player.velocity = Vector2.ZERO
 	else:
-
-		player.scale = Vector2(0.75,0.75)
+		pass
+		#player.scale = Vector2(0.75,0.75)
 	
 
 func handle_input(event):

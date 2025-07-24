@@ -56,7 +56,7 @@ func physics_process(delta):
 	if player.canon_enabled == true:
 		player.velocity = Vector2.ZERO
 	else:
-		player.scale = Vector2(1.2,1.2)
+		#player.scale = Vector2(1.2,1.2)
 		#if Input.is_action_just_pressed("no"):
 			#perform_teleport_switch()
 		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and Global.telekinesis_mode == false:

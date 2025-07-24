@@ -1,4 +1,2 @@
-[signal arg="dialog_started"]
-join character1 center
-character1: Testing helo helo
-[signal arg="dialog_ended"]
+join Player center
+Player (Normal): Testing helo helo

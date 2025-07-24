@@ -40,7 +40,7 @@ func physics_process(delta):
 	else:
 		player.jump_force = 300
 		player.gravity = 500
-		player.scale = Vector2(1.2,1.2)
+		#player.scale = Vector2(1.2,1.2)
 		
 		# --- Rocket shooting for "yes" action ---
 		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive:

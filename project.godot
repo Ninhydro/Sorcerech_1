@@ -14,7 +14,7 @@ config/name="Sorcerech"
 config/version="0.1"
 run/main_scene="res://scenes/ui/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-config/icon="res://assets_image/Sorcerech_Fini_small.svg"
+config/icon="res://assets_image/Sorcerech_Fini_small.png"
 
 [autoload]
 
@@ -26,6 +26,7 @@ SaveLoadManager="*res://config/SaveLoadManager.gd"
 [dialogic]
 
 directories/dch_directory={
+"Player": "res://dialogic/characters/Player.dch",
 "character1": "res://dialogic/characters/character1.dch",
 "character2": "res://dialogic/characters/character2.dch"
 }
@@ -56,7 +57,12 @@ text/autopauses={}
 layout/style_list=["res://dialogic/Style1.tres"]
 layout/default_style="res://dialogic/Style1.tres"
 glossary/default_case_sensitive=true
-variables={}
+variables={
+"Global.current_form": "",
+"expression": "",
+"player_current_form": "",
+"player_form": ""
+}
 
 [display]
 

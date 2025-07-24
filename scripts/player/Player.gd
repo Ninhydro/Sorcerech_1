@@ -183,6 +183,11 @@ func _ready():
 		
 		switch_state("Normal") # Ensure Normal state is active for new game
 		combat_fsm.change_state(IdleState.new(self))
+	
+	unlock_state("Magus")
+	unlock_state("UltimateMagus")
+	unlock_state("Cyber")
+	unlock_state("UltimateCyber")
 	# --- END MODIFIED _ready() LOGIC ---
 
 # This is your main physics processing loop
@@ -193,7 +198,10 @@ func _physics_process(delta):
 	# But if you move Global.playerBody assignment to _ready,
 	# make sure it happens *before* any other scripts try to access it.
 	Global.playerBody = self
+	Dialogic.VAR.set_variable("player_current_form", get_current_form_id())
+
 	Global.set_player_form(get_current_form_id())
+	Global.current_form = get_current_form_id()
 
 	if _should_apply_loaded_position:
 		print("Player._physics_process: Applying loaded position (one-time).")
@@ -302,7 +310,7 @@ func _physics_process(delta):
 			elif current_form == "Magus":
 				skill_cooldown_timer.start(10.0)
 				skill_started = true
-			elif current_form == "UltimateCyberState": # Assuming this is different from "UltimateCyber"
+			elif current_form == "UltimateCyber": # Assuming this is different from "UltimateCyber"
 				skill_cooldown_timer.start(15.0)
 				skill_started = true
 			
@@ -419,6 +427,11 @@ func switch_state(state_name: String) -> void:
 		current_state.exit()
 	current_state = states[state_name]
 	current_state.enter()
+	
+	Dialogic.VAR.set_variable("player_current_form", state_name)
+	print("Player.gd: Switched to form: ", state_name, ". Dialogic variable updated.")
+
+
 
 func unlock_state(state_name: String) -> void:
 	if unlocked_flags.has(state_name):

@@ -61,10 +61,10 @@ func _recheck(data: Dictionary, force:=false):
 			var input: Node = DialogicUtil.setup_script_property_edit_node(i, current_value, set_export_override)
 			
 			# ADD THIS NULL CHECK:
-			#if not is_instance_valid(input):
-			#	push_error("char_edit_p_section_exports.gd: Failed to create input node for property: ", i['name'])
-			#	continue # Skip to the next property if input is null
-	# END ADD NULL CHECK
+			if not is_instance_valid(input):
+				push_error("char_edit_p_section_exports.gd: Failed to create input node for property: ", i['name'])
+				continue # Skip to the next property if input is null
+			# END ADD NULL CHECK
 			input.size_flags_horizontal = SIZE_EXPAND_FILL
 			$Grid.add_child(input)
 

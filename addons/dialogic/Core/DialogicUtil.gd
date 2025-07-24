@@ -519,10 +519,12 @@ static func setup_script_property_edit_node(property_info: Dictionary, value:Var
 			input = load("res://addons/dialogic/Editor/Events/Fields/field_dictionary.tscn").instantiate()
 			input.property_name = property_info["name"]
 			# FIX THIS LINE:
-			#input.value_changed.connect(func(new_value):
-			#	_on_export_dict_submitted(property_info.name, new_value, property_changed)
-			#)
-			input.value_changed.connect(_on_export_dict_submitted.bind(property_changed))
+			input.value_changed.connect(func(_emitted_prop_name, new_value):
+				# We use property_info.name from the outer scope
+				# and new_value from the signal's second argument
+				_on_export_dict_submitted(property_info.name, new_value, property_changed)
+			)
+			#input.value_changed.connect(_on_export_dict_submitted.bind(property_changed))
 		TYPE_OBJECT:
 			input = load("res://addons/dialogic/Editor/Common/hint_tooltip_icon.tscn").instantiate()
 			input.hint_text = "Objects/Resources as settings are currently not supported. \nUse @export_file('*.extension') instead and load the resource once needed."

@@ -58,10 +58,7 @@ layout/style_list=["res://dialogic/Style1.tres"]
 layout/default_style="res://dialogic/Style1.tres"
 glossary/default_case_sensitive=true
 variables={
-"Global.current_form": "",
-"expression": "",
-"player_current_form": "",
-"player_form": ""
+"player_current_form": ""
 }
 
 [display]

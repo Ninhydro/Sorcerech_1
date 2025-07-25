@@ -1,13 +1,9 @@
-res://addons/dialogic/Editor/CharacterEditor/char_edit_p_section_exports.tscn
 res://dialogic/Style1.tres
 res://dialogic/PlayerPortrait.gd
 res://scenes/tileset/Placeholder_new_tile_set.tres
-res://addons/dialogic/Editor/CharacterEditor/char_edit_p_section_exports.gd
-res://addons/dialogic/Core/DialogicUtil.gd
 res://dialogic/characters/Player.dch
-res://dialogic/characters/character1.dch
-res://dialogic/characters/character2.dch
-res://dialogic/timeline/timeline2.dtl
+res://scenes/SpeechBubble/speech_bubble.tscn
+res://scenes/SpeechBubble/speech_bubble.gd
 res://scenes/ui/MainMenu.tscn
 res://scenes/ui/pause_menu.tscn
 res://scenes/ui/load_game_menu.tscn
@@ -20,3 +16,4 @@ res://scenes/world/test_dialog.tscn
 res://scenes/rooms/Room_AerendaleJunkyard.tscn
 res://scenes/world/cutscene_intro.tscn
 res://dialogic/PlayerPortrait.tscn
+res://addons/dialogic/Editor/CharacterEditor/char_edit_p_section_exports.tscn

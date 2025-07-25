@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cnkwa1lnnfamm"]
+[gd_scene load_steps=6 format=3 uid="uid://cnkwa1lnnfamm"]
 
 [ext_resource type="TileSet" uid="uid://dckcj5o6bchxt" path="res://scenes/tileset/Placeholder_new_tile_set.tres" id="1_56olx"]
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_i5ly2"]
 [ext_resource type="Script" path="res://scripts/rooms/Room_AerendaleJunkyard.gd" id="1_xsv6q"]
-[ext_resource type="PackedScene" uid="uid://bs105i3gcljkr" path="res://scenes/world/SaveSpot.tscn" id="3_p25pu"]
 [ext_resource type="PackedScene" uid="uid://dawiya4upgoxx" path="res://scenes/world/test_dialog.tscn" id="4_gr75u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4c7w7"]
@@ -31,9 +30,6 @@ target_spawn = "Spawn_FromJunkyard"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_AerendaleTown"]
 position = Vector2(-126, 55)
 shape = SubResource("RectangleShape2D_4c7w7")
-
-[node name="SaveSpot" parent="." instance=ExtResource("3_p25pu")]
-position = Vector2(-55, 58)
 
 [node name="Label2" type="Label" parent="."]
 offset_left = -1234.0

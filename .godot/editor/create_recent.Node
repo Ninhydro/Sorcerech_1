@@ -1,3 +1,8 @@
+Panel
+Timer
+Control
+RichTextLabel
+ColorRect
 Sprite2D
 Camera2D
 AnimationPlayer
@@ -8,7 +13,3 @@ Label
 GridContainer
 TextureRect
 VBoxContainer
-Panel
-CanvasLayer
-ConfirmationDialog
-Button

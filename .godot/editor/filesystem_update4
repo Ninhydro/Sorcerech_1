@@ -3,11 +3,10 @@ res://shaders/highlight.gdshader
 res://dialogic/Style1.tres
 res://dialogic/PlayerPortrait.gd
 res://scenes/tileset/Placeholder_new_tile_set.tres
-res://scripts/UI/game_hud.gd
+res://shaders/circle.gdshader
 res://dialogic/characters/Player.dch
+res://scripts/UI/game_hud.gd
 res://scenes/ui/MainMenu.tscn
 res://scenes/player/player.tscn
 res://scenes/world/World.tscn
 res://scenes/rooms/Room_AerendaleJunkyard.tscn
-res://scripts/player/Player.gd
-res://shaders/OutlineMaterialv2.tres

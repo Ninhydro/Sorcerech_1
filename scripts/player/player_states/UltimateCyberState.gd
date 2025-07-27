@@ -25,7 +25,7 @@ func exit():
 	#reset time freeze
 	player.jump_force = 250
 	player.gravity = 1000
-	player.allow_time_freeze = false
+	#player.allow_time_freeze = false
 	Engine.time_scale = 1
 	Global.time_freeze = false
 	
@@ -60,8 +60,8 @@ func perform_time_freeze():
 	#Engine.time_scale = 0.1  # (Engine.time_scale docs: lower values slow the game):contentReference[oaicite:8]{index=8}
 	# After a timer, reset Engine.time_scale = 1.0
 	#pass
-	player.allow_time_freeze = !player.allow_time_freeze
-	if player.allow_time_freeze == true:
+	Global.time_freeze = !Global.time_freeze
+	if Global.time_freeze == true:
 		print("Time Frozen - enemies paused")
 		Global.time_freeze = true
 		Engine.time_scale = 0.5
@@ -74,7 +74,7 @@ func perform_time_freeze():
 		print("Time Resumed - enemies active")
 		Engine.time_scale = 1
 		Global.time_freeze = false
-		player.allow_time_freeze = !player.allow_time_freeze
+		Global.time_freeze = !Global.time_freeze
 		#get_tree().paused = !get_tree().paused
 		#if player.animation_player:
 		#	player.animation_player.speed_scale = 1.0

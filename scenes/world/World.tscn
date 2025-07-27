@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bsj8x1oxp0cqn"]
+[gd_scene load_steps=25 format=3 uid="uid://bsj8x1oxp0cqn"]
 
 [ext_resource type="Script" path="res://scripts/world/World.gd" id="1_w1wil"]
 [ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets_image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_yoo7y"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://c8nfmopkmdkk7" path="res://scenes/rooms/Room_ExactlyionValentina.tscn" id="19_ojk8u"]
 [ext_resource type="PackedScene" uid="uid://ci44hikud0mu" path="res://scenes/world/transition_manager.tscn" id="20_7o6hr"]
 [ext_resource type="PackedScene" uid="uid://bew4rnh5f46sy" path="res://scenes/world/cutscene_intro.tscn" id="21_exdw8"]
+[ext_resource type="PackedScene" uid="uid://cjvrxjjcgu8qo" path="res://scenes/ui/game_hud.tscn" id="22_lv2sh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ipdlw"]
 texture = ExtResource("2_yoo7y")
@@ -424,3 +425,5 @@ position = Vector2(189, 1435)
 metadata/_edit_lock_ = true
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+
+[node name="GameHUD" parent="." instance=ExtResource("22_lv2sh")]

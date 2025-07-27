@@ -64,24 +64,24 @@ func enter():
 	# IMPORTANT: When entering, assume camouflage is OFF unless explicitly turned ON.
 	# If player.allow_camouflage was TRUE from a previous session (e.g., after the 5s timer
 	# finished but before exiting the state), we should reset it here.
-	if player.allow_camouflage and not _is_camouflage_active_timed:
+	if Global.camouflage and not _is_camouflage_active_timed:
 		# This condition handles cases where player.allow_camouflage might be true
 		# but the timed camouflage is not active. We want to ensure a clean start.
-		player.allow_camouflage = false 
+		#player.allow_camouflage = false 
 		Global.camouflage = false
 
 
 	# Set the shader uniform directly on enter
 	# The default is 1.0 (opaque). We only change it if camouflage is specifically active.
 	_camouflage_target_alpha = 1.0 
-	if player.allow_camouflage: # This will be false unless forced by another mechanism
+	if Global.camouflage: # This will be false unless forced by another mechanism
 		_camouflage_target_alpha = 0.5 # This line will likely only run if a bug somewhere else keeps player.allow_camouflage true
 	
 	if _sprite_node.material:
 		_sprite_node.material.set_shader_parameter("camouflage_alpha_override", _camouflage_target_alpha)
 
 	print("Entered Magus State. ShaderMaterial applied.")
-	print("DEBUG_ENTER: player.allow_camouflage initial state: ", player.allow_camouflage)
+	#print("DEBUG_ENTER: player.allow_camouflage initial state: ", player.allow_camouflage)
 
 
 func exit():
@@ -98,7 +98,7 @@ func exit():
 		print("DEBUG_EXIT: Sprite node not found, cannot reset material.")
 	
 	# Crucially, ensure camouflage related flags are reset on exit.
-	player.allow_camouflage = false
+	#player.allow_camouflage = false
 	Global.camouflage = false
 	_is_camouflage_active_timed = false # Reset this flag as well
 	print("Exited Magus State. Camouflage related flags reset.")
@@ -140,7 +140,7 @@ func toggle_camouflage():
 		print("Camouflage is already active or on cooldown.")
 		return
 
-	player.allow_camouflage = true # Explicitly set to true when activating
+	#player.allow_camouflage = true # Explicitly set to true when activating
 	Global.camouflage = true
 	_camouflage_target_alpha = 0.5 # Semi-transparent
 	_is_camouflage_active_timed = true # Mark timed camouflage as active
@@ -163,7 +163,7 @@ func toggle_camouflage():
 	#if _sprite_node and _sprite_node.material and (_sprite_node.material is ShaderMaterial):
 	#	_sprite_node.material.set_shader_parameter("camouflage_alpha_override", _camouflage_target_alpha)
 	
-	player.allow_camouflage = false # Explicitly set to false after duration
+	#player.allow_camouflage = false # Explicitly set to false after duration
 	Global.camouflage = false
 	_is_camouflage_active_timed = false # Mark timed camouflage as inactive
 	print("Camouflage OFF")

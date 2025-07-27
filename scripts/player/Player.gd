@@ -100,6 +100,9 @@ var inventory = []
 var _should_apply_loaded_position: bool = false 
 # --- END NEW FLAG ---
 
+signal health_changed(health, health_max)
+signal form_changed(new_form_name)
+
 # Method to disable player input
 func disable_input():
 	print("Player: Input disabled.")
@@ -121,6 +124,8 @@ func _ready():
 	print(Global.playerBody)
 	dead = false
 	can_take_damage = true
+	health_changed.emit(health, health_max) # Initial emit
+
 	
 	AreaAttack.monitoring = false
 	AreaAttackColl.disabled = true
@@ -184,10 +189,12 @@ func _ready():
 		switch_state("Normal") # Ensure Normal state is active for new game
 		combat_fsm.change_state(IdleState.new(self))
 	
-	unlock_state("Magus")
-	unlock_state("UltimateMagus")
-	unlock_state("Cyber")
-	unlock_state("UltimateCyber")
+	#unlock_state("Magus")
+	#unlock_state("UltimateMagus")
+	#unlock_state("Cyber")
+	#unlock_state("UltimateCyber")
+
+	#switch_state("Normal")
 	# --- END MODIFIED _ready() LOGIC ---
 
 # This is your main physics processing loop
@@ -270,6 +277,7 @@ func _physics_process(delta):
 
 			# Apply horizontal movement based on input (only if not wall-jumping, dialog, or attacking)
 			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking:
+				#print("movinggggggggg")
 				velocity.x = input_dir * move_speed # Use 'speed' here for normal movement
 			else:
 				velocity.x = 0 # Stop horizontal movement if dialog is open or attacking
@@ -428,6 +436,8 @@ func switch_state(state_name: String) -> void:
 	current_state = states[state_name]
 	current_state.enter()
 	
+	form_changed.emit(state_name) # Emit signal after form changes
+
 	Dialogic.VAR.set_variable("player_current_form", state_name)
 	print("Player.gd: Switched to form: ", state_name, ". Dialogic variable updated.")
 
@@ -523,6 +533,7 @@ func take_damage(damage):
 				Global.playerAlive = false
 				print("PLAYER DEAD")
 			take_damage_cooldown(1.0)
+		health_changed.emit(health, health_max) # Emit signal after health changes
 		await get_tree().create_timer(0.5).timeout
 		player_hit = false
 			

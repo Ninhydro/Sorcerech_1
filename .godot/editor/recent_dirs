@@ -1,3 +1,6 @@
+res://shaders
+res://scripts/UI
+res://scenes/ui
 res://dialogic
 res://config
 res://scenes/SpeechBubble
@@ -10,7 +13,5 @@ res://
 res://assets_image
 res://dialogic/characters
 res://scripts/rooms
-res://scripts/UI
-res://scenes/ui
 res://scripts/world
 res://scenes/world

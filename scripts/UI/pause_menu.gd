@@ -104,6 +104,8 @@ func _on_back_to_title_button_pressed():
 func _on_confirmation_dialog_back_to_title_confirmed():
 	print("PauseMenu: Player confirmed returning to title.")
 	Dialogic.clear()
+	Global.camouflage = false
+	Global.time_freeze = false
 	get_tree().paused = false
 	print("PauseMenu: Game unpaused. Paused state now: ", get_tree().paused)
 

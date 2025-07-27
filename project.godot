@@ -200,6 +200,9 @@ dialogic_default_action={
 
 [layer_names]
 
+2d_render/layer_1="MainGame "
+2d_render/layer_2="MinimapObjects "
+2d_render/layer_3="UI_Overlays "
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Platforms"
 2d_physics/layer_3="Enemies"

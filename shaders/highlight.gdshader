@@ -1,32 +1,38 @@
-shader_type canvas_item; // This shader is for 2D elements
+shader_type canvas_item;
 
-// Uniforms (variables controlled by GDScript)
+// Uniforms
 uniform bool is_highlighted = false;
-uniform vec4 highlight_color : source_color = vec4(1.0, 1.0, 0.0, 1.0); // Default: Yellow, opaque
-uniform float highlight_width = 2.0; // Width of the highlight outline in pixels
+uniform vec4 highlight_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float outline_width = 0.1;
+uniform vec4 modulate : source_color = vec4(1.0);
+uniform bool apply_modulate = true;
 
 void fragment() {
-    vec4 base_color = texture(TEXTURE, UV); // Get the original pixel color from the icon's texture
+    vec4 base_color = texture(TEXTURE, UV);
+    vec4 final_color = base_color;
     
-    // If the icon IS highlighted, apply the highlight logic
-    if (is_highlighted) {
-        // Calculate distance from the edge of the texture's UV coordinates (0.0 to 1.0)
-        vec2 uv_border_size = highlight_width * TEXTURE_PIXEL_SIZE;
-        
-        // Check if the current UV coordinate is within the border area
-        bool in_horizontal_border = UV.x < uv_border_size.x || UV.x > (1.0 - uv_border_size.x);
-        bool in_vertical_border = UV.y < uv_border_size.y || UV.y > (1.0 - uv_border_size.y);
-        
-        // Is this pixel within the border and also part of the original texture (not too transparent)?
-        if ((in_horizontal_border || in_vertical_border) && base_color.a > 0.0) { // Changed threshold to 0.0
-            // Blend the original color with the highlight color
-            COLOR = mix(base_color, highlight_color, 0.7); // 0.7 means 70% highlight color, 30% original
-        } else {
-            // Not in border, draw original color
-            COLOR = base_color; 
-        }
-    } else {
-        // If the icon is NOT highlighted, just draw its original texture
-        COLOR = base_color;
+    // Apply modulation first (if enabled)
+    if (apply_modulate) {
+        final_color *= modulate;
     }
+    
+    // Apply highlight/outline effect on top
+    if (is_highlighted && base_color.a > 0.0) {
+        vec2 center = vec2(0.5, 0.5);
+        float dist = distance(UV, center);
+        float radius = 0.5;
+        
+        // Outline effect
+        if (dist <= radius && dist > radius - outline_width) {
+            float edge = smoothstep(radius - outline_width, radius, dist);
+            final_color = mix(final_color, highlight_color, edge);
+        }
+        // Optional inner glow (remove if not needed)
+        else if (dist <= radius - outline_width && dist > radius - outline_width * 1.5) {
+            float inner_edge = smoothstep(radius - outline_width * 1.5, radius - outline_width, dist);
+            final_color = mix(final_color, highlight_color, inner_edge * 0.3);
+        }
+    }
+    
+    COLOR = final_color;
 }

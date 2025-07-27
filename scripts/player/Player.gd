@@ -189,10 +189,10 @@ func _ready():
 		switch_state("Normal") # Ensure Normal state is active for new game
 		combat_fsm.change_state(IdleState.new(self))
 	
-	#unlock_state("Magus")
-	#unlock_state("UltimateMagus")
-	#unlock_state("Cyber")
-	#unlock_state("UltimateCyber")
+	unlock_state("Magus")
+	unlock_state("UltimateMagus")
+	unlock_state("Cyber")
+	unlock_state("UltimateCyber")
 
 	#switch_state("Normal")
 	# --- END MODIFIED _ready() LOGIC ---

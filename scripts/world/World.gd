@@ -150,7 +150,7 @@ func _on_cutscene_finished():
 	# Now that the cutscene is over, position the player, enable their input, and switch to their camera.
 	teleport_player_and_enable(true) # This will position player at junkyard, enable input, and switch to player camera
 	print("✅ World: Player enabled and camera switched after cutscene.")
-
+	switch_to_player_camera()
 
 func teleport_player_and_enable(position_player: bool = true):
 	print("World: teleport_player_and_enable() called with position_player_arg: " + str(position_player))
@@ -201,42 +201,42 @@ func _on_global_brightness_changed(new_brightness_value: float):
 # This function is no longer needed as we're not switching to a separate cutscene camera.
 # The player's camera is simply repositioned.
 func switch_to_cutscene_camera(cutscene_cam: Camera2D):
-	print("World.gd: Attempting to switch to cutscene camera: ", cutscene_cam.name if is_instance_valid(cutscene_cam) else "null")
+	# In Godot 4, you don't call set_current(false) on the old camera.
+	# You just make the new camera current.
+	# The 'player_camera.is_current()' check is still useful for debugging or conditional logic,
+	# but the actual unsetting is implicit when make_current() is called on another camera.
 
-	if not is_instance_valid(cutscene_cam):
-		printerr("World.gd: Failed to activate cutscene camera: Invalid reference.")
-		return
-
-	if is_instance_valid(_player_camera):
-		if _player_camera.is_current():
-			print("World.gd: Deactivating player camera before activating cutscene camera.")
-			_player_camera.enabled = false
-			_player_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
+	if cutscene_cam and is_instance_valid(cutscene_cam):
+		# Ensure the cutscene camera is enabled and processing before making it current
+		cutscene_cam.enabled = true
+		cutscene_cam.set_process_mode(Node.PROCESS_MODE_INHERIT) # Ensure it processes
+		cutscene_cam.make_current() # THIS IS THE KEY CHANGE
+		print("✅ World.gd: Cutscene camera activated: ", cutscene_cam.name)
 	else:
-		printerr("World.gd: Player camera (_player_camera) is not a valid instance when attempting to deactivate it.")
-
-	cutscene_cam.enabled = true
-	cutscene_cam.set_process_mode(Node.PROCESS_MODE_INHERIT)
-	Callable(cutscene_cam, "make_current").call_deferred()
-	print("✅ World.gd: Cutscene camera activation deferred: ", cutscene_cam.name)
+		printerr("World.gd: Failed to switch to cutscene camera: invalid reference.")
 
 func switch_to_player_camera():
-	print("World.gd: Attempting to switch to player camera.")
+	# When switching back to the player camera, we simply make it current.
+	# The previously current camera (e.g., cutscene_cam) will automatically become non-current.
+	# We can optionally disable the old camera here if it's no longer needed for processing.
 
-	if not is_instance_valid(_player_camera): # Always check validity first
-		printerr("World.gd: Failed to activate player camera: Invalid reference or not found.")
-		return
+	var previous_camera = get_viewport().get_camera_2d() # Get the camera that *was* current
 
-	# Explicitly deactivate any other camera that might be current.
-	var current_viewport_camera = get_viewport().get_camera_2d()
-	if is_instance_valid(current_viewport_camera) and current_viewport_camera != _player_camera:
-		print("World.gd: Deactivating current viewport camera before activating player camera:", current_viewport_camera.name)
-		current_viewport_camera.enabled = false
-		current_viewport_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
+	if _player_camera and is_instance_valid(_player_camera):
+		_player_camera.enabled = true
+		_player_camera.set_process_mode(Node.PROCESS_MODE_INHERIT) # Ensure it processes
+		_player_camera.make_current() # THIS IS THE KEY CHANGE
+		print("✅ World.gd: Player camera activated.")
 
-	# Ensure the player camera is visible/enabled and current
-	_player_camera.enabled = true
-	_player_camera.set_process_mode(Node.PROCESS_MODE_INHERIT)
-	# Use call_deferred for make_current to ensure it happens after current frame processing
-	Callable(_player_camera, "make_current").call_deferred()
-	print("✅ World.gd: Player camera activation deferred.")
+		# Optional: If the previous camera was the cutscene camera, you can disable it here
+		# to prevent it from consuming resources if it's not needed.
+		if previous_camera and previous_camera != _player_camera and is_instance_valid(previous_camera):
+			# You might want to check its name or type if you have multiple types of cutscene cameras
+			# For example, if your cutscene camera is always named "Camera2D":
+			# if previous_camera.name == "Camera2D":
+			previous_camera.enabled = false
+			previous_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
+			print("World.gd: Deactivated previous camera (", previous_camera.name, ").")
+
+	else:
+		printerr("World.gd: Failed to switch to player camera: player_camera is invalid.")

@@ -47,11 +47,17 @@ func _ready():
 	if not Dialogic.dialog_ended.is_connected(Callable(self, "_on_dialogic_ended_in_cutscene")):
 		Dialogic.dialog_ended.connect(Callable(self, "_on_dialogic_ended_in_cutscene"))
 
-	# Ensure the cutscene camera is NOT current by default, and is disabled.
-	if cutscene_camera and is_instance_valid(cutscene_camera):
-		cutscene_camera.enabled = false
-		cutscene_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
-		print("Cutscene Area2D: Cutscene camera explicitly set to not current and disabled in _ready.")
+	# REMOVE THESE LINES:
+	# if cutscene_camera and is_instance_valid(cutscene_camera):
+	# 	cutscene_camera.enabled = false
+	# 	cutscene_camera.set_process_mode(Node.PROCESS_MODE_DISABLED)
+	# 	print("Cutscene Area2D: Cutscene camera explicitly set to not current and disabled in _ready.")
+
+	# NEW: Instead of disabling it, ensure it's not current if it somehow became current in editor
+	if cutscene_camera and is_instance_valid(cutscene_camera) and cutscene_camera.is_current():
+		cutscene_camera.set_current(false)
+		print("Cutscene Area2D: Cutscene camera explicitly set to not current in _ready.")
+
 
 	print("Cutscene Area2D is ready. Waiting for player interaction.")
 

@@ -74,11 +74,12 @@ func _process(delta):
 	player = Global.playerBody
 	
 	#print(is_enemy_chase)
-	if Global.playerAlive and Global.camouflage == false and range == true:
+	if Global.playerAlive and not Global.camouflage and range:
 		is_enemy_chase = true
-	elif !Global.playerAlive or  Global.camouflage == true or  range == false:
+	else:
 		is_enemy_chase = false
 	
+	print(is_enemy_chase)
 	move(delta)
 	handle_animation()
 	move_and_slide()
@@ -94,22 +95,36 @@ func _process(delta):
 	#		attack()
 
 func move(delta):
-	if !dead:
-		if !is_enemy_chase:
-			velocity += dir * speed * delta
-			#print("not chasing")
-		elif is_enemy_chase and !taking_damage:
-			var dir_to_player = position.direction_to(player.global_position) * speed
-			velocity.x = dir_to_player.x 
-			dir.x = abs(velocity.x)/velocity.x
-			#print("chasing")
-		elif taking_damage:
-			var knockback_dir = position.direction_to(player.global_position) * knockback_force
-			velocity.x = knockback_dir.x	
-		is_roaming = true
-		#print(velocity)
-	elif dead:
+	if dead:
 		velocity.x = 0
+		return
+	
+	# Prioritize states: dead, taking_damage, is_dealing_damage, then chase/roam
+	if taking_damage:
+		# Apply knockback
+		var knockback_dir = (global_position - player.global_position).normalized() # Knockback away from player
+		velocity.x = knockback_dir.x * abs(knockback_force) # Use abs to ensure positive force
+		is_roaming = false # Not roaming when taking damage
+		return
+		
+	if is_dealing_damage:
+		velocity.x = 0 # Stop movement during attack animation
+		is_roaming = false # Not roaming when attacking
+		return
+		
+	if is_enemy_chase:
+		is_roaming = false # <-- SET TO FALSE WHEN CHASING
+		var dir_to_player = (player.global_position - global_position).normalized()
+		velocity.x = dir_to_player.x * speed
+		dir.x = sign(velocity.x) # Update dir for facing animation
+	else:
+		is_roaming = true # <-- SET TO TRUE WHEN ROAMING
+		# Use 'dir' from _on_direction_timer_timeout
+		velocity.x = dir.x * speed # Directly set velocity.x for roaming
+		# If roaming and standing still, might need to prevent velocity accumulation
+		if velocity.x == 0 and dir.x != 0: # This means direction timer might have set a new dir, but velocity is zero
+			velocity.x = dir.x * speed # Ensure movement starts if dir changes while velocity was zero
+
 		#print("dead")
 		
 			

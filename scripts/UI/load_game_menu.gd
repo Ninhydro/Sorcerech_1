@@ -6,6 +6,9 @@ extends CanvasLayer
 
 var slot_buttons: Array[Button] = []
 
+signal closed # NEW: Signal to indicate the menu is closing
+
+
 func _ready():
 	
 	print("LoadGameMenu _ready() called! Current paused state: ", get_tree().paused)
@@ -113,52 +116,59 @@ func _parse_timestamp(timestamp: String) -> Dictionary:
 	}
 
 func _on_save_slot_button_pressed(slot_name: String):
-	print("LoadGameMenu: Loading game from slot: ", slot_name if not slot_name.is_empty() else "Autosave")
+	print("LoadGameMenu: Loading game from slot: %s" % (slot_name if not slot_name.is_empty() else "Autosave"))
 	var loaded_data = SaveLoadManager.load_game(slot_name)
 	
 	if not loaded_data.is_empty():
-		var saved_scene_path = Global.current_scene_path # Get path from Global after load
+		var saved_scene_path = Global.current_scene_path
 		
 		if ResourceLoader.exists(saved_scene_path, "PackedScene"):
-			print("LoadGameMenu: Game loaded. Unpausing and changing scene to: ", saved_scene_path)
+			print("LoadGameMenu: Game loaded. Unpausing and changing scene to: %s" % saved_scene_path)
 			get_tree().paused = false # Unpause the game BEFORE changing scene
-			queue_free() # Remove this load menu instance
 			
-			# Re-enable main menu buttons if LoadGameMenu was opened from MainMenu.
-			var parent_node = get_parent()
-			if parent_node and parent_node.has_method("_set_main_menu_buttons_enabled"):
-				parent_node._set_main_menu_buttons_enabled(true)
+			# --- CRITICAL FIX START ---
+			# Defer the scene change to avoid trying to access parent after scene tree is gone.
+			get_tree().change_scene_to_file.call_deferred(saved_scene_path)
+			
+			# Queue free THIS menu instance immediately. It has done its job.
+			# DO NOT attempt to interact with any old scene nodes (like parent_node) after this point,
+			# as they will be freed when the new scene loads.
+			queue_free()
+			print("LoadGameMenu: Self-freed after initiating deferred scene change.")
+			# --- CRITICAL FIX END ---
 
-			var target_scene = load(saved_scene_path) as PackedScene
-			get_tree().change_scene_to_packed(target_scene)
 		else:
-			printerr("LoadGameMenu: Error: Target scene path for loaded slot is invalid or does not exist: ", saved_scene_path)
+			printerr("LoadGameMenu: Error: Target scene path for loaded slot is invalid or does not exist: %s" % saved_scene_path)
 			# If load fails due to invalid path, clear loaded data from Global
 			Global.current_loaded_player_data = {}
 			Global.current_game_state_data = {}
 			Global.current_scene_path = ""
+			# Do NOT queue_free here if loading failed, let user try again.
 	else:
-		print("LoadGameMenu: Failed to load game from slot: ", slot_name if not slot_name.is_empty() else "Autosave")
+		print("LoadGameMenu: Failed to load game from slot: %s" % (slot_name if not slot_name.is_empty() else "Autosave"))
 		# If load fails, clear loaded data from Global
 		Global.current_loaded_player_data = {}
 		Global.current_game_state_data = {}
 		Global.current_scene_path = ""
-		pass # Keep menu open for user to try again
-	queue_free()
+		# Do NOT queue_free here if loading failed, let user try again.
 
 func _on_back_button_pressed():
 	print("LoadGameMenu: Closing Load Game Menu pop-up.")
 	
 	var parent_node = get_parent()
 	
-	if parent_node:
+	if is_instance_valid(parent_node):
 		if parent_node.has_method("show_pause_menu"):
 			print("LoadGameMenu: Parent is PauseMenu. Telling it to show.")
 			parent_node.show_pause_menu()
 		elif parent_node.has_method("_set_main_menu_buttons_enabled"):
 			print("LoadGameMenu: Parent is MainMenu. Re-enabling its buttons.")
 			parent_node._set_main_menu_buttons_enabled(true)
-		else:
-			printerr("LoadGameMenu: Unknown parent type when closing. Cannot notify parent.")
+		#else:
+		#	printerr("LoadGameMenu: Unknown parent type when closing. Cannot notify parent.")
+	else:
+		print("LoadGameMenu: Parent node is no longer valid. Cannot notify.")
+	
+	emit_signal("closed") # Emit the signal
 	
 	queue_free()

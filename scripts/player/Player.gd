@@ -144,6 +144,11 @@ func _ready():
 	
 	set_collision_mask_value(2, true)
 	
+	unlock_state("Magus")
+	unlock_state("UltimateMagus")
+	unlock_state("Cyber")
+	unlock_state("UltimateCyber")
+	
 	# --- MODIFIED _ready() LOGIC FOR SAVE/LOAD ---
 	# Check if there's loaded data from Global
 	if Global.current_loaded_player_data != null and not Global.current_loaded_player_data.is_empty():
@@ -189,10 +194,7 @@ func _ready():
 		switch_state("Normal") # Ensure Normal state is active for new game
 		combat_fsm.change_state(IdleState.new(self))
 	
-	unlock_state("Magus")
-	unlock_state("UltimateMagus")
-	unlock_state("Cyber")
-	unlock_state("UltimateCyber")
+	
 
 	#switch_state("Normal")
 	# --- END MODIFIED _ready() LOGIC ---
@@ -532,6 +534,7 @@ func take_damage(damage):
 				dead = true
 				Global.playerAlive = false
 				print("PLAYER DEAD")
+				load_game_over_scene()
 			take_damage_cooldown(1.0)
 		health_changed.emit(health, health_max) # Emit signal after health changes
 		await get_tree().create_timer(0.5).timeout
@@ -542,6 +545,22 @@ func take_damage_cooldown(time):
 	can_take_damage = false
 	await get_tree().create_timer(time).timeout
 	can_take_damage = true
+
+func load_game_over_scene():
+	# Preload the game over scene for efficiency
+	var game_over_scene_res = preload("res://scenes/ui/game_over_ui.tscn") # Adjust path if different
+	
+	# Create an instance of the game over scene
+	var game_over_instance = game_over_scene_res.instantiate()
+	
+	# Add it to the current scene's root (Viewport)
+	get_tree().current_scene.add_child(game_over_instance)
+	
+	# Optionally, you might want to disable player input/physics completely
+	# after loading the game over scene, as the game over scene handles pausing.
+	# For example, by setting Global.playerAlive to false your _physics_process
+	# already handles stopping movement. You could also hide the player character.
+	# visible = false 
 	
 func apply_knockback(vector: Vector2):
 	knockback_velocity = vector

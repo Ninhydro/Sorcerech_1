@@ -63,7 +63,7 @@ func _ready():
 
 func _on_body_entered(body: Node2D):
 	print("Player position: ",player_node_ref.global_position)
-	if body.is_in_group("player") and not _has_been_triggered:
+	if (body.is_in_group("player") and not _has_been_triggered) and Global.cutscene_finished1 == false:
 		print("Player entered cutscene trigger area. Starting cutscene.")
 
 		if collision_shape:
@@ -285,6 +285,8 @@ func end_cutscene(cutscene_name_finished: String):
 	if not target_scene_path.is_empty():
 		print("Cutscene Area2D: Teleporting player to %s at %s" % [target_scene_path, target_position_in_scene])
 		Global.playerBody.global_position = target_position_in_scene
+	
+	Global.cutscene_finished1 = true
 
 # NEW: Function to set player reference (called from World.gd)
 func set_player_reference(player: Player):

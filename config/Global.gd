@@ -115,6 +115,8 @@ var player_position_before_dialog: Vector2 = Vector2.ZERO # Use Vector2 for posi
 var scene_path_before_dialog: String = ""
 
 
+var cutscene_finished1 = false
+
 func _init():
 	# Set initial default values for settings here
 	fullscreen_on = false
@@ -173,8 +175,10 @@ func get_save_data() -> Dictionary:
 		"scene_path_before_dialog": scene_path_before_dialog,
 		"is_cutscene_active": is_cutscene_active, # NEW: Save cutscene active state
 		"cutscene_name": cutscene_name,
-		"cutscene_playback_position": cutscene_playback_position
+		"cutscene_playback_position": cutscene_playback_position,
 		
+		"cutscene_finished1": cutscene_finished1
+
 	}
 	print("Global: Gathering full save data.")
 	return data
@@ -212,6 +216,9 @@ func apply_load_data(data: Dictionary):
 	cutscene_name = data.get("cutscene_name", "")
 	cutscene_playback_position = data.get("cutscene_playback_position", 0.0)
 
+	
+	cutscene_finished1 = data.get("cutscene_finished1", false)
+	
 	var loaded_pos_dict = data.get("player_position_before_dialog", {"x": 0.0, "y": 0.0})
 	player_position_before_dialog = Vector2(loaded_pos_dict.x, loaded_pos_dict.y)
 	scene_path_before_dialog = data.get("scene_path_before_dialog", "")
@@ -262,6 +269,8 @@ func reset_to_defaults():
 
 	cutscene_name = ""
 	cutscene_playback_position = 0.0
+	
+	cutscene_finished1 = false
 
 	if autosave_timer.is_running():
 		autosave_timer.stop()

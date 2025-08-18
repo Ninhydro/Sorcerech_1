@@ -1590,6 +1590,8 @@ vframes = 12
 frame = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(0, -3)
+offset = Vector2(0, -30)
 
 [node name="GrappleLine" type="Line2D" parent="Player"]
 width = 5.0

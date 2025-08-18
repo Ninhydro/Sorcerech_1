@@ -1,13 +1,13 @@
-res://scenes/world/test_dialog.tscn
+res://scenes/ui/MainMenu.tscn
 res://shaders/highlight.gdshader
 res://dialogic/Style1.tres
 res://dialogic/PlayerPortrait.gd
 res://scenes/tileset/Placeholder_new_tile_set.tres
 res://shaders/circle.gdshader
-res://config/Global.gd
-res://scripts/world/test_dialog.gd
-res://scenes/ui/MainMenu.tscn
+res://scenes/ui/option_menu.tscn
 res://scenes/ui/game_hud.tscn
 res://scenes/player/player.tscn
 res://scenes/world/World.tscn
 res://scenes/rooms/Room_AerendaleJunkyard.tscn
+res://scenes/world/test_dialog.tscn
+res://dialogic/PlayerPortrait.tscn

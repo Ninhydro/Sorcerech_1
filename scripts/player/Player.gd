@@ -285,7 +285,7 @@ func _physics_process(delta):
 				velocity.x = 0 # Stop horizontal movement if dialog is open or attacking
 
 			# Jumping (only if on floor, no dialog, no attacking)
-			if is_on_floor() and Input.is_action_just_pressed("move_up") and not Global.is_dialog_open and not Global.attacking:
+			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking:
 				velocity.y = -jump_force
 
 		# Attack input (only if not dialog open)

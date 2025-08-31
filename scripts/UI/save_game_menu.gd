@@ -23,7 +23,7 @@ func _ready():
 		back_button.grab_focus()
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("menu"):
+	if event.is_action_pressed("menu") or event.is_action_pressed("no"):
 		print("SaveGameMenu: ESC pressed. Current paused state: ", get_tree().paused)
 		_on_back_button_pressed()
 		get_viewport().set_input_as_handled()

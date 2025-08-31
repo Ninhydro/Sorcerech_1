@@ -33,6 +33,7 @@ func _ready():
 
 
 	_set_main_menu_buttons_enabled(true) # Ensure buttons are enabled on start
+	print("grabbing.......................")
 
 	new_game_button.grab_focus()
 
@@ -114,4 +115,8 @@ func _on_confirmation_dialog_exit_game_confirmed():
 func _on_confirmation_dialog_exit_game_canceled():
 	print("MainMenu: Player canceled exit.")
 	exit_button.grab_focus() # Good UX: refocus the exit button
+	
+func show_pause_menu():
+	#print("MainMenu: show_pause_menu() called. Game should still be paused: ", get_tree().paused)
+	new_game_button.grab_focus()
 	

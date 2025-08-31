@@ -90,7 +90,7 @@ func exit():
 func physics_process(delta):
 	# Removed wall jump logic if it's supposed to happen OUTSIDE grapple
 	# If wall jump should release grapple:
-	if player.is_on_wall() and Input.is_action_just_pressed("move_up") and not is_grappling:
+	if player.is_on_wall() and Input.is_action_just_pressed("jump") and not is_grappling:
 		print("wall jump")
 		player.wall_jump_just_happened = true
 		player.wall_jump_timer = player.WALL_JUMP_DURATION

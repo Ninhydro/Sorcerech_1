@@ -36,7 +36,7 @@ func physics_update(delta):
 		if (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")) and player.telekinesis_enabled == false and Global.is_dialog_open == false:
 			#print("IdleState: Detected movement input → switching to RunState")
 			get_parent().change_state(RunState.new(player))
-		elif (Input.is_action_just_pressed("move_up")) and player.telekinesis_enabled == false and Global.is_dialog_open == false:
+		elif (Input.is_action_just_pressed("jump")) and player.telekinesis_enabled == false and Global.is_dialog_open == false:
 			#print("IdleState: Detected movement input → switching to JumpState")
 			get_parent().change_state(JumpState.new(player))
 		elif Input.is_action_just_pressed("yes") and player.can_attack == true:

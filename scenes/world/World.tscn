@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bsj8x1oxp0cqn"]
+[gd_scene load_steps=26 format=3 uid="uid://bsj8x1oxp0cqn"]
 
 [ext_resource type="Script" path="res://scripts/world/World.gd" id="1_w1wil"]
 [ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets_image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_yoo7y"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://2y3devuwcuju" path="res://scenes/rooms/Room_ExactlyionTown.tscn" id="15_wky0v"]
 [ext_resource type="PackedScene" uid="uid://cnbcuo1v16c7" path="res://scenes/rooms/Room_ExactlyionBattlefield.tscn" id="16_acxiu"]
 [ext_resource type="PackedScene" uid="uid://2dwtol1f3sey" path="res://scenes/rooms/Room_ExactlyionCentral.tscn" id="17_bi5uk"]
+[ext_resource type="PackedScene" uid="uid://be402c7tmtfjf" path="res://scenes/rooms/Room_ExactlyionBattlefield2.tscn" id="18_6tufi"]
 [ext_resource type="PackedScene" uid="uid://djx4sn2eal13h" path="res://scenes/rooms/Room_ExactlyionMainframe.tscn" id="18_rdbnv"]
 [ext_resource type="PackedScene" uid="uid://c8nfmopkmdkk7" path="res://scenes/rooms/Room_ExactlyionValentina.tscn" id="19_ojk8u"]
 [ext_resource type="PackedScene" uid="uid://ci44hikud0mu" path="res://scenes/world/transition_manager.tscn" id="20_7o6hr"]
@@ -360,68 +361,70 @@ tile_set = SubResource("TileSet_jlx8q")
 format = 2
 
 [node name="Player" parent="." instance=ExtResource("3_pp1my")]
-position = Vector2(188, 1446)
+position = Vector2(-2419, -939)
 
 [node name="Room_AerendaleTown" parent="." instance=ExtResource("4_6wqko")]
-position = Vector2(-295, -489)
+position = Vector2(-291, -482)
 
 [node name="Room_AerendaleJunkyard" parent="." instance=ExtResource("5_d2ced")]
-position = Vector2(-269, 1391)
-metadata/_edit_lock_ = true
+position = Vector2(-1556, -483)
 
 [node name="Marker2D" type="Marker2D" parent="Room_AerendaleJunkyard"]
 position = Vector2(-542, 29)
 
 [node name="Room_AerendaleBattlefield" parent="." instance=ExtResource("6_t47eu")]
-position = Vector2(-322, 3343)
+position = Vector2(1152, 88)
 
 [node name="Room_AerendaleCapital" parent="." instance=ExtResource("7_ou7s5")]
-position = Vector2(-343, -2268)
+position = Vector2(-1592, -1384)
 
-[node name="Room_HiddenTown" parent="." instance=ExtResource("8_kooar")]
-position = Vector2(-340, -4025)
+[node name="Room_HiddenRuinss" parent="." instance=ExtResource("8_kooar")]
+position = Vector2(-1320, -2040)
 
-[node name="Room_HiddenRuins" parent="." instance=ExtResource("9_8mm3s")]
-position = Vector2(-352, -5885)
+[node name="Room_HiddenRuinsField" parent="." instance=ExtResource("9_8mm3s")]
+position = Vector2(1896, -2464)
 
 [node name="Room_TromarveliaTown" parent="." instance=ExtResource("10_vsvcc")]
-position = Vector2(-3996, -489)
+position = Vector2(-2088, 568)
 
 [node name="Room_TromarveliaBattlefield" parent="." instance=ExtResource("11_rs5ry")]
-position = Vector2(-4008, 3354)
+position = Vector2(-2152, 1128)
 
 [node name="Room_TromarveliaCastle" parent="." instance=ExtResource("12_bfh2l")]
-position = Vector2(-4011, -4197)
+position = Vector2(2936, 2360)
 
 [node name="Room_TromarveliaDungeon" parent="." instance=ExtResource("13_wwr1u")]
-position = Vector2(-4031, -2274)
+position = Vector2(-2472, 3560)
 
 [node name="Room_TromarveliaNora" parent="." instance=ExtResource("14_mfqso")]
-position = Vector2(-3987, 1446)
+position = Vector2(-2992, -40)
 
 [node name="Room_ExactlyionTown" parent="." instance=ExtResource("15_wky0v")]
-position = Vector2(3439, -512)
+position = Vector2(4496, 312)
 
 [node name="Room_ExactlyionBattlefield" parent="." instance=ExtResource("16_acxiu")]
-position = Vector2(3457, 3404)
+position = Vector2(3928, -264)
 
 [node name="Room_ExactlyionCentral" parent="." instance=ExtResource("17_bi5uk")]
-position = Vector2(3383, -2286)
+position = Vector2(7112, -920)
+
+[node name="RoomExactlyionBattlefield2" parent="." instance=ExtResource("18_6tufi")]
+position = Vector2(7984, -856)
 
 [node name="Room_ExactlyionMainframe" parent="." instance=ExtResource("18_rdbnv")]
-position = Vector2(3487, -4114)
+position = Vector2(5248, -2032)
 
 [node name="Room_ExactlyionValentina" parent="." instance=ExtResource("19_ojk8u")]
-position = Vector2(3475, 1418)
+position = Vector2(6120, 728)
 
 [node name="TransitionManager" parent="." instance=ExtResource("20_7o6hr")]
 
 [node name="CutsceneIntro" parent="." instance=ExtResource("21_exdw8")]
-position = Vector2(25, 1350)
+position = Vector2(-2593, -1067)
 metadata/_edit_lock_ = true
 
 [node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(189, 1435)
+position = Vector2(-2429, -982)
 metadata/_edit_lock_ = true
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]

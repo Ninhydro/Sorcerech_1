@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_rcy5o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pfl21"]
-size = Vector2(28, 30)
+size = Vector2(28, 31)
 
 [node name="RoomExactlyionBattlefield" type="Node2D"]
 
@@ -16,7 +16,10 @@ layer_0/tile_data = PackedInt32Array(327644, 917504, 4, 327645, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="Spawn_FromExactlyionTown" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(5, -2)
+position = Vector2(240, 40)
+
+[node name="Spawn_FromExactlyionCentral" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(2472, -760)
 
 [node name="Doors" type="Node2D" parent="."]
 
@@ -26,7 +29,16 @@ target_room = "Room_ExactlyionTown"
 target_spawn = "Spawn_FromEBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_ExactlyionTown"]
-position = Vector2(198, 54)
+position = Vector2(168, 56)
+shape = SubResource("RectangleShape2D_pfl21")
+
+[node name="Door_ExactlyionCentral" type="Area2D" parent="Doors"]
+script = ExtResource("1_rcy5o")
+target_room = "Room_ExactlyionCentral"
+target_spawn = "Spawn_FromEBattlefield"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_ExactlyionCentral"]
+position = Vector2(2520, -752)
 shape = SubResource("RectangleShape2D_pfl21")
 
 [node name="Label" type="Label" parent="."]

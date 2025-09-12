@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dho52j1svafa7"]
+[gd_scene load_steps=7 format=3 uid="uid://dho52j1svafa7"]
 
 [ext_resource type="Script" path="res://scripts/rooms/Room_Hub.gd" id="1_67lrk"]
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_sl44h"]
@@ -334,13 +334,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_xqyw1")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c2wbv"]
-size = Vector2(23, 31)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_b2fba"]
-size = Vector2(30, 24)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_emdl6"]
-size = Vector2(20, 34)
+size = Vector2(23, 55.5)
 
 [node name="RoomAerendaleTown" type="Node2D"]
 script = ExtResource("1_67lrk")
@@ -353,17 +347,11 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 position = Vector2(8, 8)
 
-[node name="Spawn_FromTromarveliaTown" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(272, 16)
-
-[node name="Spawn_FromExactlyionTown" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(304, 16)
-
 [node name="Spawn_FromJunkyard" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-560, 32)
+position = Vector2(-496, 24)
 
 [node name="Spawn_FromABattlefield" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(232, 16)
+position = Vector2(1816, 24)
 
 [node name="Spawn_FromCapital" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(-528, -24)
@@ -378,7 +366,7 @@ target_room = "Room_AerendaleBattlefield"
 target_spawn = "Spawn_FromHub"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_AerendaleBattlefield"]
-position = Vector2(240, -8)
+position = Vector2(1776, 8)
 shape = SubResource("RectangleShape2D_c2wbv")
 
 [node name="Door_AerendaleJunkyard" type="Area2D" parent="Doors"]
@@ -390,26 +378,6 @@ target_spawn = "Spawn_FromHub"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_AerendaleJunkyard"]
 position = Vector2(-584, 8)
 shape = SubResource("RectangleShape2D_c2wbv")
-
-[node name="Door_MagusTown" type="Area2D" parent="Doors"]
-position = Vector2(208, 48)
-script = ExtResource("1_sl44h")
-target_room = "Room_TromarveliaTown"
-target_spawn = "Spawn_FromHub"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_MagusTown"]
-position = Vector2(240, 0)
-shape = SubResource("RectangleShape2D_b2fba")
-
-[node name="Door_CyberTown" type="Area2D" parent="Doors"]
-position = Vector2(248, 56)
-script = ExtResource("1_sl44h")
-target_room = "Room_ExactlyionTown"
-target_spawn = "Spawn_FromHub"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_CyberTown"]
-position = Vector2(288, -8)
-shape = SubResource("RectangleShape2D_emdl6")
 
 [node name="Door_AerendaleCapital" type="Area2D" parent="Doors"]
 position = Vector2(-40, 16)

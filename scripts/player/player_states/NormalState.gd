@@ -25,6 +25,11 @@ func physics_process(delta):
 	
 	#print(player.health.current_hp)
 	
+	var collision = player.get_node_or_null("CollisionShape2D")
+	collision.position = Vector2(1,2)
+	collision.scale = Vector2(1,1)
+	
+	
 	if player.canon_enabled == true or player.telekinesis_enabled == true:
 		player.velocity = Vector2.ZERO
 	else:

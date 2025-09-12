@@ -19,17 +19,19 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="Spawn_FromHub" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(528, 16)
 
 [node name="Doors" type="Node2D" parent="."]
+position = Vector2(536, 24)
 
 [node name="Door_AerendaleTown" type="Area2D" parent="Doors"]
-position = Vector2(486, 40)
+position = Vector2(488, 48)
 script = ExtResource("1_i5ly2")
 target_room = "Room_AerendaleTown"
 target_spawn = "Spawn_FromJunkyard"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_AerendaleTown"]
-position = Vector2(106, 8)
+position = Vector2(-398, -24)
 shape = SubResource("RectangleShape2D_4c7w7")
 
 [node name="Label2" type="Label" parent="."]

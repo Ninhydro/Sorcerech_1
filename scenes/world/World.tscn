@@ -7,8 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://cnkwa1lnnfamm" path="res://scenes/rooms/Room_AerendaleJunkyard.tscn" id="5_d2ced"]
 [ext_resource type="PackedScene" uid="uid://dbo4t4k7ob3qg" path="res://scenes/rooms/Room_AerendaleBattlefield.tscn" id="6_t47eu"]
 [ext_resource type="PackedScene" uid="uid://bkcqtqfijxmyn" path="res://scenes/rooms/Room_AerendaleCapital.tscn" id="7_ou7s5"]
-[ext_resource type="PackedScene" uid="uid://cum4bca2wrlj3" path="res://scenes/rooms/Room_HiddenTown.tscn" id="8_kooar"]
-[ext_resource type="PackedScene" uid="uid://klvtn501ec6g" path="res://scenes/rooms/Room_HiddenRuins.tscn" id="9_8mm3s"]
+[ext_resource type="PackedScene" uid="uid://dignl4ivlyijc" path="res://scenes/rooms/Room_HiddenRuins.tscn" id="9_8mm3s"]
+[ext_resource type="PackedScene" uid="uid://klvtn501ec6g" path="res://scenes/rooms/Room_HiddenRuinsField.tscn" id="9_v56yw"]
 [ext_resource type="PackedScene" uid="uid://d31x3lq4tpd8s" path="res://scenes/rooms/Room_TromarveliaTown.tscn" id="10_vsvcc"]
 [ext_resource type="PackedScene" uid="uid://b3dq36l3txbp4" path="res://scenes/rooms/Room_TromarveliaBattlefield.tscn" id="11_rs5ry"]
 [ext_resource type="PackedScene" uid="uid://bps10xv2v18d" path="res://scenes/rooms/Room_TromarveliaCastle.tscn" id="12_bfh2l"]
@@ -378,10 +378,10 @@ position = Vector2(1152, 88)
 [node name="Room_AerendaleCapital" parent="." instance=ExtResource("7_ou7s5")]
 position = Vector2(-1592, -1384)
 
-[node name="Room_HiddenRuinss" parent="." instance=ExtResource("8_kooar")]
-position = Vector2(-1320, -2040)
+[node name="Room_HiddenRuins" parent="." instance=ExtResource("9_8mm3s")]
+position = Vector2(-1304, -2048)
 
-[node name="Room_HiddenRuinsField" parent="." instance=ExtResource("9_8mm3s")]
+[node name="Room_HiddenRuinsField" parent="." instance=ExtResource("9_v56yw")]
 position = Vector2(1896, -2464)
 
 [node name="Room_TromarveliaTown" parent="." instance=ExtResource("10_vsvcc")]

@@ -274,8 +274,10 @@ func _physics_process(delta):
 		else: # Normal movement and input processing
 			if facing_direction == -1: # No need for !dead check here, already done above
 				sprite.flip_h = true
+				AreaAttackColl.position = Vector2(-16,-8.75)
 			else:
 				sprite.flip_h = false
+				AreaAttackColl.position = Vector2(16,-8.75)
 
 			# Apply horizontal movement based on input (only if not wall-jumping, dialog, or attacking)
 			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking:
@@ -723,8 +725,10 @@ func set_player_direction(direction_vector: Vector2):
 	# Assuming your player's sprite is flipped based on direction
 	if direction_vector.x < 0:
 		$Sprite2D.flip_h = true
+		AreaAttackColl.position = Vector2(16,-8.75)
 	elif direction_vector.x > 0:
 		$Sprite2D.flip_h = false
+		AreaAttackColl.position = Vector2(-16,-8.75)
 	print("Player: Facing direction: ", direction_vector)
 
 # NEW: Call this from your Cutscene Animation (Call Method Track via Test_dialog proxy)

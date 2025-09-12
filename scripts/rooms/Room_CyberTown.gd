@@ -17,8 +17,8 @@ func _ready() -> void:
 			cam.make_current()
 	
 	# Optional: Display sandbox label
-	if has_node("Label"):
-		$Label.text = "Welcome to the Platformer Sandbox!"
+	#if has_node("Label"):
+	#	$Label.text = "Welcome to the Platformer Sandbox!"
 
 	# Enable some test abilities for sandbox
 	# Toggle player abilities for testing

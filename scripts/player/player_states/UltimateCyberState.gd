@@ -18,6 +18,11 @@ func _init(_player):
 func enter():
 	Global.playerDamageAmount = 30
 	print("Entered Ultimate Cyber State")
+	
+	var collision = player.get_node_or_null("CollisionShape2D")
+	collision.position = Vector2(1,-10)
+	collision.scale = Vector2(1,3)
+	
 	# e.g. change player color or animation
 	
 

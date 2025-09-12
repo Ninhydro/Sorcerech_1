@@ -4,7 +4,7 @@
 [ext_resource type="TileSet" uid="uid://dckcj5o6bchxt" path="res://scenes/tileset/Placeholder_new_tile_set.tres" id="1_uqs08"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6jiau"]
-size = Vector2(28, 24)
+size = Vector2(41, 36)
 
 [node name="RoomExactlyionMainframe" type="Node2D"]
 
@@ -16,19 +16,19 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 position = Vector2(-9, 4)
 
-[node name="Spawn_FromExactlyionCentral" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(5, -2)
+[node name="Spawn_FromEBattlefield" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(633, 12)
 
 [node name="Doors" type="Node2D" parent="."]
 position = Vector2(-9, 4)
 
 [node name="Door_ExactlyionCentral" type="Area2D" parent="Doors"]
 script = ExtResource("1_b6t2i")
-target_room = "Room_ExactlyionCentral"
+target_room = "Room_ExactlyionBattlefield2"
 target_spawn = "Spawn_FromExactlyionMainframe"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_ExactlyionCentral"]
-position = Vector2(-246, 56)
+position = Vector2(689, 14)
 shape = SubResource("RectangleShape2D_6jiau")
 
 [node name="Label" type="Label" parent="."]

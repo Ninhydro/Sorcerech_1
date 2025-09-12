@@ -18,11 +18,11 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 position = Vector2(32, 8)
 
-[node name="Spawn_FromHiddenTown" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn_FromHiddenRuins" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(-152, 32)
 
 [node name="Spawn_FromHub" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(464, 32)
+position = Vector2(640, 8)
 
 [node name="Doors" type="Node2D" parent="."]
 position = Vector2(-8, -16)
@@ -34,16 +34,16 @@ target_room = "Room_AerendaleTown"
 target_spawn = "Spawn_FromCapital"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_AerendaleTown"]
-position = Vector2(552, 88)
+position = Vector2(696, 56)
 shape = SubResource("RectangleShape2D_k3rrh")
 
-[node name="Door_HiddenTown" type="Area2D" parent="Doors"]
+[node name="Door_HiddenRuins" type="Area2D" parent="Doors"]
 position = Vector2(16, 0)
 script = ExtResource("1_876ac")
-target_room = "Room_HiddenTown"
+target_room = "Room_HiddenRuins"
 target_spawn = "Spawn_FromCapital"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_HiddenTown"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_HiddenRuins"]
 position = Vector2(-160, 64)
 shape = SubResource("RectangleShape2D_sguh3")
 

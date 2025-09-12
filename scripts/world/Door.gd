@@ -25,5 +25,7 @@ func _on_body_exited(body):
 		player_in_range = null
 
 func _process(delta):
-	if player_in_range and Input.is_action_just_pressed("move_up"):
+	#if player_in_range and Input.is_action_just_pressed("move_up"):
+	#	transition_manager.travel_to(player_in_range, target_room, target_spawn)
+	if player_in_range:
 		transition_manager.travel_to(player_in_range, target_room, target_spawn)

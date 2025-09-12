@@ -69,8 +69,13 @@ func enter():
 	# Set player's grappling flag to false on state entry
 	player.is_grappling_active = false 
 	
+	var collision = player.get_node_or_null("CollisionShape2D")
+	collision.position = Vector2(1,-10)
+	collision.scale = Vector2(1,3)
+	
 	print("DEBUG_CYBERSTATE_ENTER: Entered Cyber State.")
 	var sprite = player.get_node_or_null("Sprite2D")
+	
 	if sprite and sprite.material and (sprite.material is ShaderMaterial):
 		print("DEBUG_CYBERSTATE_ENTER: Shader Alpha Override: ", sprite.material.get_shader_parameter("camouflage_alpha_override"))
 	elif sprite:

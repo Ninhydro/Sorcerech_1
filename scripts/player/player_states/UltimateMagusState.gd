@@ -33,7 +33,12 @@ func enter():
 	is_holding = false
 	hold_time = 0.0
 	Global.playerDamageAmount = 50
+	var collision = player.get_node_or_null("CollisionShape2D")
+	collision.position = Vector2(1,-10)
+	collision.scale = Vector2(1,3)
+	
 	print("Entered Ultimate Magus State")
+	
 
 	# e.g. change player color or animation
 

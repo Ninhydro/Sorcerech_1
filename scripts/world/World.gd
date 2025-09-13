@@ -61,7 +61,7 @@ func _ready():
 
 	# --- Safely assign _player_camera ---
 	if Global.playerBody and is_instance_valid(Global.playerBody):
-		_player_camera = Global.playerBody.get_node_or_null("Camera2D")
+		_player_camera = Global.playerBody.get_node_or_null("CameraPivot/Camera2D")
 		if not _player_camera:
 			printerr("World: ERROR: Player's Camera2D not found at 'Camera2D' under playerBody!")
 	else:

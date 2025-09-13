@@ -29,7 +29,7 @@ var lock_object = false
 
 
 func _process(delta):
-	if player.telekinesis_enabled == true and once == false:
+	if player.telekinesis_enabled == true and once == false and not Global.teleporting:
 		print("magus spot?")
 		if not is_ui_open :
 			open_telekinesis_ui()
@@ -132,8 +132,10 @@ func highlight_object_list(obj_list: Array, selected_idx: int):
 	for i in range(obj_list.size()):
 		var obj = obj_list[i]
 		var sprite = obj.get_node_or_null("Sprite2D")
+		
 		if sprite:
 			if i == selected_idx:
 				sprite.material = outline_material
+				print("highlight material?")
 			else:
 				sprite.material = null

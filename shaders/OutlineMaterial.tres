@@ -4,6 +4,8 @@
 
 [resource]
 shader = ExtResource("1_wbahx")
-shader_parameter/highlight_color = Color(0.5, 0.8, 1, 1)
+shader_parameter/is_highlighted = false
+shader_parameter/highlight_color = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 2.0
-shader_parameter/glow_intensity = 1.5
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/apply_modulate = true

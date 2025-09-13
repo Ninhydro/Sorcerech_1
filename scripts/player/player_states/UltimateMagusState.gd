@@ -20,8 +20,10 @@ var is_attacking := false
 var attack_timer := 0.0
 const ATTACK_DURATION := 0.2  # seconds
 
+var teleport_reset_timer: float = 0.0
+var teleport_reset_delay: float = 0.8  # Match this to your animation length
+var skill_just_used: bool = false
 
-	
 func _init(_player):
 	player = _player
 	combat_fsm = CombatFSM.new(player)
@@ -57,7 +59,7 @@ func physics_process(delta):
 	combat_fsm.physics_update(delta)
 	#print(teleport_select_mode)
 	
-	
+			
 	if player.canon_enabled == true:
 		player.velocity = Vector2.ZERO
 	else:
@@ -78,6 +80,7 @@ func physics_process(delta):
 			#print("teleporting")
 			
 			if !teleport_select_mode:
+				Global.teleporting = true
 				teleport_select_mode = true
 				player.telekinesis_enabled = true
 				available_objects = player.get_nearby_telekinesis_objects()
@@ -94,17 +97,25 @@ func physics_process(delta):
 				current_object = available_objects[selected_index]
 				switch_with_object(current_object)
 				print("Swapped with:", current_object.name, " Now at:", current_object.global_position)
+				teleport_select_mode = false
+				
 			else:
+				Global.dashing = true
 				do_dash()
+				teleport_select_mode = false
+				
 			clear_highlights()
-			teleport_select_mode = false
+			#Global.teleporting = false
+			#teleport_select_mode = false
 			player.telekinesis_enabled = false
 			is_holding = false
 			hold_time = 0.0
-		
+			
+			Global.teleporting = false
+			
 		if teleport_select_mode and available_objects.size() > 0 and  hold_time >= hold_threshold and Global.telekinesis_mode == false:
 			update_highlight()
-			print("highlight")
+			#print("highlight")
 			if Input.is_action_just_pressed("move_right"):
 				selected_index = (selected_index + 1) % available_objects.size()
 				print("right")
@@ -141,19 +152,19 @@ func switch_with_object(obj: TelekinesisObject):
 	obj.freeze = false
 
 func do_dash():
-	# Do a small dash forward in facing direction
-	var dash_distance = 50
-	var dir = Vector2.RIGHT if player.facing_direction > 0 else Vector2.LEFT
-	var dash_speed = 10
-	var dash_vector = Vector2(dash_speed * player.facing_direction, 0)
-	var collision = player.move_and_collide(dash_vector.normalized() * dash_distance)
-
-	if collision:
-		# Adjust to stop before wall
-		player.global_position = collision.get_position() - dash_vector.normalized() * 4
-	else:
-		player.global_position += dash_vector.normalized() * dash_distance
-	#player.global_position += dir * dash_distance
+	# Do a dash forward in facing direction using velocity
+	var dash_power = 500  # Adjust this value to control dash speed
+	var dash_direction = Vector2.RIGHT if player.facing_direction > 0 else Vector2.LEFT
+	
+	# Apply dash velocity instead of changing position directly
+	player.velocity = dash_direction * dash_power
+	
+	# Debug output
+	print("Dash activated! Velocity set to: ", player.velocity)
+	print("Facing direction: ", player.facing_direction)
+	print("Dash power: ", dash_power)
+	# Set dashing state
+	Global.dashing = true
 
 func update_highlight():
 	player.telekinesis_controller.highlight_object_list(available_objects, selected_index)

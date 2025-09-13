@@ -61,6 +61,8 @@ var playerDamageZone: Area2D
 var playerDamageAmount: int
 var playerHitbox: Area2D
 var telekinesis_mode := false
+var teleporting := false
+var dashing := false
 var camouflage := false
 var time_freeze := false
 var enemyADamageZone: Area2D
@@ -238,6 +240,8 @@ func reset_to_defaults():
 	selected_form_index = 0
 	playerAlive = true
 	telekinesis_mode = false
+	teleporting = false
+	dashing = false
 	camouflage = false
 	time_freeze = false
 	fullscreen_on = false

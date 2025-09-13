@@ -1,6 +1,7 @@
+Timer
+Node2D
 Marker2D
 RayCast2D
-Node2D
 Label
 Line2D
 Camera2D
@@ -12,4 +13,3 @@ HBoxContainer
 TextureProgressBar
 Control
 CanvasLayer
-Panel

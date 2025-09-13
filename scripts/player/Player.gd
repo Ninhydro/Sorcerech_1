@@ -117,6 +117,8 @@ var is_grabbing_ledge = false
 var LedgePosition: Vector2 = Vector2.ZERO # The position where the player should hang
 var LedgeDirection: Vector2 = Vector2.ZERO # The direction of the ledge (+1 for right, -1 for left)
 
+@onready var camera = $CameraPivot/Camera2D
+
 #@export var CollisionMap: TileMapLayer
 
 # Method to disable player input
@@ -130,11 +132,13 @@ func disable_input():
 # Method to enable player input
 func enable_input():
 	print("Player: Input enabled.")
+	set_process_input(true)
 	set_physics_process(true)
 	set_process(true)
 
 
 func _ready():
+	enable_input()
 	Global.playerBody = self
 	Global.playerAlive = true
 	print(Global.playerBody)
@@ -222,6 +226,8 @@ func _physics_process(delta):
 	# This should ideally be done once at load/spawn, not every physics frame.
 	# But if you move Global.playerBody assignment to _ready,
 	# make sure it happens *before* any other scripts try to access it.
+	print(velocity)
+	
 	Global.playerBody = self
 	Dialogic.VAR.set_variable("player_current_form", get_current_form_id())
 
@@ -229,7 +235,8 @@ func _physics_process(delta):
 	Global.current_form = get_current_form_id()
 	
 
-	print(global_position)
+	#print(global_position)
+	#camera_pivot.position = camera_pivot.position.lerp(Vector2.ZERO, 0.1) # Adjust speed
 
 	if _should_apply_loaded_position:
 		print("Player._physics_process: Applying loaded position (one-time).")
@@ -288,8 +295,26 @@ func _physics_process(delta):
 		elif canon_enabled and not is_launched:
 			scale = Vector2(0.5,0.5)
 			velocity = Vector2.ZERO
+			switch_state("Normal")
+			Global.selected_form_index = 2
+			combat_fsm.change_state(IdleState.new(self))
+			
 		elif telekinesis_enabled:
 			velocity = Vector2.ZERO
+		elif Global.dashing:
+		# Apply gravity during dash
+			velocity.y += gravity * delta
+			
+			# Move with the dash velocity
+			move_and_slide()
+			
+			# Gradually reduce dash velocity
+			velocity.x = lerp(velocity.x, 0.0, delta * 5)
+		
+		# End dash when velocity becomes small
+			if abs(velocity.x) < 50:
+				Global.dashing = false
+
 		else: # Normal movement and input processing
 			if facing_direction == -1: # No need for !dead check here, already done above
 				sprite.flip_h = true
@@ -425,8 +450,9 @@ func _physics_process(delta):
 
 		if (is_on_floor() or is_on_ceiling() or is_on_wall()) and bounced_protection_timer <= 0:
 			is_launched = false
-			velocity = Vector2.ZERO # Stop movement
+			#velocity = Vector2.ZERO # Stop movement
 			canon_enabled = false # Exit cannon mode
+			scale = Vector2(1,1)
 			print("Player stopped on a non-bounce surface or came to rest.")
 	else:
 		# This else block handles normal gravity application when not launched, not in cannon, not telekinesis
@@ -667,7 +693,7 @@ func _on_combo_timer_timeout():
 	attack_cooldown_timer.start(2.0)
 	print("combo,timer attack start")
 
-
+#var next_ledge_position
 func handle_ledge_grab():
 	# Only check for ledges when in the air and not currently grabbing one
 	var current_form = get_current_form_id()
@@ -681,6 +707,7 @@ func handle_ledge_grab():
 			# Snap the player's position to hang on the ledge
 			LedgePosition = Vector2(collision_point.x +6, collision_point.y - 14)
 			print("Player grabbed a ledge on the right!")
+			return true
 			#NormalColl.disabled = true
 		# Check for a ledge on the left side
 		elif LedgeLeftLower.is_colliding() and not LedgeLeftUpper.is_colliding():
@@ -690,13 +717,20 @@ func handle_ledge_grab():
 			LedgePosition = Vector2(collision_point.x -6 , collision_point.y - 14)
 			print("Player grabbed a ledge on the left!")
 			#NormalColl.disabled = true
-
+			return true
+		return false	
 	# If the player is grabbing a ledge, handle inputs for climbing or dropping
 	if is_grabbing_ledge and (current_form != "Normal"):
 		#velocity.x = 0# Stop all movement
+		#next_ledge_position = LedgePosition
+		camera.position_smoothing_enabled = true
 		global_position = LedgePosition # Snap to the hanging position
-	
+		#velocity = Vector2.ZERO
+		#NormalColl.disabled = true
+		#global_position = global_position.lerp(LedgePosition, 0.5) # Adjust the interpolation speed (0.2 is a good starting point)
 
+
+		
 		
 		# Return true to signal that no further movement logic should be processed
 		return true

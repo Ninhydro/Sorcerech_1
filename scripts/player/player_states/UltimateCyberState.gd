@@ -10,6 +10,9 @@ var is_attacking := false
 var attack_timer := 0.0
 const ATTACK_DURATION := 0.2  # seconds
 
+#@export var jump_force = 250.0   # Jump impulse force (vertical velocity for jump)
+#var gravity  = 1000.0     # Gravity strength (pixels/sec^2)
+
 func _init(_player):
 	player = _player
 	combat_fsm = CombatFSM.new(player)
@@ -43,8 +46,8 @@ func physics_process(delta):
 	if player.canon_enabled == true or player.telekinesis_enabled == true:
 		player.velocity = Vector2.ZERO
 	else:
-		player.jump_force = 300
-		player.gravity = 500
+		player.jump_force = 450
+		player.gravity = 1000
 		#player.scale = Vector2(1.2,1.2)
 		
 		# --- Rocket shooting for "yes" action ---
@@ -65,7 +68,7 @@ func perform_time_freeze():
 	#Engine.time_scale = 0.1  # (Engine.time_scale docs: lower values slow the game):contentReference[oaicite:8]{index=8}
 	# After a timer, reset Engine.time_scale = 1.0
 	#pass
-	Global.time_freeze = !Global.time_freeze
+	Global.time_freeze = true
 	if Global.time_freeze == true:
 		print("Time Frozen - enemies paused")
 		Global.time_freeze = true
@@ -79,12 +82,13 @@ func perform_time_freeze():
 		print("Time Resumed - enemies active")
 		Engine.time_scale = 1
 		Global.time_freeze = false
-		Global.time_freeze = !Global.time_freeze
+		#Global.time_freeze = !Global.time_freeze
 		#get_tree().paused = !get_tree().paused
 		#if player.animation_player:
 		#	player.animation_player.speed_scale = 1.0
 			
 			# Reset time_scale or unpause enemies.
+	
 
 
 func handle_input(event):

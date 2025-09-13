@@ -53,6 +53,7 @@ var still_animation := false
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var skill_cooldown_timer: Timer = $SkillCooldownTimer
 @onready var sprite = $Sprite2D
+@onready var NormalColl = $CollisionShape2D
 
 @onready var AreaAttack = $AttackArea
 @onready var AreaAttackColl = $AttackArea/CollisionShape2D
@@ -77,10 +78,13 @@ var grapple_length := 0.0
 
 var is_grappling_active := false # Flag to tell player.gd when grapple is active
 
+@onready var grapple_hand_point: Marker2D = $GrappleHandPoint
+@onready var grapple_line: Line2D = $GrappleLine
+
 const FLOOR_NORMAL: Vector2 = Vector2(0, -1) # Standard for side-scrolling 2D
 
 var wall_jump_just_happened = false
-var wall_jump_timer := 0.0
+var wall_jump_timer := 0.5
 const WALL_JUMP_DURATION := 0.3
 
 @export var fireball_scene: PackedScene =  preload("res://scenes/objects/Fireball.tscn") # Will hold the preloaded Fireball.tscn
@@ -102,6 +106,18 @@ var _should_apply_loaded_position: bool = false
 
 signal health_changed(health, health_max)
 signal form_changed(new_form_name)
+
+@onready var LedgeRightLower = $Raycast/LedgeGrab/LedgeRightLower
+@onready var LedgeRightUpper = $Raycast/LedgeGrab/LedgeRightUpper
+@onready var LedgeLeftLower = $Raycast/LedgeGrab/LedgeLeftLower
+@onready var LedgeLeftUpper = $Raycast/LedgeGrab/LedgeLeftUpper
+
+
+var is_grabbing_ledge = false
+var LedgePosition: Vector2 = Vector2.ZERO # The position where the player should hang
+var LedgeDirection: Vector2 = Vector2.ZERO # The direction of the ledge (+1 for right, -1 for left)
+
+#@export var CollisionMap: TileMapLayer
 
 # Method to disable player input
 func disable_input():
@@ -211,6 +227,9 @@ func _physics_process(delta):
 
 	Global.set_player_form(get_current_form_id())
 	Global.current_form = get_current_form_id()
+	
+
+	print(global_position)
 
 	if _should_apply_loaded_position:
 		print("Player._physics_process: Applying loaded position (one-time).")
@@ -244,7 +263,7 @@ func _physics_process(delta):
 		UI_telekinesis = true
 	else:
 		UI_telekinesis = false
-
+	#print(wall_jump_just_happened)
 	# --- Player Input and Movement (Only if NOT in a cutscene and NOT dead) ---
 	if not dead and not Global.is_cutscene_active: # <-- IMPORTANT: Add Global.is_cutscene_active check here
 		var input_dir = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
@@ -275,26 +294,39 @@ func _physics_process(delta):
 			if facing_direction == -1: # No need for !dead check here, already done above
 				sprite.flip_h = true
 				AreaAttackColl.position = Vector2(-16,-8.75)
+				grapple_hand_point.position = Vector2(-abs(grapple_hand_point.position.x), grapple_hand_point.position.y)
+
 			else:
 				sprite.flip_h = false
 				AreaAttackColl.position = Vector2(16,-8.75)
+				grapple_hand_point.position = Vector2(abs(grapple_hand_point.position.x), grapple_hand_point.position.y)
+
 
 			# Apply horizontal movement based on input (only if not wall-jumping, dialog, or attacking)
-			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking:
+			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge:
 				#print("movinggggggggg")
 				velocity.x = input_dir * move_speed # Use 'speed' here for normal movement
+			elif wall_jump_just_happened: #or current_form = cyber form,
+				pass
+			elif is_grabbing_ledge:
+				velocity.x = 0
 			else:
 				velocity.x = 0 # Stop horizontal movement if dialog is open or attacking
 
 			# Jumping (only if on floor, no dialog, no attacking)
-			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking:
+			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge:
 				velocity.y = -jump_force
+			elif is_grabbing_ledge:
+				velocity.y += gravity+delta
 
 		# Attack input (only if not dialog open)
 		if Input.is_action_just_pressed("yes") and can_attack and not Global.is_dialog_open:
 			var current_form = get_current_form_id()
 			var attack_started = false
-			if current_form != "Normal" and current_form != "UltimateMagus" and current_form != "UltimateCyber":
+			if current_form == "Cyber":
+				attack_cooldown_timer.start(2.0)
+				attack_started = true
+			elif current_form == "Magus":
 				attack_cooldown_timer.start(2.0)
 				attack_started = true
 			elif current_form == "UltimateCyber":
@@ -403,6 +435,7 @@ func _physics_process(delta):
 
 	# IMPORTANT: Only one move_and_slide() call per _physics_process frame.
 	# This should be at the very end of _physics_process after all velocity calculations.
+	handle_ledge_grab()
 	move_and_slide()
 
 	# --- FORM ROTATION (Only if NOT in a cutscene) ---
@@ -511,6 +544,12 @@ func _on_skill_cooldown_timer_timeout():
 func _on_animation_tree_animation_finished(anim_name):
 	still_animation = false
 	print("animation end")
+
+	
+func _on_animation_player_animation_finished(anim_name):
+	#still_animation = false
+	#print("animation end")
+	pass
 
 func check_hitbox():
 	var hitbox_areas = $Hitbox.get_overlapping_areas()
@@ -627,6 +666,53 @@ func _on_combo_timer_timeout():
 	can_attack = false
 	attack_cooldown_timer.start(2.0)
 	print("combo,timer attack start")
+
+
+func handle_ledge_grab():
+	# Only check for ledges when in the air and not currently grabbing one
+	var current_form = get_current_form_id()
+	if not is_on_floor() and not is_grabbing_ledge and current_form != "Normal" and current_form != "Cyber":
+		# Check for a ledge on the right side
+		if LedgeRightLower.is_colliding() and not LedgeRightUpper.is_colliding():
+			is_grabbing_ledge = true
+			LedgeDirection = Vector2.RIGHT
+			# Calculate the grab position relative to the lower raycast's collision point
+			var collision_point = LedgeRightLower.get_collision_point()
+			# Snap the player's position to hang on the ledge
+			LedgePosition = Vector2(collision_point.x +6, collision_point.y - 14)
+			print("Player grabbed a ledge on the right!")
+			#NormalColl.disabled = true
+		# Check for a ledge on the left side
+		elif LedgeLeftLower.is_colliding() and not LedgeLeftUpper.is_colliding():
+			is_grabbing_ledge = true
+			LedgeDirection = Vector2.LEFT
+			var collision_point = LedgeLeftLower.get_collision_point()
+			LedgePosition = Vector2(collision_point.x -6 , collision_point.y - 14)
+			print("Player grabbed a ledge on the left!")
+			#NormalColl.disabled = true
+
+	# If the player is grabbing a ledge, handle inputs for climbing or dropping
+	if is_grabbing_ledge and (current_form != "Normal" or current_form != "Cyber"):
+		#velocity.x = 0# Stop all movement
+		global_position = LedgePosition # Snap to the hanging position
+		
+		#if still_animation == false:
+		#	is_grabbing_ledge = false
+			#velocity = Vector2(LedgeDirection.x * move_speed, -jump_force)
+				# Play a "climb" animation
+			#print("Player is climbing the ledge.")
+		#	NormalColl.disabled = false
+		# You can add an animation here, e.g., anim_state.travel("LedgeGrab")
+		
+		# Climb the ledge with "jump" or "move_up"
+
+		
+		# Return true to signal that no further movement logic should be processed
+		return true
+
+	return false # Return false if not grabbing a ledge
+	
+
 
 func add_item_to_inventory(item_id: String):
 	if not inventory.has(item_id):
@@ -858,3 +944,6 @@ func enable_player_input_after_cutscene():
 	
 	# visible = true # Example: if player was hidden
 	
+
+
+

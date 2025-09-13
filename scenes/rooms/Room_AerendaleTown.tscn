@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dho52j1svafa7"]
+[gd_scene load_steps=8 format=3 uid="uid://dho52j1svafa7"]
 
 [ext_resource type="Script" path="res://scripts/rooms/Room_Hub.gd" id="1_67lrk"]
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_sl44h"]
 [ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets_image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_dpjfi"]
+[ext_resource type="PackedScene" uid="uid://cfecqsjeojxxt" path="res://scenes/objects/GrapplePoint.tscn" id="4_halrj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xqyw1"]
 texture = ExtResource("2_dpjfi")
@@ -334,7 +335,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_xqyw1")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c2wbv"]
-size = Vector2(23, 55.5)
+size = Vector2(59.5, 55.5)
 
 [node name="RoomAerendaleTown" type="Node2D"]
 script = ExtResource("1_67lrk")
@@ -348,7 +349,7 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 position = Vector2(8, 8)
 
 [node name="Spawn_FromJunkyard" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-496, 24)
+position = Vector2(-488, 48)
 
 [node name="Spawn_FromABattlefield" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1816, 24)
@@ -376,7 +377,7 @@ target_room = "Room_AerendaleJunkyard"
 target_spawn = "Spawn_FromHub"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_AerendaleJunkyard"]
-position = Vector2(-584, 8)
+position = Vector2(-528, 72)
 shape = SubResource("RectangleShape2D_c2wbv")
 
 [node name="Door_AerendaleCapital" type="Area2D" parent="Doors"]
@@ -390,10 +391,10 @@ position = Vector2(-568, -48)
 shape = SubResource("RectangleShape2D_c2wbv")
 
 [node name="Label" type="Label" parent="."]
-offset_left = -456.0
-offset_top = 40.0
-offset_right = -330.0
-offset_bottom = 63.0
+offset_left = -432.0
+offset_top = 48.0
+offset_right = -306.0
+offset_bottom = 71.0
 text = "Aerandale Town"
 
 [node name="Label2" type="Label" parent="."]
@@ -402,3 +403,6 @@ offset_top = 48.0
 offset_right = 792.0
 offset_bottom = 61.0
 text = "Village & Boss Part 1"
+
+[node name="GrapplePoint" parent="." instance=ExtResource("4_halrj")]
+position = Vector2(-392, -24)

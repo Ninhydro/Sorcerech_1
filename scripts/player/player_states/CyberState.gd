@@ -1,7 +1,7 @@
 extends BaseState
 class_name CyberState
 
-var grapple_line: Line2D = null # Line2D node for drawing the grapple rope
+#var grapple_line = player.grapple_line # Line2D node for drawing the grapple rope
 
 # Grapple point stores the global position where the grapple latched on
 var grapple_point: Vector2 = Vector2.ZERO
@@ -52,7 +52,7 @@ const GRAVITY = 1200.0          # Global gravity constant, used for consistency
 
 const ATTACK_DURATION := 0.2
 
-var wall_jump_force = 200
+var wall_jump_force = 300
  
 # Constructor for the state
 func _init(_player):
@@ -62,7 +62,7 @@ func _init(_player):
 
 # Called when entering this state
 func enter():
-	grapple_line = player.get_node("GrappleLine")
+	player.grapple_line = player.get_node("GrappleLine")
 	Global.playerDamageAmount = 30
 	print("Entered Cyber State")
 	
@@ -130,7 +130,7 @@ func physics_process(delta):
 		handle_grapple_movement(delta)
 
 	# Release grapple if "move_up" (jump) is pressed while grappling
-	if Input.is_action_just_pressed("move_up") and is_grappling:
+	if (Input.is_action_just_pressed("move_up") or  Input.is_action_just_pressed("jump") )and is_grappling:
 		release_grapple()
 
 func handle_input(event):
@@ -142,17 +142,19 @@ func perform_grapple():
 	var closest_target: Node2D = null
 	var closest_distance := MAX_GRAPPLE_DISTANCE
 
+	var ray_origin = player.grapple_hand_point.global_position
+	
 	for target in player.get_tree().get_nodes_in_group("grapple_targets"):
 		if not target.has_method("get_global_position"):
 			continue
 
-		var to_target = target.global_position - player.global_position
+		var to_target = target.global_position - ray_origin
 		var distance = to_target.length()
 
 		if distance > MAX_GRAPPLE_DISTANCE:
 			continue
 
-		var query = PhysicsRayQueryParameters2D.create(player.global_position, target.global_position)
+		var query = PhysicsRayQueryParameters2D.create(ray_origin, target.global_position)
 		query.exclude = [player]
 		var result = space_state.intersect_ray(query)
 
@@ -169,12 +171,12 @@ func perform_grapple():
 		player.is_grappling_active = true # Inform player.gd that grappling is active
 		player.still_animation = true # <--- ADD THIS LINE: Keep skill animation playing
 		
-		grapple_line.clear_points() # Clear any existing points
-		grapple_line.add_point(Vector2.ZERO) # Add point 0 (player's local origin)
-		grapple_line.add_point(player.to_local(grapple_point)) # Add point 1 (grapple point in player's local space)
+		player.grapple_line.clear_points() # Clear any existing points
+		player.grapple_line.add_point(player.grapple_hand_point.position) # Add point 0 (player's local origin)
+		player.grapple_line.add_point(player.to_local(grapple_point)) # Add point 1 (grapple point in player's local space)
 		
 		# Store the initial rope length when the grapple begins
-		initial_grapple_rope_length = (grapple_point - player.global_position).length()
+		initial_grapple_rope_length = (grapple_point - ray_origin).length()
 		original_rope_length = initial_grapple_rope_length # Initialize original_rope_length
 
 		print("Grappling to ", grapple_point)
@@ -183,7 +185,7 @@ func perform_grapple():
 		is_grappling = false
 		player.is_grappling_active = false # Reset if grapple fails
 		player.still_animation = false # <--- ADD THIS LINE: Reset if grapple fails to start
-		grapple_line.clear_points() # Clear the line if grapple is not successful
+		player.grapple_line.clear_points() # Clear the line if grapple is not successful
 
 # Handles player movement during grappling (pulling or swinging)
 func handle_grapple_movement(delta):
@@ -219,8 +221,8 @@ func handle_grapple_movement(delta):
 			player.velocity.x += SWING_FORCE * delta
 
 	# Update the visual representation of the grapple rope
-	grapple_line.set_point_position(0, Vector2.ZERO)
-	grapple_line.set_point_position(1, player.to_local(grapple_point))
+	player.grapple_line.set_point_position(0, player.grapple_hand_point.position)
+	player.grapple_line.set_point_position(1, player.to_local(grapple_point))
 
 # Enters the swinging (pendulum) mode
 func enter_swing_mode(distance):
@@ -369,7 +371,7 @@ func release_grapple():
 		is_swinging = false
 		player.is_grappling = false # Custom player flag (if used elsewhere)
 		player.is_grappling_active = false # <-- Reset the flag for player.gd's gravity
-		grapple_line.clear_points()
+		player.grapple_line.clear_points()
 		player.still_animation = false # <--- ADD THIS LINE: Reset still_animation on release
 
 		print("Grapple released. Final Player velocity:", player.velocity)

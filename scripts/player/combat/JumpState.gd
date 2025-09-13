@@ -47,6 +47,8 @@ func physics_update(delta):
 		elif Input.is_action_just_pressed("no") and player.can_skill == true:
 			#print("IdleState: Detected movement input → switching to SkillState")
 			get_parent().change_state(SkillState.new(player))
+		elif player.is_grabbing_ledge:
+			get_parent().change_state(LedgeState.new(player))
 	elif player.player_hit == true:
 		#print("IdleState: Detected movement input → switching to HurtState")
 		get_parent().change_state(HurtState.new(player))

@@ -54,7 +54,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [Vector2(-270, 1447.4), 5.0, 1, 1],
+"args": [Vector2(-1578, -427), 5.0, 1, 1],
 "method": &"proxy_move_player_to_position"
 }]
 }

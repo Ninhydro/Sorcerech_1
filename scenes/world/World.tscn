@@ -364,7 +364,7 @@ format = 2
 position = Vector2(-2419, -939)
 
 [node name="Room_AerendaleTown" parent="." instance=ExtResource("4_6wqko")]
-position = Vector2(-291, -482)
+position = Vector2(-289, -483)
 
 [node name="Room_AerendaleJunkyard" parent="." instance=ExtResource("5_d2ced")]
 position = Vector2(-1556, -483)

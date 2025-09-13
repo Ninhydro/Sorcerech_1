@@ -26,7 +26,7 @@ target_room = "Room_TromarveliaBattlefield"
 target_spawn = "Spawn_FromCastle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_TromarveliaTown"]
-position = Vector2(-632, -224)
+position = Vector2(-664, 24)
 shape = SubResource("RectangleShape2D_l4sc2")
 
 [node name="Label" type="Label" parent="."]

@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_ol1a4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovshc"]
-size = Vector2(45.25, 98)
+size = Vector2(70.625, 72)
 
 [node name="RoomTromarveliaBattlefield" type="Node2D"]
 
@@ -35,7 +35,7 @@ target_room = "Room_TromarveliaTown"
 target_spawn = "Spawn_FromTBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_TromarveliaTown"]
-position = Vector2(-536, -40)
+position = Vector2(-640, -328)
 shape = SubResource("RectangleShape2D_ovshc")
 
 [node name="Door_TromarveliaTown2" type="Area2D" parent="Doors"]
@@ -44,7 +44,7 @@ target_room = "Room_AerendaleBattlefield"
 target_spawn = "Spawn_FromTBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_TromarveliaTown2"]
-position = Vector2(728, -360)
+position = Vector2(736, -256)
 shape = SubResource("RectangleShape2D_ovshc")
 
 [node name="Door_TromarveliaDungeon" type="Area2D" parent="Doors"]
@@ -53,7 +53,7 @@ target_room = "Room_TromarveliaDungeon"
 target_spawn = "Spawn_FromTBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_TromarveliaDungeon"]
-position = Vector2(-984, 2088)
+position = Vector2(-1032, 2184)
 shape = SubResource("RectangleShape2D_ovshc")
 
 [node name="Door_TromarveliaCastle" type="Area2D" parent="Doors"]
@@ -62,7 +62,7 @@ target_room = "Room_TromarveliaCastle"
 target_spawn = "Spawn_FromTBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_TromarveliaCastle"]
-position = Vector2(4384, 968)
+position = Vector2(4432, 1128)
 shape = SubResource("RectangleShape2D_ovshc")
 
 [node name="Label" type="Label" parent="."]

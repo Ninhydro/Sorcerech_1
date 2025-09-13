@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="2_ti10i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_05uf5"]
-size = Vector2(38, 52)
+size = Vector2(38, 122)
 
 [node name="RoomExactlyionTown" type="Node2D"]
 script = ExtResource("1_0e4yv")
@@ -18,7 +18,7 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="Spawn_FromABattlefield" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-664, -168)
+position = Vector2(-600, -160)
 
 [node name="Spawn_FromEBattlefield" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(-568, 0)
@@ -37,7 +37,7 @@ target_room = "Room_AerendaleBattlefield"
 target_spawn = "Spawn_FromCyberTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Hub"]
-position = Vector2(-720, -160)
+position = Vector2(-656, -192)
 shape = SubResource("RectangleShape2D_05uf5")
 
 [node name="Door_Battlefield" type="Area2D" parent="Doors"]
@@ -46,7 +46,7 @@ target_room = "Room_ExactlyionBattlefield"
 target_spawn = "Spawn_FromExactlyionTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Battlefield"]
-position = Vector2(-608, -8)
+position = Vector2(-664, -432)
 shape = SubResource("RectangleShape2D_05uf5")
 
 [node name="Door_Battlefield2" type="Area2D" parent="Doors"]
@@ -56,7 +56,7 @@ target_room = "Room_ExactlyionBattlefield2"
 target_spawn = "Spawn_FromExactlyionTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Battlefield2"]
-position = Vector2(3000, -528)
+position = Vector2(3096, -592)
 shape = SubResource("RectangleShape2D_05uf5")
 
 [node name="Door_Valentina" type="Area2D" parent="Doors"]

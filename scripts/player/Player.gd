@@ -671,7 +671,7 @@ func _on_combo_timer_timeout():
 func handle_ledge_grab():
 	# Only check for ledges when in the air and not currently grabbing one
 	var current_form = get_current_form_id()
-	if not is_on_floor() and not is_grabbing_ledge and current_form != "Normal" and current_form != "Cyber":
+	if not is_on_floor() and not is_grabbing_ledge and current_form != "Normal" and not is_grappling_active:
 		# Check for a ledge on the right side
 		if LedgeRightLower.is_colliding() and not LedgeRightUpper.is_colliding():
 			is_grabbing_ledge = true
@@ -692,19 +692,10 @@ func handle_ledge_grab():
 			#NormalColl.disabled = true
 
 	# If the player is grabbing a ledge, handle inputs for climbing or dropping
-	if is_grabbing_ledge and (current_form != "Normal" or current_form != "Cyber"):
+	if is_grabbing_ledge and (current_form != "Normal"):
 		#velocity.x = 0# Stop all movement
 		global_position = LedgePosition # Snap to the hanging position
-		
-		#if still_animation == false:
-		#	is_grabbing_ledge = false
-			#velocity = Vector2(LedgeDirection.x * move_speed, -jump_force)
-				# Play a "climb" animation
-			#print("Player is climbing the ledge.")
-		#	NormalColl.disabled = false
-		# You can add an animation here, e.g., anim_state.travel("LedgeGrab")
-		
-		# Climb the ledge with "jump" or "move_up"
+	
 
 		
 		# Return true to signal that no further movement logic should be processed

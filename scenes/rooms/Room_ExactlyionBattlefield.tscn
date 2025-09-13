@@ -29,7 +29,7 @@ target_room = "Room_ExactlyionTown"
 target_spawn = "Spawn_FromEBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_ExactlyionTown"]
-position = Vector2(168, 56)
+position = Vector2(528, 48)
 shape = SubResource("RectangleShape2D_pfl21")
 
 [node name="Door_ExactlyionCentral" type="Area2D" parent="Doors"]
@@ -38,7 +38,7 @@ target_room = "Room_ExactlyionCentral"
 target_spawn = "Spawn_FromEBattlefield"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_ExactlyionCentral"]
-position = Vector2(2520, -752)
+position = Vector2(2528, -704)
 shape = SubResource("RectangleShape2D_pfl21")
 
 [node name="Label" type="Label" parent="."]

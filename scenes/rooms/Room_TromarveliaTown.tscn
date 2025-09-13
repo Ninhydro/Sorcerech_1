@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="2_b8suv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qlktd"]
-size = Vector2(26.5, 24)
+size = Vector2(56, 116)
 
 [node name="RoomTromarveliaTown" type="Node2D"]
 script = ExtResource("1_imj52")
@@ -18,7 +18,7 @@ layer_0/tile_data = PackedInt32Array(327641, 917504, 4, 327642, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="Spawn_FromABattlefield" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(384, 0)
+position = Vector2(528, -352)
 
 [node name="Spawn_FromTBattlefield" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(-680, 96)
@@ -34,7 +34,7 @@ target_room = "Room_AerendaleBattlefield"
 target_spawn = "Spawn_FromMagusTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Hub"]
-position = Vector2(448, -8)
+position = Vector2(604, -424)
 shape = SubResource("RectangleShape2D_qlktd")
 
 [node name="Door_Battlefield" type="Area2D" parent="Doors"]
@@ -43,7 +43,7 @@ target_room = "Room_TromarveliaBattlefield"
 target_spawn = "Spawn_FromTromarveliaTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Battlefield"]
-position = Vector2(-648, 104)
+position = Vector2(-688, 176)
 shape = SubResource("RectangleShape2D_qlktd")
 
 [node name="Door_Nora" type="Area2D" parent="Doors"]

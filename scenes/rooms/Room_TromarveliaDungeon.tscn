@@ -16,7 +16,7 @@ layer_0/tile_data = PackedInt32Array(327640, 917504, 4, 327641, 917504, 4, 32764
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="Spawn_FromTBattlefield" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-544, -24)
+position = Vector2(-616, -336)
 
 [node name="Doors" type="Node2D" parent="."]
 
@@ -26,7 +26,7 @@ target_room = "Room_TromarveliaBattlefield"
 target_spawn = "Spawn_FromDungeon"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_TromarveliaTown"]
-position = Vector2(-584, -32)
+position = Vector2(-664, -272)
 shape = SubResource("RectangleShape2D_c0wao")
 
 [node name="Label" type="Label" parent="."]

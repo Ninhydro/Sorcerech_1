@@ -28,7 +28,7 @@ target_room = "Room_ExactlyionBattlefield2"
 target_spawn = "Spawn_FromExactlyionMainframe"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_ExactlyionCentral"]
-position = Vector2(689, 14)
+position = Vector2(689, 68)
 shape = SubResource("RectangleShape2D_6jiau")
 
 [node name="Label" type="Label" parent="."]

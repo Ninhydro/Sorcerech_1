@@ -120,6 +120,8 @@ var LedgeDirection: Vector2 = Vector2.ZERO # The direction of the ledge (+1 for 
 @onready var camera = $CameraPivot/Camera2D
 
 #@export var CollisionMap: TileMapLayer
+var cannon_form_switched: bool = false
+var previous_form: String = ""
 
 # Method to disable player input
 func disable_input():
@@ -226,7 +228,7 @@ func _physics_process(delta):
 	# This should ideally be done once at load/spawn, not every physics frame.
 	# But if you move Global.playerBody assignment to _ready,
 	# make sure it happens *before* any other scripts try to access it.
-	print(velocity)
+	#print(velocity)
 	
 	Global.playerBody = self
 	Dialogic.VAR.set_variable("player_current_form", get_current_form_id())
@@ -293,11 +295,24 @@ func _physics_process(delta):
 			knockback_timer -= delta
 		# Special states where player input is overridden
 		elif canon_enabled and not is_launched:
-			scale = Vector2(0.5,0.5)
+				
+			scale = Vector2(0.5, 0.5)
 			velocity = Vector2.ZERO
-			switch_state("Normal")
-			Global.selected_form_index = 2
-			combat_fsm.change_state(IdleState.new(self))
+			
+			# Only switch form once when entering cannon mode
+			if get_current_form_id() != "Normal":
+		# Find the index of "Normal" in unlocked_states
+				var normal_index = unlocked_states.find("Normal")
+				if normal_index != -1:  # Make sure Normal form is actually unlocked
+					current_state_index = normal_index
+					switch_state("Normal")
+					combat_fsm.change_state(IdleState.new(self))
+					# Note: We don't set can_switch_form = false or start timer for cannon mode
+					print("Cannon mode: Switched to Normal form")
+			
+			# Prevent form switching while in cannon mode
+			# This ensures the player stays in Normal form during cannon mode
+			can_switch_form = false
 			
 		elif telekinesis_enabled:
 			velocity = Vector2.ZERO
@@ -343,7 +358,19 @@ func _physics_process(delta):
 				velocity.y = -jump_force
 			elif is_grabbing_ledge:
 				velocity.y += gravity+delta
-
+		
+		if is_launched and cannon_form_switched:
+	# Restore previous form after launch
+			if previous_form != "" and previous_form != "Normal":
+				switch_state(previous_form)
+				Global.selected_form_index = unlocked_states.find(previous_form)
+			cannon_form_switched = false
+			previous_form = ""
+		
+		if not canon_enabled and not can_switch_form:
+			can_switch_form = true
+			print("Exited cannon mode: Form switching re-enabled")
+	
 		# Attack input (only if not dialog open)
 		if Input.is_action_just_pressed("yes") and can_attack and not Global.is_dialog_open:
 			var current_form = get_current_form_id()
@@ -453,6 +480,11 @@ func _physics_process(delta):
 			#velocity = Vector2.ZERO # Stop movement
 			canon_enabled = false # Exit cannon mode
 			scale = Vector2(1,1)
+			set_physics_process(true)
+			set_process(true)
+			can_switch_form = true
+			can_attack = true
+			can_skill = true
 			print("Player stopped on a non-bounce surface or came to rest.")
 	else:
 		# This else block handles normal gravity application when not launched, not in cannon, not telekinesis
@@ -475,12 +507,13 @@ func _physics_process(delta):
 			print("Selected form: " + unlocked_states[Global.selected_form_index])
 
 		if Input.is_action_just_pressed("form_apply") and not dead and not Global.is_dialog_open:
-			if Global.selected_form_index != current_state_index:
-				current_state_index = Global.selected_form_index
-				switch_state(unlocked_states[current_state_index])
-				combat_fsm.change_state(IdleState.new(self))
-				can_switch_form = false
-				form_cooldown_timer.start(3)
+			if not canon_enabled:
+				if Global.selected_form_index != current_state_index:
+					current_state_index = Global.selected_form_index
+					switch_state(unlocked_states[current_state_index])
+					combat_fsm.change_state(IdleState.new(self))
+					can_switch_form = false
+					form_cooldown_timer.start(3)
 
 	
 func get_current_form_id() -> String:
@@ -498,6 +531,8 @@ func switch_state(state_name: String) -> void:
 		current_state.exit()
 	current_state = states[state_name]
 	current_state.enter()
+	
+	#anim_state.travel(state_name.to_lower() + "_idle") 
 	
 	form_changed.emit(state_name) # Emit signal after form changes
 
@@ -524,6 +559,7 @@ func enter_cannon():
 	is_aiming = true
 	velocity = Vector2.ZERO # Stop player movement when entering cannon
 	show_aim_ui(true)
+	cannon_form_switched = false  # Reset flag when entering cannon
 	print("Entered cannon and aiming.")
 	# Optionally disable animations or switch to a "cannon idle" sprite
 	

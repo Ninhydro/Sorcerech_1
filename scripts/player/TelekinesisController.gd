@@ -129,13 +129,22 @@ func update_selection():
 	#print("Current object set to: ", current_object)
 	
 func highlight_object_list(obj_list: Array, selected_idx: int):
+	print("HIGHLIGHTING OBJECTS: ", obj_list.size(), " objects, selected index: ", selected_idx)
+	
 	for i in range(obj_list.size()):
 		var obj = obj_list[i]
 		var sprite = obj.get_node_or_null("Sprite2D")
 		
 		if sprite:
+			print("Object ", i, ": ", obj.name, " - Sprite found: ", sprite != null)
+			
 			if i == selected_idx:
 				sprite.material = outline_material
-				print("highlight material?")
+				print("Applied outline material to object ", i)
 			else:
 				sprite.material = null
+				print("Removed material from object ", i)
+		
+		else:
+			print("Object ", i, ": ", obj.name, " - No Sprite2D found!")
+			

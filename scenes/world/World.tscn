@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bsj8x1oxp0cqn"]
+[gd_scene load_steps=28 format=3 uid="uid://bsj8x1oxp0cqn"]
 
 [ext_resource type="Script" path="res://scripts/world/World.gd" id="1_w1wil"]
 [ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets_image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_yoo7y"]
@@ -25,7 +25,6 @@
 [ext_resource type="PackedScene" uid="uid://cjvrxjjcgu8qo" path="res://scenes/ui/game_hud.tscn" id="22_lv2sh"]
 [ext_resource type="PackedScene" uid="uid://krbnmqo4s6nb" path="res://scenes/objects/TObject.tscn" id="24_7o2ag"]
 [ext_resource type="PackedScene" uid="uid://bhr7h56wnxj71" path="res://scenes/world/MagusSpot.tscn" id="25_yciw3"]
-[ext_resource type="PackedScene" uid="uid://c2nv1v2dftw2b" path="res://scenes/world/CyberSpot.tscn" id="26_rdoe7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ipdlw"]
 texture = ExtResource("2_yoo7y")
@@ -444,6 +443,3 @@ object_id = "2"
 
 [node name="MagusSpot" parent="." instance=ExtResource("25_yciw3")]
 position = Vector2(-1128, -432)
-
-[node name="CyberSpot" parent="." instance=ExtResource("26_rdoe7")]
-position = Vector2(-1048, -424)

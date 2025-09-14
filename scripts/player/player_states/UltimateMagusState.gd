@@ -87,7 +87,7 @@ func physics_process(delta):
 				print(player.get_nearby_telekinesis_objects())
 				print("teleport mode")
 				selected_index = 0
-				#update_highlight()
+				update_highlight()
 				is_holding = true
 				hold_time = 0.0
 			# Allow left/right selection while holding

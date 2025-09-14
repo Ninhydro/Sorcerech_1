@@ -8,9 +8,18 @@ var is_controlled := false
 var offset := Vector2.ZERO
 @export var can_teleport_switch := true
 
+@onready var outline_material = preload("res://shaders/OutlineMaterial.tres")
+
 func _ready():
 	add_to_group("TelekinesisObject")
-	sprite.material = null 
+	if has_node("Sprite2D"):
+		sprite = $Sprite2D
+		sprite.material = null
+		print("Sprite2D found for object: ", name)
+	else:
+		print("ERROR: No Sprite2D node found for object: ", name)
+	
+	
 
 func start_levitation(player_pos: Vector2):
 	is_controlled = true

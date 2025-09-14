@@ -12,3 +12,6 @@ res://scenes/rooms/Room_AerendaleBattlefield.tscn
 res://scenes/rooms/Room_AerendaleJunkyard.tscn
 res://scripts/player/player_states/UltimateMagusState.gd
 res://scripts/player/TelekinesisController.gd
+res://scenes/objects/TObject.gd
+res://shaders/OutlineMaterial.tres
+res://shaders/highlight2.gdshader

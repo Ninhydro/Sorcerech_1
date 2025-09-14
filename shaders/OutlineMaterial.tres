@@ -1,11 +1,8 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://btras4giugcwr"]
 
-[ext_resource type="Shader" path="res://shaders/highlight.gdshader" id="1_wbahx"]
+[ext_resource type="Shader" path="res://shaders/highlight2.gdshader" id="1_028y6"]
 
 [resource]
-shader = ExtResource("1_wbahx")
-shader_parameter/is_highlighted = false
-shader_parameter/highlight_color = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 2.0
-shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/apply_modulate = true
+shader = ExtResource("1_028y6")
+shader_parameter/outline_color = Color(0.960784, 1, 1, 1)
+shader_parameter/outline_thickness = 0.02

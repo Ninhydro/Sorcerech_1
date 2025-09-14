@@ -1768,7 +1768,6 @@ frame = 1
 
 [node name="TelekinesisController" type="Node2D" parent="Player"]
 script = ExtResource("3_epc14")
-is_ui_open = null
 
 [node name="TelekinesisUI" parent="Player/TelekinesisController" instance=ExtResource("4_nueqj")]
 visible = false

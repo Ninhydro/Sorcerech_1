@@ -84,6 +84,12 @@ func physics_process(delta):
 				teleport_select_mode = true
 				player.telekinesis_enabled = true
 				available_objects = player.get_nearby_telekinesis_objects()
+				print("Found objects: ", available_objects)
+				if available_objects.size() > 0:
+					selected_index = 0
+					update_highlight()  # Highlight immediately
+				else:
+					print("No objects available for teleport")
 				print(player.get_nearby_telekinesis_objects())
 				print("teleport mode")
 				selected_index = 0
@@ -167,6 +173,16 @@ func do_dash():
 	Global.dashing = true
 
 func update_highlight():
+	# Filter out any invalid objects
+	debug_object_states() 
+	available_objects = available_objects.filter(func(obj): return is_instance_valid(obj))
+	
+	if available_objects.size() == 0:
+		print("No valid objects to highlight")
+		return
+		
+	print("Updating highlight for ", available_objects.size(), " objects, selected index: ", selected_index)
+	
 	player.telekinesis_controller.highlight_object_list(available_objects, selected_index)
 
 	#for i in range(available_objects.size()):
@@ -175,6 +191,23 @@ func update_highlight():
 	#	if sprite:
 	#		sprite.material = outline_material if i == selected_index else null
 
+func debug_object_states():
+	print("=== OBJECT DEBUG ===")
+	print("Available objects count: ", available_objects.size())
+	print("Selected index: ", selected_index)
+	print("Teleport select mode: ", teleport_select_mode)
+	
+	for i in range(available_objects.size()):
+		var obj = available_objects[i]
+		if is_instance_valid(obj):
+			var sprite = obj.get_node_or_null("Sprite2D")
+			print("Object ", i, ": ", obj.name, " - Valid: ", true, " - Has Sprite: ", sprite != null)
+			if sprite:
+				print("  Material: ", sprite.material)
+		else:
+			print("Object ", i, ": INVALID")
+	print("===================")
+	
 func clear_highlights():
 	for obj in available_objects:
 		var sprite = obj.get_node_or_null("Sprite2D")

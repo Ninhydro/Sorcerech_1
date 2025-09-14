@@ -79,7 +79,7 @@ func open_telekinesis_ui():
 		is_ui_open = true
 		selected_index = 0
 		update_ui_highlight()
-		telekinesis_ui.visible = true
+		#telekinesis_ui.visible = true
 		print("open ui")
 
 
@@ -90,7 +90,7 @@ func close_telekinesis_ui():
 	selected_index = 0
 	current_object = null
 	available_objects.clear()
-	telekinesis_ui.visible = false
+	#telekinesis_ui.visible = false
 	is_ui_open = false
 	available_objects.clear()
 	update_ui_highlight()
@@ -107,11 +107,14 @@ func handle_ui_navigation():
 		update_ui_highlight()
 
 func update_ui_highlight():
+	var test_material = create_test_material()
+	
 	for i in range(available_objects.size()):
 		var obj = available_objects[i]
 		var sprite = obj.get_node("Sprite2D") # adjust path if needed
 		if i == selected_index:
 			sprite.material = outline_material
+			print("Outline material loaded: ", outline_material != null)  # Add this
 		else:
 			sprite.material = null # Remove outline
 
@@ -127,9 +130,41 @@ func update_selection():
 	selected_index = clamp(selected_index, 0, available_objects.size() - 1)
 	current_object = available_objects[selected_index]
 	#print("Current object set to: ", current_object)
+
+func create_test_material() -> ShaderMaterial:
+	var shader = Shader.new()
+	shader.code = """
+	shader_type canvas_item;
+	void fragment() {
+		COLOR = vec4(1.0, 0.0, 0.0, 1.0); // Solid red
+	}
+	"""
+	var material = ShaderMaterial.new()
+	material.shader = shader
+	return material
+
+
+# Use it in highlight_object_list:
+func highlight_object_list(obj_list: Array, selected_idx: int):
+	var test_material = create_test_material()
 	
+	for i in range(obj_list.size()):
+		var obj = obj_list[i]
+		var sprite = obj.get_node_or_null("Sprite2D")
+		
+		if sprite:
+			if i == selected_idx:
+				sprite.material = outline_material
+				print("Applied TEST material to object ", i)
+			else:
+				sprite.material = null
+				
+"""
 func highlight_object_list(obj_list: Array, selected_idx: int):
 	print("HIGHLIGHTING OBJECTS: ", obj_list.size(), " objects, selected index: ", selected_idx)
+	print("HIGHLIGHTING OBJECTS - Outline material: ", outline_material)
+	print("Material resource path: ", outline_material.resource_path)
+	print("Material type: ", outline_material.get_class())
 	
 	for i in range(obj_list.size()):
 		var obj = obj_list[i]
@@ -137,6 +172,7 @@ func highlight_object_list(obj_list: Array, selected_idx: int):
 		
 		if sprite:
 			print("Object ", i, ": ", obj.name, " - Sprite found: ", sprite != null)
+			print("  Sprite material before: ", sprite.material)
 			
 			if i == selected_idx:
 				sprite.material = outline_material
@@ -148,3 +184,5 @@ func highlight_object_list(obj_list: Array, selected_idx: int):
 		else:
 			print("Object ", i, ": ", obj.name, " - No Sprite2D found!")
 			
+"""
+

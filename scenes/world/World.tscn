@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bsj8x1oxp0cqn"]
+[gd_scene load_steps=26 format=3 uid="uid://bsj8x1oxp0cqn"]
 
 [ext_resource type="Script" path="res://scripts/world/World.gd" id="1_w1wil"]
 [ext_resource type="Texture2D" uid="uid://iv6kxjhc61g2" path="res://assets_image/placeholder/Environments/Day-Platformer/PNG/tileset.png" id="2_yoo7y"]
@@ -23,8 +23,6 @@
 [ext_resource type="PackedScene" uid="uid://ci44hikud0mu" path="res://scenes/world/transition_manager.tscn" id="20_7o6hr"]
 [ext_resource type="PackedScene" uid="uid://bew4rnh5f46sy" path="res://scenes/world/cutscene_intro.tscn" id="21_exdw8"]
 [ext_resource type="PackedScene" uid="uid://cjvrxjjcgu8qo" path="res://scenes/ui/game_hud.tscn" id="22_lv2sh"]
-[ext_resource type="PackedScene" uid="uid://krbnmqo4s6nb" path="res://scenes/objects/TObject.tscn" id="24_7o2ag"]
-[ext_resource type="PackedScene" uid="uid://bhr7h56wnxj71" path="res://scenes/world/MagusSpot.tscn" id="25_yciw3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ipdlw"]
 texture = ExtResource("2_yoo7y")
@@ -381,10 +379,10 @@ position = Vector2(1152, 88)
 position = Vector2(-1592, -1384)
 
 [node name="Room_HiddenRuins" parent="." instance=ExtResource("9_8mm3s")]
-position = Vector2(-1304, -2048)
+position = Vector2(-840, -1816)
 
 [node name="Room_HiddenRuinsField" parent="." instance=ExtResource("9_v56yw")]
-position = Vector2(1896, -2464)
+position = Vector2(2360, -2248)
 
 [node name="Room_TromarveliaTown" parent="." instance=ExtResource("10_vsvcc")]
 position = Vector2(-2088, 568)
@@ -432,14 +430,3 @@ metadata/_edit_lock_ = true
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 
 [node name="GameHUD" parent="." instance=ExtResource("22_lv2sh")]
-
-[node name="TObject" parent="." instance=ExtResource("24_7o2ag")]
-position = Vector2(-1208, -432)
-object_id = "1"
-
-[node name="TObject2" parent="." instance=ExtResource("24_7o2ag")]
-position = Vector2(-1176, -432)
-object_id = "2"
-
-[node name="MagusSpot" parent="." instance=ExtResource("25_yciw3")]
-position = Vector2(-1128, -432)

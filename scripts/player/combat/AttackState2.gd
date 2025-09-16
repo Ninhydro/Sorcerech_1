@@ -16,7 +16,7 @@ func enter():
 		"UltimateMagus":
 			#player.anim_sprite.play("ultimate_magus_blast")
 			# Big AoE logic here
-			print("Ultimate Magus attack 2")
+			#print("Ultimate Magus attack 2")
 			player.still_animation = true
 			player.anim_state.travel("attack_ult_magus_2")
 			Global.attacking = true

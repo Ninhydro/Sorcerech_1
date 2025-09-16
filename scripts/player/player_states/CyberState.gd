@@ -94,8 +94,9 @@ func exit():
 # Main physics update loop for the state
 func physics_process(delta):
 	# Removed wall jump logic if it's supposed to happen OUTSIDE grapple
-	# If wall jump should release grapple:
-	if player.is_on_wall() and Input.is_action_just_pressed("jump") and not is_grappling:
+	# If wall jump should release grapple:LedgeLeftON = true
+
+	if player.is_on_wall() and Input.is_action_just_pressed("jump") and not is_grappling and (player.LedgeLeftON or player.LedgeRightON):
 		print("wall jump")
 		player.wall_jump_just_happened = true
 		player.wall_jump_timer = player.WALL_JUMP_DURATION
@@ -192,7 +193,7 @@ func handle_grapple_movement(delta):
 	if not is_grappling:
 		return
 
-	print("grapp to swing")
+	#print("grapp to swing")
 
 	var to_grapple = grapple_point - player.global_position
 	var distance = to_grapple.length()

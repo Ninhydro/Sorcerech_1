@@ -9,30 +9,30 @@ func enter():
 		"Magus":
 			#player.anim_sprite.play("magus_attack")
 			# You could also spawn a fireball or magic effect here
-			print("Magus hurt")
+			#print("Magus hurt")
 			player.anim_state.travel("hurt_magus")
 			#player.still_animation = true
 		"Cyber":
 			#player.anim_sprite.play("cyber_slash")
 			# Maybe activate grapple or combo effects
-			print("Cyber hurt")
+			#print("Cyber hurt")
 			player.anim_state.travel("hurt_cyber")
 			#player.still_animation = true
 		"UltimateMagus":
 			#player.anim_sprite.play("ultimate_magus_blast")
 			# Big AoE logic here
-			print("Ultimate Magus hurt")
+			#print("Ultimate Magus hurt")
 			player.anim_state.travel("hurt_ult_magus")
 			#player.still_animation = true
 		"UltimateCyber":
 			#player.anim_sprite.play("ultimate_cyber_strike")
 			# Laser or time freeze here
-			print("Ultimate Cyber hurt")
+			#print("Ultimate Cyber hurt")
 			player.anim_state.travel("hurt_ult_cyber")
 			#player.still_animation = true
 		"Normal":
 			#player.anim_sprite.play("normal_attack")
-			print("Normal hurt")
+			#print("Normal hurt")
 			player.anim_state.travel("hurt_normal")
 			#player.still_animation = true
 			

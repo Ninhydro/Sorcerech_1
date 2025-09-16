@@ -9,26 +9,26 @@ func enter():
 		"Magus":
 			#player.anim_sprite.play("magus_attack")
 			# You could also spawn a fireball or magic effect here
-			print("Magus run")
+			#print("Magus run")
 			player.anim_state.travel("run_magus")
 		"Cyber":
 			#player.anim_sprite.play("cyber_slash")
 			# Maybe activate grapple or combo effects
-			print("Cyber run")
+			#print("Cyber run")
 			player.anim_state.travel("run_cyber")
 		"UltimateMagus":
 			#player.anim_sprite.play("ultimate_magus_blast")
 			# Big AoE logic here
-			print("Ultimate Magus run")
+			#print("Ultimate Magus run")
 			player.anim_state.travel("run_ult_magus")
 		"UltimateCyber":
 			#player.anim_sprite.play("ultimate_cyber_strike")
 			# Laser or time freeze here
-			print("Ultimate Cyber run")
+			#print("Ultimate Cyber run")
 			player.anim_state.travel("run_ult_cyber")
 		"Normal":
 			#player.anim_sprite.play("normal_attack")
-			print("Normal run")
+			#print("Normal run")
 			player.anim_state.travel("run_normal")
 			
 func physics_update(delta):

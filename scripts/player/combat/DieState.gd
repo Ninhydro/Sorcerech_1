@@ -9,26 +9,26 @@ func enter():
 		"Magus":
 			#player.anim_sprite.play("magus_attack")
 			# You could also spawn a fireball or magic effect here
-			print("Magus die")
+			#print("Magus die")
 			player.anim_state.travel("die_magus")
 		"Cyber":
 			#player.anim_sprite.play("cyber_slash")
 			# Maybe activate grapple or combo effects
-			print("Cyber die")
+			#print("Cyber die")
 			player.anim_state.travel("die_cyber")
 		"UltimateMagus":
 			#player.anim_sprite.play("ultimate_magus_blast")
 			# Big AoE logic here
-			print("Ultimate Magus die")
+			#print("Ultimate Magus die")
 			player.anim_state.travel("die_ult_magus")
 		"UltimateCyber":
 			#player.anim_sprite.play("ultimate_cyber_strike")
 			# Laser or time freeze here
-			print("Ultimate Cyber die")
+			#print("Ultimate Cyber die")
 			player.anim_state.travel("die_ult_cyber")
 		"Normal":
 			#player.anim_sprite.play("normal_attack")
-			print("Normal die")
+			#print("Normal die")
 			player.anim_state.travel("die_normal")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

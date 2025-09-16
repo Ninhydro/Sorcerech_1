@@ -1,8 +1,7 @@
-res://scenes/world/World.tscn
+res://scenes/rooms/Room_AerendaleBattlefield.tscn
 res://shaders/highlight2.gdshader
 res://dialogic/Style1.tres
 res://dialogic/PlayerPortrait.gd
 res://scenes/tileset/Placeholder_new_tile_set.tres
 res://shaders/circle.gdshader
 res://shaders/highlight.gdshader
-res://scripts/world/Door_press.gd

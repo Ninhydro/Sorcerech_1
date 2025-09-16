@@ -8,7 +8,7 @@ func enter():
 		"Magus":
 			#player.anim_sprite.play("magus_attack")
 			# You could also spawn a fireball or magic effect here
-			print("Magus attack")
+			#print("Magus attack")
 			player.still_animation = true
 			player.anim_state.travel("attack_magus")
 			Global.attacking = true
@@ -16,7 +16,7 @@ func enter():
 		"Cyber":
 			#player.anim_sprite.play("cyber_slash")
 			# Maybe activate grapple or combo effects
-			print("Cyber attack")
+			#print("Cyber attack")
 			player.still_animation = true
 			player.anim_state.travel("attack_cyber")
 			Global.attacking = true
@@ -24,7 +24,7 @@ func enter():
 		"UltimateMagus":
 			#player.anim_sprite.play("ultimate_magus_blast")
 			# Big AoE logic here
-			print("Ultimate Magus attack")
+			#print("Ultimate Magus attack")
 			player.still_animation = true
 			player.anim_state.travel("attack_ult_magus_1")
 			Global.attacking = true
@@ -32,7 +32,7 @@ func enter():
 		"UltimateCyber":
 			#player.anim_sprite.play("ultimate_cyber_strike")
 			# Laser or time freeze here
-			print("Ultimate Cyber attack")
+			#print("Ultimate Cyber attack")
 			player.still_animation = true
 			player.anim_state.travel("attack_ult_cyber")
 			Global.attacking = true

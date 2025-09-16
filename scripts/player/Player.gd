@@ -112,7 +112,8 @@ signal form_changed(new_form_name)
 @onready var LedgeLeftLower = $Raycast/LedgeGrab/LedgeLeftLower
 @onready var LedgeLeftUpper = $Raycast/LedgeGrab/LedgeLeftUpper
 
-
+var LedgeLeftON = false
+var LedgeRightON = false
 var is_grabbing_ledge = false
 var LedgePosition: Vector2 = Vector2.ZERO # The position where the player should hang
 var LedgeDirection: Vector2 = Vector2.ZERO # The direction of the ledge (+1 for right, -1 for left)
@@ -733,7 +734,16 @@ func _on_combo_timer_timeout():
 func handle_ledge_grab():
 	# Only check for ledges when in the air and not currently grabbing one
 	var current_form = get_current_form_id()
-	if not is_on_floor() and not is_grabbing_ledge and current_form != "Normal" and not is_grappling_active:
+	
+	if LedgeLeftLower.is_colliding():
+		LedgeLeftON = true
+	else:
+		LedgeLeftON = false
+	if LedgeRightLower.is_colliding():
+		LedgeRightON = true
+	else:
+		LedgeRightON = false
+	if not is_on_floor() and not is_grabbing_ledge and current_form != "Normal" and not is_grappling_active and not Global.dashing and not Global.teleporting and not is_launched:
 		# Check for a ledge on the right side
 		if LedgeRightLower.is_colliding() and not LedgeRightUpper.is_colliding():
 			is_grabbing_ledge = true

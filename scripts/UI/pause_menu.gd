@@ -16,6 +16,7 @@ extends CanvasLayer
 @export var option_menu_scene: PackedScene
 @export var profile_scene: PackedScene 
 
+var is_closing: bool = false
 
 func _ready():
 	print("PauseMenu _ready() called! Current paused state on entry: ", get_tree().paused)
@@ -42,21 +43,50 @@ func _ready():
 	# So, ensure `get_viewport().set_input_as_handled()` is in the script that opens PauseMenu.
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("menu") or event.is_action_pressed("no"):
-		print("PauseMenu: 'menu' action pressed in _unhandled_input. Current paused state: ", get_tree().paused)
+	if is_closing:
+		return
+		
+	if event.is_action_pressed("menu"):
+		print("PauseMenu: 'menu' action pressed")
 		if confirmation_dialog_back_to_title.visible:
 			confirmation_dialog_back_to_title.hide()
-			# It's good practice to disconnect the canceled signal after it's hidden
-			# to prevent accidental re-triggers if it's set up to fire on hide.
 			if confirmation_dialog_back_to_title.canceled.is_connected(_on_confirmation_dialog_back_to_title_canceled):
 				confirmation_dialog_back_to_title.canceled.disconnect(_on_confirmation_dialog_back_to_title_canceled)
 			back_to_title_button.grab_focus()
 		else:
 			_close_menu()
 		get_viewport().set_input_as_handled()
+	
+	elif event.is_action_pressed("no"):
+		print("PauseMenu: 'no' action pressed")
+		
+		# CONSUME THE INPUT FIRST
+		get_viewport().set_input_as_handled()
+		
+		# Set global flag BEFORE processing to prevent ability activation
+		Global.ignore_player_input_after_unpause = true
+		Global.unpause_cooldown_timer = Global.UNPAUSE_COOLDOWN_DURATION
+		
+		if confirmation_dialog_back_to_title.visible:
+			confirmation_dialog_back_to_title.hide()
+			if confirmation_dialog_back_to_title.canceled.is_connected(_on_confirmation_dialog_back_to_title_canceled):
+				confirmation_dialog_back_to_title.canceled.disconnect(_on_confirmation_dialog_back_to_title_canceled)
+			back_to_title_button.grab_focus()
+		else:
+			_close_menu()
 
 func _close_menu():
+	if is_closing:
+		return
+	is_closing = true
+	
 	print("PauseMenu: _close_menu() called. Unpausing game.")
+	
+	# Set global flag BEFORE unpausing to catch the input
+	Global.ignore_player_input_after_unpause = true
+	Global.unpause_cooldown_timer = Global.UNPAUSE_COOLDOWN_DURATION
+	print("Global: Unpause cooldown started for ", Global.UNPAUSE_COOLDOWN_DURATION, " seconds")
+	
 	get_tree().paused = false
 	print("PauseMenu: Game unpaused. Paused state now: ", get_tree().paused)
 

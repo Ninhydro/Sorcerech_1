@@ -74,14 +74,14 @@ func enter():
 	collision.scale = Vector2(1,3)
 	
 	print("DEBUG_CYBERSTATE_ENTER: Entered Cyber State.")
-	var sprite = player.get_node_or_null("Sprite2D")
+	#var sprite = player.get_node_or_null("Sprite2D")
 	
-	if sprite and sprite.material and (sprite.material is ShaderMaterial):
-		print("DEBUG_CYBERSTATE_ENTER: Shader Alpha Override: ", sprite.material.get_shader_parameter("camouflage_alpha_override"))
-	elif sprite:
-		print("DEBUG_CYBERSTATE_ENTER: Sprite2D does not have a ShaderMaterial or material is null.")
-	else:
-		print("DEBUG_CYBERSTATE_ENTER: Sprite2D node not found.")
+	#if sprite and sprite.material and (sprite.material is ShaderMaterial):
+	#	print("DEBUG_CYBERSTATE_ENTER: Shader Alpha Override: ", sprite.material.get_shader_parameter("camouflage_alpha_override"))
+	#elif sprite:
+	#	print("DEBUG_CYBERSTATE_ENTER: Sprite2D does not have a ShaderMaterial or material is null.")
+	#else:
+	#	print("DEBUG_CYBERSTATE_ENTER: Sprite2D node not found.")
 
 # Called when exiting this state
 func exit():
@@ -119,11 +119,11 @@ func physics_process(delta):
 	else:
 		#player.scale = Vector2(1,1) # Reset player scale
 
-		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive:
+		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			player.AreaAttack.monitoring = true
 			print("Cyber attacking")
 
-		if Input.is_action_just_pressed("no") and player.can_skill == true and Global.playerAlive:
+		if Input.is_action_just_pressed("no") and player.can_skill == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			perform_grapple()
 
 	# Handle grapple movement if currently grappling

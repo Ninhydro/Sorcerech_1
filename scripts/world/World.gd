@@ -23,7 +23,7 @@ func _unhandled_input(event: InputEvent):
 			print("World: 'menu' pressed, opening pause menu.")
 			var pause_menu_instance = pause_menu_scene.instantiate()
 			add_child(pause_menu_instance)
-			get_tree().paused = true # Pause the game when menu opens
+			#get_tree().paused = true # Pause the game when menu opens
 			get_viewport().set_input_as_handled() # <--- THIS IS THE KEY LINE!
 
 func _ready():

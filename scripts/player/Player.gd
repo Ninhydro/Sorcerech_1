@@ -395,7 +395,8 @@ func _physics_process(delta):
 				# Add your attack logic here (e.g., combat_fsm.change_state(AttackState.new(self)))
 
 		# Skill input (only if not dialog open)
-		if Input.is_action_just_pressed("no") and can_skill and not Global.is_dialog_open:
+		if Input.is_action_just_pressed("no") and can_skill and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
+			print("=== PLAYER: 'no' pressed - Checking global flag: ", Global.ignore_player_input_after_unpause, " ===")
 			var current_form = get_current_form_id()
 			var skill_started = false
 			if current_form == "UltimateMagus": # Check for UltimateMagus first
@@ -507,7 +508,7 @@ func _physics_process(delta):
 			Global.selected_form_index = (Global.selected_form_index - 1 + unlocked_states.size()) % unlocked_states.size()
 			print("Selected form: " + unlocked_states[Global.selected_form_index])
 
-		if Input.is_action_just_pressed("form_apply") and not dead and not Global.is_dialog_open:
+		if Input.is_action_just_pressed("form_apply") and not dead and not Global.is_dialog_open :
 			if not canon_enabled:
 				if Global.selected_form_index != current_state_index:
 					current_state_index = Global.selected_form_index

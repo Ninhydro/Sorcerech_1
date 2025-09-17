@@ -119,11 +119,11 @@ func physics_process(delta):
 	else:
 		#player.scale = Vector2(1,1)
 		
-		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive:
+		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			player.shoot_fireball()
 			print("Magus shooting fireball!")
 			
-		if Input.is_action_just_pressed("no") and player.can_skill == true and Global.playerAlive:
+		if Input.is_action_just_pressed("no") and player.can_skill == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			# Only toggle if timed camouflage is not already active
 			if not _is_camouflage_active_timed:
 				toggle_camouflage()

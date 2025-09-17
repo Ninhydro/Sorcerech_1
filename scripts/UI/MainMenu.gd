@@ -22,6 +22,13 @@ extends CanvasLayer
 #5. cutscene, etc
 
 func _ready():
+	get_viewport().gui_embed_subwindows = false
+	await get_tree().process_frame
+	#get_viewport().window.grab_focus()
+	
+	set_process_input(true)
+	set_process_unhandled_input(true)
+	
 	new_game_button.pressed.connect(_on_new_game_button_pressed)
 	load_game_button.pressed.connect(_on_continue_button_pressed) 
 	option_button.pressed.connect(_on_option_button_pressed) 

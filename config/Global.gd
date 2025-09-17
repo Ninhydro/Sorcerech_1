@@ -119,6 +119,11 @@ var scene_path_before_dialog: String = ""
 
 var cutscene_finished1 = false
 
+var ignore_player_input_after_unpause: bool = false
+var unpause_cooldown_timer: float = 0.0
+const UNPAUSE_COOLDOWN_DURATION: float = 0.1  # 100ms cooldown
+
+
 func _init():
 	# Set initial default values for settings here
 	fullscreen_on = false
@@ -136,6 +141,23 @@ func _init():
 	affinity = 0
 	player_status = "Normal"
 	current_form = "Normal" # Initialize the backing variable
+
+func _process(delta):
+	# Handle unpause cooldown timer
+	if unpause_cooldown_timer > 0:
+		unpause_cooldown_timer -= delta
+		if unpause_cooldown_timer <= 0:
+			ignore_player_input_after_unpause = false
+			unpause_cooldown_timer = 0.0
+			print("=== GLOBAL: Input ENABLED (cooldown finished) ===")
+	
+	# Continuous debug print - remove this after debugging
+	#print("Global input flag: ", ignore_player_input_after_unpause, " | Timer: ", unpause_cooldown_timer)
+	
+func start_unpause_cooldown():
+	ignore_player_input_after_unpause = true
+	unpause_cooldown_timer = UNPAUSE_COOLDOWN_DURATION
+	print("Global: Unpause cooldown started for ", UNPAUSE_COOLDOWN_DURATION, " seconds")
 	
 func set_current_game_scene_path(path: String):
 	current_scene_path = path

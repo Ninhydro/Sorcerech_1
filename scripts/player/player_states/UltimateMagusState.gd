@@ -66,7 +66,7 @@ func physics_process(delta):
 		#player.scale = Vector2(1.2,1.2)
 		#if Input.is_action_just_pressed("no"):
 			#perform_teleport_switch()
-		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and Global.telekinesis_mode == false:
+		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			#is_attacking = true
 			#attack_timer = ATTACK_DURATION
 			player.AreaAttack.monitoring = true
@@ -75,7 +75,7 @@ func physics_process(delta):
 		
 		if is_holding == true:
 			hold_time += delta
-		if Input.is_action_pressed("no") and player.can_skill == true and Global.playerAlive and Global.telekinesis_mode == false:
+		if Input.is_action_pressed("no") and player.can_skill == true and Global.playerAlive and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			#hold_time += delta # Add time while holding
 			#print("teleporting")
 			

@@ -1715,6 +1715,7 @@ move_speed = 100.0
 [node name="Camera2D" type="Camera2D" parent="Player/CameraPivot"]
 position = Vector2(0, -3)
 offset = Vector2(0, -10)
+zoom = Vector2(0.8, 0.8)
 
 [node name="Hitbox" type="Area2D" parent="Player"]
 

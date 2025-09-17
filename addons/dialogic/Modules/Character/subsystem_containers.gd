@@ -182,12 +182,12 @@ func resize_container(container: DialogicNode_PortraitContainer, rect_size: Vari
 			tween.finished.connect(save_position_container.bind(container))
 	else:
 		container.position = container.position + relative_position_change
-		container.size = final_rect_resize
+		# Use set_deferred to avoid the anchor conflict warning
+		container.set_deferred("size", final_rect_resize)
 		save_position_container(container)
 
 	position_changed.emit({&'change':'resized', &'container_node':container})
-
-
+	
 func save_position_container(container: DialogicNode_PortraitContainer) -> void:
 	if not dialogic.current_state_info.has('portrait_containers'):
 		dialogic.current_state_info['portrait_containers'] = {}

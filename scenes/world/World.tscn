@@ -415,7 +415,7 @@ position = Vector2(7984, -856)
 position = Vector2(5248, -2032)
 
 [node name="Room_ExactlyionValentina" parent="." instance=ExtResource("19_ojk8u")]
-position = Vector2(6120, 728)
+position = Vector2(6120, 816)
 
 [node name="TransitionManager" parent="." instance=ExtResource("20_7o6hr")]
 

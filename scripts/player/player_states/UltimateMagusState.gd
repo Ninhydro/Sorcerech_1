@@ -12,7 +12,7 @@ var hold_time := 0.0
 var hold_threshold := 1
 var is_holding := false
 
-@onready var outline_material = preload("res://shaders/OutlineMaterial.tres")
+var outline_material = ShaderMaterial.new() 
 const CombatFSM = preload("res://scripts/player/combat/CombatFSM.gd")
 var combat_fsm: CombatFSM
 
@@ -30,6 +30,22 @@ func _init(_player):
 	add_child(combat_fsm)
 
 func enter():
+	var shader = load("res://shaders/highlight2.gdshader")
+	if shader and shader is Shader:
+		outline_material.shader = shader
+		print("Shader loaded successfully from highlight2.gdshader in UltimateMagusState")
+	else:
+		print("ERROR: Failed to load shader from highlight2.gdshader in UltimateMagusState")
+		# Create a simple fallback shader
+		var fallback_shader = Shader.new()
+		fallback_shader.code = """
+		shader_type canvas_item;
+		void fragment() {
+			COLOR = vec4(1.0, 0.0, 0.0, 1.0); // Solid red
+		}
+		"""
+		outline_material.shader = fallback_shader
+		
 	teleport_select_mode = false
 	player.telekinesis_enabled = false
 	is_holding = false
@@ -171,6 +187,7 @@ func do_dash():
 	
 	# Apply dash velocity instead of changing position directly
 	player.velocity = dash_direction * dash_power
+	player.velocity.y -= 100
 	
 	# Debug output
 	print("Dash activated! Velocity set to: ", player.velocity)
@@ -181,6 +198,7 @@ func do_dash():
 
 func update_highlight():
 	# Filter out any invalid objects
+	# Filter out any invalid objects
 	debug_object_states() 
 	available_objects = available_objects.filter(func(obj): return is_instance_valid(obj))
 	
@@ -190,14 +208,18 @@ func update_highlight():
 		
 	print("Updating highlight for ", available_objects.size(), " objects, selected index: ", selected_index)
 	
-	player.telekinesis_controller.highlight_object_list(available_objects, selected_index)
-
-	#for i in range(available_objects.size()):
-	#	var obj = available_objects[i]
-	#	var sprite = obj.get_node_or_null("Sprite2D")  # or "Sprite"
-	#	if sprite:
-	#		sprite.material = outline_material if i == selected_index else null
-
+	# Use the fixed outline material
+	for i in range(available_objects.size()):
+		var obj = available_objects[i]
+		if is_instance_valid(obj):
+			var sprite = obj.get_node_or_null("Sprite2D")
+			if sprite:
+				if i == selected_index:
+					sprite.material = outline_material
+					print("Applied outline material to object ", i)
+				else:
+					sprite.material = null
+					
 func debug_object_states():
 	print("=== OBJECT DEBUG ===")
 	print("Available objects count: ", available_objects.size())

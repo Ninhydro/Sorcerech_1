@@ -79,7 +79,7 @@ func _process(delta):
 	else:
 		is_enemy_chase = false
 	
-	print(is_enemy_chase)
+	#print(is_enemy_chase)
 	move(delta)
 	handle_animation()
 	move_and_slide()

@@ -126,7 +126,7 @@ var cannon_form_switched: bool = false
 var previous_form: String = ""
 
 var not_busy = true
-
+@onready var effects = $Effects
 
 # Method to disable player input
 func disable_input():
@@ -145,6 +145,7 @@ func enable_input():
 
 
 func _ready():
+	effects.visible = false
 	enable_input()
 	Global.playerBody = self
 	Global.playerAlive = true
@@ -736,12 +737,12 @@ func shoot_rocket():
 
 	var rocket1 = rocket_scene.instantiate()
 	get_tree().current_scene.add_child(rocket1)
-	rocket1.global_position = base_spawn_position + Vector2(0, -5)
+	rocket1.global_position = base_spawn_position + Vector2(-5, -10)
 	rocket1.set_initial_properties(Vector2(-0.2, -0.1).normalized(), target_enemy)
 
 	var rocket2 = rocket_scene.instantiate()
 	get_tree().current_scene.add_child(rocket2)
-	rocket2.global_position = base_spawn_position + Vector2(0, 5)
+	rocket2.global_position = base_spawn_position + Vector2(5, -10)
 	rocket2.set_initial_properties(Vector2(0.2, -0.1).normalized(), target_enemy)
 
 	print("Player in Ultimate Cyber mode shot two homing rockets!")

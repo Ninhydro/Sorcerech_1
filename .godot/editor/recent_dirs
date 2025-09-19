@@ -1,5 +1,5 @@
-res://config
 res://shaders
+res://config
 res://scenes/player
 res://scripts/UI
 res://scenes/ui

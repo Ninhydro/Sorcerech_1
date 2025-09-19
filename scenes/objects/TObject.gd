@@ -8,7 +8,7 @@ var is_controlled := false
 var offset := Vector2.ZERO
 @export var can_teleport_switch := true
 
-@onready var outline_material = preload("res://shaders/OutlineMaterial.tres")
+#@onready var outline_material = preload("res://shaders/OutlineMaterial.tres")
 
 func _ready():
 	add_to_group("TelekinesisObject")

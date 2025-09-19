@@ -24,9 +24,26 @@ var current_object: TelekinesisObject = null
 #@onready var magic_spot: Area2D = get_node("../MagucSpot")
 var once = false
 var lock_object = false
-@onready var outline_material = preload("res://shaders/OutlineMaterial.tres")
+@onready var outline_material = ShaderMaterial.new()  # Create empty material
 
 
+func _ready():
+	# Load the shader from your .gdshader file and assign it to the material
+	var shader = load("res://shaders/highlight2.gdshader")
+	if shader and shader is Shader:
+		outline_material.shader = shader
+		print("Shader loaded successfully from highlight2.gdshader")
+	else:
+		print("ERROR: Failed to load shader from highlight2.gdshader")
+		# Create a simple fallback shader
+		var fallback_shader = Shader.new()
+		fallback_shader.code = """
+		shader_type canvas_item;
+		void fragment() {
+			COLOR = vec4(1.0, 0.0, 0.0, 1.0); // Solid red
+		}
+		"""
+		outline_material.shader = fallback_shader
 
 func _process(delta):
 	if player.telekinesis_enabled == true and once == false and not Global.teleporting:
@@ -112,8 +129,9 @@ func handle_ui_navigation():
 		update_ui_highlight()
 
 func update_ui_highlight():
-	#var test_material = create_test_material()
+	#print("=== DEBUGGING OUTLINE MATERIAL ===")
 	
+	# Now apply the material
 	for i in range(available_objects.size()):
 		var obj = available_objects[i]
 		if not is_instance_valid(obj):
@@ -122,22 +140,12 @@ func update_ui_highlight():
 		var sprite = obj.get_node("Sprite2D")
 		if not sprite:
 			continue
-		
+			
 		if i == selected_index:
-			# Create material only when needed
-			if sprite.material == null:
-				var new_material = ShaderMaterial.new()
-				new_material.shader = load("res://shaders/OutlineMaterial.tres").shader
-				sprite.material = new_material
-			elif sprite.material is ShaderMaterial:
-				# Reuse existing material
-				pass
+			sprite.material = outline_material
+			print("Applied outline material to object ", i)
 		else:
-			# Remove material properly
-			if sprite.material != null:
-				if sprite.material is ShaderMaterial:
-					sprite.material.set_shader(null)
-				sprite.material = null
+			sprite.material = null
 
 
 
@@ -165,19 +173,5 @@ func create_test_material() -> ShaderMaterial:
 	return material
 
 
-# Use it in highlight_object_list:
-func highlight_object_list(obj_list: Array, selected_idx: int):
-	var test_material = create_test_material()
-	
-	for i in range(obj_list.size()):
-		var obj = obj_list[i]
-		var sprite = obj.get_node_or_null("Sprite2D")
-		
-		if sprite:
-			if i == selected_idx:
-				sprite.material = outline_material
-				print("Applied TEST material to object ", i)
-			else:
-				sprite.material = null
-				
+
 

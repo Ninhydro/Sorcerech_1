@@ -52,6 +52,7 @@ var still_animation := false
 @onready var form_cooldown_timer: Timer = $FormCooldownTimer
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var skill_cooldown_timer: Timer = $SkillCooldownTimer
+@onready var player_timer: Timer = $PlayerTimer
 @onready var sprite = $Sprite2D
 @onready var NormalColl = $CollisionShape2D
 
@@ -123,6 +124,9 @@ var LedgeDirection: Vector2 = Vector2.ZERO # The direction of the ledge (+1 for 
 #@export var CollisionMap: TileMapLayer
 var cannon_form_switched: bool = false
 var previous_form: String = ""
+
+var not_busy = true
+
 
 # Method to disable player input
 func disable_input():
@@ -237,7 +241,10 @@ func _physics_process(delta):
 	Global.set_player_form(get_current_form_id())
 	Global.current_form = get_current_form_id()
 	
-
+	if is_nan(velocity.x) or is_nan(velocity.y):
+		print("EMERGENCY: Velocity was NaN! Resetting to zero.")
+		velocity = Vector2.ZERO
+		
 	#print(global_position)
 	#camera_pivot.position = camera_pivot.position.lerp(Vector2.ZERO, 0.1) # Adjust speed
 
@@ -373,22 +380,27 @@ func _physics_process(delta):
 			print("Exited cannon mode: Form switching re-enabled")
 	
 		# Attack input (only if not dialog open)
-		if Input.is_action_just_pressed("yes") and can_attack and not Global.is_dialog_open:
+		if Input.is_action_just_pressed("yes") and can_attack and not Global.is_dialog_open and not_busy:
 			var current_form = get_current_form_id()
 			var attack_started = false
 			if current_form == "Cyber":
 				attack_cooldown_timer.start(2.0)
 				attack_started = true
+				not_busy = false
 			elif current_form == "Magus":
 				attack_cooldown_timer.start(2.0)
 				attack_started = true
+				not_busy = false
 			elif current_form == "UltimateCyber":
 				attack_cooldown_timer.start(5.0)
 				attack_started = true
+				not_busy = false
 			elif current_form == "UltimateMagus" and combo_timer_flag:
 				combo_timer_flag = false
 				combo_timer.start(0.5)
 				attack_started = true
+				not_busy = false
+			start_cooldown()
 			
 			if attack_started:
 				can_attack = false
@@ -399,18 +411,27 @@ func _physics_process(delta):
 			print("=== PLAYER: 'no' pressed - Checking global flag: ", Global.ignore_player_input_after_unpause, " ===")
 			var current_form = get_current_form_id()
 			var skill_started = false
-			if current_form == "UltimateMagus": # Check for UltimateMagus first
+			if current_form == "UltimateMagus" and not_busy: # Check for UltimateMagus first
 				skill_cooldown_timer.start(2.0)
 				skill_started = true
+				not_busy = false
+				start_cooldown()
 			elif current_form == "Cyber":
-				skill_cooldown_timer.start(0.1)
+				skill_cooldown_timer.start(0.2)
 				skill_started = true
-			elif current_form == "Magus":
+				not_busy = false
+				start_cooldown()
+			elif current_form == "Magus" and not_busy:
 				skill_cooldown_timer.start(10.0)
 				skill_started = true
-			elif current_form == "UltimateCyber": # Assuming this is different from "UltimateCyber"
+				not_busy = false
+				start_cooldown()
+			elif current_form == "UltimateCyber" and not_busy: # Assuming this is different from "UltimateCyber"
 				skill_cooldown_timer.start(15.0)
 				skill_started = true
+				not_busy = false
+				start_cooldown()
+			
 			
 			if skill_started:
 				can_skill = false
@@ -517,6 +538,19 @@ func _physics_process(delta):
 					can_switch_form = false
 					form_cooldown_timer.start(3)
 
+func start_cooldown():
+	print("Cooldown started...")
+	
+	# Set the timer's wait time and start it
+	player_timer.wait_time = 0.5
+	player_timer.one_shot = true
+	player_timer.start()
+	
+	# Pause the function until the timer times out
+	await player_timer.timeout
+	
+	not_busy = true
+	print("Cooldown finished!")
 	
 func get_current_form_id() -> String:
 	if current_state_index >= 0 and current_state_index < unlocked_states.size():
@@ -534,7 +568,7 @@ func switch_state(state_name: String) -> void:
 	current_state = states[state_name]
 	current_state.enter()
 	
-	#anim_state.travel(state_name.to_lower() + "_idle") 
+
 	
 	form_changed.emit(state_name) # Emit signal after form changes
 

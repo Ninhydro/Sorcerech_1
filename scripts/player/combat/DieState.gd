@@ -5,6 +5,7 @@ class_name DieState
 func enter():
 	#print("die")
 	var form = player.get_current_form_id()
+	
 	match form:
 		"Magus":
 			#player.anim_sprite.play("magus_attack")

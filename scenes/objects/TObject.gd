@@ -14,8 +14,11 @@ func _ready():
 	add_to_group("TelekinesisObject")
 	if has_node("Sprite2D"):
 		sprite = $Sprite2D
-		sprite.material = null
+		if sprite.material != null:
+			sprite.material.set_shader(null)
+			sprite.material = null
 		print("Sprite2D found for object: ", name)
+
 	else:
 		print("ERROR: No Sprite2D node found for object: ", name)
 	
@@ -37,3 +40,4 @@ func update_levitation(player_pos: Vector2):
 
 func stop_levitation():
 	is_controlled = false
+

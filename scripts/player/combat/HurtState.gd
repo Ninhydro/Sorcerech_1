@@ -6,6 +6,7 @@ func enter():
 	#print("hurt")
 	var form = player.get_current_form_id()
 	match form:
+		
 		"Magus":
 			#player.anim_sprite.play("magus_attack")
 			# You could also spawn a fireball or magic effect here

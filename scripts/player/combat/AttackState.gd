@@ -4,6 +4,7 @@ class_name AttackState
 # Called when the node enters the scene tree for the first time.
 func enter():
 	var form = player.get_current_form_id()
+	
 	match form:
 		"Magus":
 			#player.anim_sprite.play("magus_attack")

@@ -70,9 +70,9 @@ shape = SubResource("RectangleShape2D_05uf5")
 
 [node name="Door_Valentina" type="Area2D" parent="Doors"]
 position = Vector2(-200, -48)
-script = ExtResource("2_ti10i")
+script = ExtResource("4_fkgil")
 target_room = "Room_ExactlyionValentina"
-target_spawn = "Spawn_FromExactlyionTown"
+target_spawn = "Spawn_FromExactlyionTownddddddddddddddddddddd"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Valentina"]
 position = Vector2(1944, 96)

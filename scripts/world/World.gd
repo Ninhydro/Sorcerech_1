@@ -150,7 +150,7 @@ func _on_cutscene_finished():
 	# Now that the cutscene is over, position the player, enable their input, and switch to their camera.
 	teleport_player_and_enable(true) # This will position player at junkyard, enable input, and switch to player camera
 	print("✅ World: Player enabled and camera switched after cutscene.")
-	switch_to_player_camera()
+	#switch_to_player_camera()
 
 func teleport_player_and_enable(position_player: bool = true):
 	print("World: teleport_player_and_enable() called with position_player_arg: " + str(position_player))

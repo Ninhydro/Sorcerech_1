@@ -85,17 +85,22 @@ func open_telekinesis_ui():
 
 func close_telekinesis_ui():
 	for obj in available_objects:
-		var sprite = obj.get_node("Sprite2D")
-		sprite.material = null # Remove any outline
+		if is_instance_valid(obj):
+			var sprite = obj.get_node("Sprite2D")
+			if sprite and sprite.material != null:
+				# Proper cleanup for shader materials
+				if sprite.material is ShaderMaterial:
+					sprite.material.set_shader(null)
+				sprite.material = null
+	
 	selected_index = 0
 	current_object = null
 	available_objects.clear()
-	#telekinesis_ui.visible = false
 	is_ui_open = false
-	available_objects.clear()
-	update_ui_highlight()
 	player.telekinesis_enabled = false
 	once = false
+	
+	update_ui_highlight()
 	#print("close ui")
 
 func handle_ui_navigation():
@@ -107,16 +112,32 @@ func handle_ui_navigation():
 		update_ui_highlight()
 
 func update_ui_highlight():
-	var test_material = create_test_material()
+	#var test_material = create_test_material()
 	
 	for i in range(available_objects.size()):
 		var obj = available_objects[i]
-		var sprite = obj.get_node("Sprite2D") # adjust path if needed
+		if not is_instance_valid(obj):
+			continue
+			
+		var sprite = obj.get_node("Sprite2D")
+		if not sprite:
+			continue
+		
 		if i == selected_index:
-			sprite.material = outline_material
-			print("Outline material loaded: ", outline_material != null)  # Add this
+			# Create material only when needed
+			if sprite.material == null:
+				var new_material = ShaderMaterial.new()
+				new_material.shader = load("res://shaders/OutlineMaterial.tres").shader
+				sprite.material = new_material
+			elif sprite.material is ShaderMaterial:
+				# Reuse existing material
+				pass
 		else:
-			sprite.material = null # Remove outline
+			# Remove material properly
+			if sprite.material != null:
+				if sprite.material is ShaderMaterial:
+					sprite.material.set_shader(null)
+				sprite.material = null
 
 
 
@@ -159,30 +180,4 @@ func highlight_object_list(obj_list: Array, selected_idx: int):
 			else:
 				sprite.material = null
 				
-"""
-func highlight_object_list(obj_list: Array, selected_idx: int):
-	print("HIGHLIGHTING OBJECTS: ", obj_list.size(), " objects, selected index: ", selected_idx)
-	print("HIGHLIGHTING OBJECTS - Outline material: ", outline_material)
-	print("Material resource path: ", outline_material.resource_path)
-	print("Material type: ", outline_material.get_class())
-	
-	for i in range(obj_list.size()):
-		var obj = obj_list[i]
-		var sprite = obj.get_node_or_null("Sprite2D")
-		
-		if sprite:
-			print("Object ", i, ": ", obj.name, " - Sprite found: ", sprite != null)
-			print("  Sprite material before: ", sprite.material)
-			
-			if i == selected_idx:
-				sprite.material = outline_material
-				print("Applied outline material to object ", i)
-			else:
-				sprite.material = null
-				print("Removed material from object ", i)
-		
-		else:
-			print("Object ", i, ": ", obj.name, " - No Sprite2D found!")
-			
-"""
 

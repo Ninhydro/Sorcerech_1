@@ -5,6 +5,7 @@ func enter():
 	#player.play_anim("run")
 	#print("run")
 	var form = player.get_current_form_id()
+	
 	match form:
 		"Magus":
 			#player.anim_sprite.play("magus_attack")

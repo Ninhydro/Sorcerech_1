@@ -21,10 +21,10 @@ func _ready():
 	Dialogic.connect("dialog_started", Callable(self, "_on_dialog_started"))
 	Dialogic.connect("dialog_ended", Callable(self, "_on_dialog_ended"))
 	
-	add_child(autosave_timer)
-	autosave_timer.wait_time = autosave_interval_seconds
-	autosave_timer.timeout.connect(_on_autosave_timer_timeout)
-	autosave_timer.start()
+	#add_child(autosave_timer)
+	#autosave_timer.wait_time = autosave_interval_seconds
+	#autosave_timer.timeout.connect(_on_autosave_timer_timeout)
+	#autosave_timer.start()
 	print("Autosave timer started with interval: %s seconds" % autosave_interval_seconds)
 
 func _on_dialog_started():
@@ -121,7 +121,7 @@ var cutscene_finished1 = false
 
 var ignore_player_input_after_unpause: bool = false
 var unpause_cooldown_timer: float = 0.0
-const UNPAUSE_COOLDOWN_DURATION: float = 0.1  # 100ms cooldown
+const UNPAUSE_COOLDOWN_DURATION: float = 0.5  # 100ms cooldown
 
 
 func _init():
@@ -362,3 +362,14 @@ func _on_autosave_timer_timeout():
 		print("Game autosaved by timer.")
 	else:
 		print("No player node found for timer-based autosave!")
+		
+
+#func _notification(what):
+#	if what == NOTIFICATION_SCENE_CHANGED:
+#		cleanup_materials()
+
+#func cleanup_materials():
+	# Force garbage collection
+#	RenderingServer.call_deferred("free_rids")
+#	OS.delay_msec(100) # Small delay
+	

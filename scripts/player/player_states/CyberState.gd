@@ -119,7 +119,7 @@ func physics_process(delta):
 	else:
 		#player.scale = Vector2(1,1) # Reset player scale
 
-		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
+		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause and player.not_busy:
 			player.AreaAttack.monitoring = true
 			print("Cyber attacking")
 

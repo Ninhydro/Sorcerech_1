@@ -51,8 +51,15 @@ func exit():
 	hold_time = 0.0
 	clear_highlights()
 	
+	clear_highlights(true) # Pass true to indicate full cleanup
+	
 	player.skill_cooldown_timer.start(0.1)
 	player.attack_cooldown_timer.start(0.1)
+	
+	
+		
+
+		
 
 func physics_process(delta):
 	#print(player.can_skill)
@@ -66,7 +73,7 @@ func physics_process(delta):
 		#player.scale = Vector2(1.2,1.2)
 		#if Input.is_action_just_pressed("no"):
 			#perform_teleport_switch()
-		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
+		if Input.is_action_just_pressed("yes") and player.can_attack == true and Global.playerAlive and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause and player.not_busy:
 			#is_attacking = true
 			#attack_timer = ATTACK_DURATION
 			player.AreaAttack.monitoring = true
@@ -75,7 +82,7 @@ func physics_process(delta):
 		
 		if is_holding == true:
 			hold_time += delta
-		if Input.is_action_pressed("no") and player.can_skill == true and Global.playerAlive and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
+		if Input.is_action_pressed("no") and player.can_skill == true and Global.playerAlive and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause and not Global.ignore_player_input_after_unpause and player.not_busy:
 			#hold_time += delta # Add time while holding
 			#print("teleporting")
 			
@@ -98,7 +105,7 @@ func physics_process(delta):
 				hold_time = 0.0
 			# Allow left/right selection while holding
 	
-		elif Input.is_action_just_released("no") and teleport_select_mode and Global.telekinesis_mode == false:
+		elif Input.is_action_just_released("no") and teleport_select_mode and Global.telekinesis_mode == false and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			if available_objects.size() > 0 and hold_time >= hold_threshold:
 				current_object = available_objects[selected_index]
 				switch_with_object(current_object)
@@ -208,10 +215,21 @@ func debug_object_states():
 			print("Object ", i, ": INVALID")
 	print("===================")
 	
-func clear_highlights():
+
+	
+func clear_highlights(full_cleanup: bool = false):
 	for obj in available_objects:
-		var sprite = obj.get_node_or_null("Sprite2D")
-		if sprite:
-			sprite.material = null
+		if is_instance_valid(obj):
+			var sprite = obj.get_node_or_null("Sprite2D")
+			if sprite and sprite.material != null:
+				if full_cleanup and sprite.material is ShaderMaterial:
+					sprite.material.set_shader(null) # Proper cleanup
+				sprite.material = null
+	
+	
+		
 	available_objects.clear()
 	selected_index = 0
+	
+	#if full_cleanup:
+	#	RenderingServer.call_deferred("free_rids")

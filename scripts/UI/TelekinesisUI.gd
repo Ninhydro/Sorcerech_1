@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+#No need for this
 @onready var object_list = $Control/ObjectList
 @onready var preview_sprite = $Control/PreviewSprite
 @onready var object_name_label = $Control/ObjectName

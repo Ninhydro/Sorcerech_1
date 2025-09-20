@@ -30,8 +30,9 @@ func enter():
 	Global.playerDamageAmount = 20
 	
 	var collision = player.get_node_or_null("CollisionShape2D")
-	collision.position = Vector2(1,-10)
-	collision.scale = Vector2(1,3)
+	if collision:
+		collision.position = Vector2(1,-10)
+		collision.scale = Vector2(1,3)
 	
 	_sprite_node = player.get_node_or_null("Sprite2D")
 	

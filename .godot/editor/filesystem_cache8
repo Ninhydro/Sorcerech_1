@@ -1,5 +1,5 @@
 fc8a56933c4b1c8d796fdb8f7a9f9475
-::res://::1758323552
+::res://::1758352561
 export_presets.cfg::TextFile::-1::1745606209::0::1::::<><>::
 ::res://addons/::1752792161
 ::res://addons/dialogic/::1752792162
@@ -2022,11 +2022,11 @@ yellow_style_box_flat.tres::StyleBoxFlat::498292094375441641::1753392630::0::1::
 ::res://dialogic/::1758318405
 PlayerPortrait.gd::GDScript::-1::1758318405::0::1::::<>Node2D<>::
 PlayerPortrait.tscn::PackedScene::6117106582711419505::1758316290::0::1::::<><>::res://dialogic/PlayerPortrait.gd
-Style1.tres::Resource/DialogicStyle::5833768707364281777::1758318405::0::1::::<><>::res://addons/dialogic/Resources/dialogic_style_layer.gd<>uid://c1k5m0w3r40xf::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_FullBackground/full_background_layer.tscn<>uid://cy1y14inwkplb::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Portraits/vn_portrait_layer.tscn<>uid://cn674foxwedqu::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Input/full_advance_input_layer.tscn<>uid://bquja8jyk8kbr::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Textbox/vn_textbox_layer.tscn<>uid://dsbwnp5hegnu3::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Glossary/glossary_popup_layer.tscn<>uid://dhk6j6eb6e3q::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Choices/vn_choice_layer.tscn<>uid://cvgf4c6gg0tsy::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_TextInput/text_input_layer.tscn<>uid://lx24i8fl6uo::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_History/history_layer.tscn<>res://addons/dialogic/Resources/dialogic_style.gd
-::res://dialogic/characters/::1758323348
+Style1.tres::Resource/Resource::5833768707364281777::1758318405::0::1::::<><>::res://addons/dialogic/Resources/dialogic_style_layer.gd<>uid://c1k5m0w3r40xf::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_FullBackground/full_background_layer.tscn<>uid://cy1y14inwkplb::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Portraits/vn_portrait_layer.tscn<>uid://cn674foxwedqu::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Input/full_advance_input_layer.tscn<>uid://bquja8jyk8kbr::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Textbox/vn_textbox_layer.tscn<>uid://dsbwnp5hegnu3::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Glossary/glossary_popup_layer.tscn<>uid://dhk6j6eb6e3q::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Choices/vn_choice_layer.tscn<>uid://cvgf4c6gg0tsy::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_TextInput/text_input_layer.tscn<>uid://lx24i8fl6uo::::res://addons/dialogic/Modules/DefaultLayoutParts/Layer_History/history_layer.tscn<>res://addons/dialogic/Resources/dialogic_style.gd
+::res://dialogic/characters/::1758323693
 character1.dch::Resource/Resource::-1::1758146422::0::1::::<><>::
 character2.dch::Resource/Resource::-1::1758308838::0::1::::<><>::
-Player.dch::Resource/DialogicCharacter::-1::1758323348::0::1::::<><>::
+Player.dch::Resource/DialogicCharacter::-1::1758323693::0::1::::<><>::
 ::res://dialogic/timeline/::1758146484
 timeline1.dtl::Resource/Resource::-1::1758146484::0::1::::<><>::
 timeline2.dtl::Resource/Resource::-1::1753821602::0::1::::<><>::
@@ -2144,10 +2144,10 @@ TelekinesisLock.gd::GDScript::-1::1751809713::0::1::::<>Area2D<>::
 test_dialog.gd::GDScript::-1::1754140017::0::1::::<>Area2D<>::
 TransitionManager.gd::GDScript::-1::1757770615::0::1::::<>CanvasLayer<>::
 World.gd::GDScript::-1::1758304762::0::1::::<>Node2D<>::
-::res://shaders/::1758323348
-camouflage_alpha.gdshader::Shader::-1::1758323348::0::1::::<><>::
-circle.gdshader::Shader::-1::1758323348::0::1::::<><>::
-highlight2.gdshader::Shader::-1::1758323348::0::1::::<><>::
-highlight.gdshader::Shader::-1::1758323348::0::1::::<><>::
+::res://shaders/::1758323693
+camouflage_alpha.gdshader::Shader::-1::1758323693::0::1::::<><>::
+circle.gdshader::Shader::-1::1758323693::0::1::::<><>::
+highlight2.gdshader::Shader::-1::1758323693::0::1::::<><>::
+highlight.gdshader::Shader::-1::1758323693::0::1::::<><>::
 OutlineMaterial.tres::ShaderMaterial::3755136811761450357::1758322266::0::1::::<><>::res://shaders/highlight2.gdshader
 OutlineMaterialv2.tres::ShaderMaterial::7725126849339735717::1753647319::0::1::::<><>::res://shaders/highlight.gdshader

@@ -23,8 +23,9 @@ func enter():
 	print("Entered Ultimate Cyber State")
 	
 	var collision = player.get_node_or_null("CollisionShape2D")
-	collision.position = Vector2(1,-10)
-	collision.scale = Vector2(1,3)
+	if collision:
+		collision.position = Vector2(1,-10)
+		collision.scale = Vector2(1,3)
 	
 	# e.g. change player color or animation
 	

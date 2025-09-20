@@ -70,8 +70,9 @@ func enter():
 	player.is_grappling_active = false 
 	
 	var collision = player.get_node_or_null("CollisionShape2D")
-	collision.position = Vector2(1,-10)
-	collision.scale = Vector2(1,3)
+	if collision:
+		collision.position = Vector2(1,-10)
+		collision.scale = Vector2(1,3)
 	
 	print("DEBUG_CYBERSTATE_ENTER: Entered Cyber State.")
 	#var sprite = player.get_node_or_null("Sprite2D")

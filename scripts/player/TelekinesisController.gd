@@ -29,21 +29,8 @@ var lock_object = false
 
 func _ready():
 	# Load the shader from your .gdshader file and assign it to the material
-	var shader = load("res://shaders/highlight2.gdshader")
-	if shader and shader is Shader:
-		outline_material.shader = shader
-		print("Shader loaded successfully from highlight2.gdshader")
-	else:
-		print("ERROR: Failed to load shader from highlight2.gdshader")
-		# Create a simple fallback shader
-		var fallback_shader = Shader.new()
-		fallback_shader.code = """
-		shader_type canvas_item;
-		void fragment() {
-			COLOR = vec4(1.0, 0.0, 0.0, 1.0); // Solid red
-		}
-		"""
-		outline_material.shader = fallback_shader
+	outline_material = Global.highlight_material
+	print("Using global highlight material")
 
 func _process(delta):
 	if player.telekinesis_enabled == true and once == false and not Global.teleporting:
@@ -104,10 +91,8 @@ func close_telekinesis_ui():
 	for obj in available_objects:
 		if is_instance_valid(obj):
 			var sprite = obj.get_node("Sprite2D")
-			if sprite and sprite.material != null:
-				# Proper cleanup for shader materials
-				if sprite.material is ShaderMaterial:
-					sprite.material.set_shader(null)
+			if sprite:
+				# Just remove material reference, don't modify the shader
 				sprite.material = null
 	
 	selected_index = 0

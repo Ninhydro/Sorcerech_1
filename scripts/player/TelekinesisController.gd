@@ -34,8 +34,8 @@ func _ready():
 	#_current_highlight_material = ShaderMaterial.new()
 	#_current_highlight_material.shader = Global.highlight_shader
 	#outline_material = Global.highlight_material
-	_current_highlight_material = ShaderMaterial.new()
-	_current_highlight_material.shader = Global.highlight_shader
+	_current_highlight_material = Global.create_highlight_material()
+	#_current_highlight_material.shader = Global.highlight_shader
 	print("Using global highlight material")
 
 func _process(delta):
@@ -106,8 +106,8 @@ func close_telekinesis_ui():
 	for obj in _object_original_materials:
 		if is_instance_valid(obj):
 			var sprite = obj.get_node_or_null("Sprite2D")
-			if sprite:
-				sprite.material = _object_original_materials[obj]  # Restore ORIGINAL material
+			if sprite and sprite.material == _current_highlight_material:
+				sprite.material = _object_original_materials[obj]
 	
 	_object_original_materials.clear()
 	available_objects.clear()

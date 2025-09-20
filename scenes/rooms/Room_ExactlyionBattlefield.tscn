@@ -68,16 +68,16 @@ position = Vector2(752, -160)
 position = Vector2(864, -160)
 
 [node name="GrapplePoint7" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1504, -280)
+position = Vector2(1496, -264)
 
 [node name="GrapplePoint8" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1608, -376)
+position = Vector2(1592, -384)
 
 [node name="GrapplePoint9" parent="." instance=ExtResource("3_m28yc")]
 position = Vector2(1480, -448)
 
 [node name="GrapplePoint10" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1352, -384)
+position = Vector2(1360, -368)
 
 [node name="GrapplePoint11" parent="." instance=ExtResource("3_m28yc")]
 position = Vector2(1344, -528)
@@ -104,7 +104,7 @@ position = Vector2(760, -472)
 position = Vector2(688, -592)
 
 [node name="GrapplePoint19" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(592, -664)
+position = Vector2(568, -656)
 
 [node name="GrapplePoint20" parent="." instance=ExtResource("3_m28yc")]
 position = Vector2(720, -720)
@@ -113,22 +113,22 @@ position = Vector2(720, -720)
 position = Vector2(832, -800)
 
 [node name="GrapplePoint22" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1528, -776)
+position = Vector2(1488, -752)
 
 [node name="GrapplePoint23" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1704, -792)
+position = Vector2(1688, -784)
 
 [node name="GrapplePoint24" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1864, -792)
+position = Vector2(1856, -792)
 
 [node name="GrapplePoint25" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1792, -888)
+position = Vector2(1744, -888)
 
 [node name="GrapplePoint26" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1616, -872)
+position = Vector2(1568, -848)
 
 [node name="GrapplePoint27" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1880, -944)
+position = Vector2(1872, -944)
 
 [node name="GrapplePoint28" parent="." instance=ExtResource("3_m28yc")]
 position = Vector2(2008, -792)
@@ -140,13 +140,13 @@ position = Vector2(1928, -864)
 position = Vector2(2000, -928)
 
 [node name="GrapplePoint31" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1224, -320)
+position = Vector2(1232, -320)
 
 [node name="GrapplePoint32" parent="." instance=ExtResource("3_m28yc")]
 position = Vector2(872, -384)
 
 [node name="GrapplePoint33" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1000, -224)
+position = Vector2(992, -200)
 
 [node name="GrapplePoint34" parent="." instance=ExtResource("3_m28yc")]
-position = Vector2(1128, -240)
+position = Vector2(1136, -240)

@@ -42,7 +42,9 @@ func _on_dialogic_finished(_timeline_name = ""):
 	tween.set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(black_overlay, "modulate:a", 0.0, 0.1) # Fade out in 1 second
 	tween.tween_callback(Callable(self, "_on_cutscene_end"))
-
+	
+	Dialogic.clear(Dialogic.ClearFlags.FULL_CLEAR)
+	
 	# Disconnect the signal to prevent unintended calls.
 	if Dialogic.timeline_ended.is_connected(_on_dialogic_finished):
 		Dialogic.timeline_ended.disconnect(_on_dialogic_finished)

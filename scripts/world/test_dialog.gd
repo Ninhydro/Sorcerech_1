@@ -42,10 +42,10 @@ func _ready():
 	else:
 		printerr("Cutscene Area2D: ERROR: AnimationPlayer is null! Animation related features will not work.")
 
-	if not Dialogic.dialog_started.is_connected(Callable(self, "_on_dialogic_started_in_cutscene")):
-		Dialogic.dialog_started.connect(Callable(self, "_on_dialogic_started_in_cutscene"))
-	if not Dialogic.dialog_ended.is_connected(Callable(self, "_on_dialogic_ended_in_cutscene")):
-		Dialogic.dialog_ended.connect(Callable(self, "_on_dialogic_ended_in_cutscene"))
+	#if not Dialogic.dialog_started.is_connected(Callable(self, "_on_dialogic_started_in_cutscene")):
+#		Dialogic.dialog_started.connect(Callable(self, "_on_dialogic_started_in_cutscene"))
+#	if not Dialogic.dialog_ended.is_connected(Callable(self, "_on_dialogic_ended_in_cutscene")):
+#		Dialogic.dialog_ended.connect(Callable(self, "_on_dialogic_ended_in_cutscene"))
 
 	# REMOVE THESE LINES:
 	# if cutscene_camera and is_instance_valid(cutscene_camera):
@@ -171,6 +171,16 @@ func _on_dialogic_started_in_cutscene(dialog_timeline_name_passed: String = ""):
 
 
 func _on_dialogic_ended_in_cutscene(dialog_timeline_name_passed: String = ""):
+	print("Cutscene Area2D: _on_dialogic_ended_in_cutscene called!")
+	
+	if Global.is_cutscene_active and _waiting_for_dialogic_to_end:
+		print("Cutscene Area2D: Specific cutscene Dialogic ended. Cleaning up...")
+		_dialogic_active_in_cutscene = false
+		_waiting_for_dialogic_to_end = false
+		
+		# PROPER CLEANUP - Add this line
+		Dialogic.clear(Dialogic.ClearFlags.FULL_CLEAR)
+		
 	print("Cutscene Area2D: _on_dialogic_ended_in_cutscene called!")
 	print("Cutscene Area2D: Debug: dialog_timeline_name_passed = '%s' (expected '%s')" % [dialog_timeline_name_passed, CUTSCENE_DIALOG_TIMELINE_NAME])
 	print("Cutscene Area2D: Debug: Global.is_cutscene_active = %s" % Global.is_cutscene_active)

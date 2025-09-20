@@ -37,8 +37,8 @@ func enter():
 	#_previous_material = player.sprite.material
 	
 	# CREATE the highlight material using Global's shader
-	_current_highlight_material = ShaderMaterial.new()
-	_current_highlight_material.shader = Global.highlight_shader
+	_current_highlight_material = Global.create_highlight_material()
+	#_current_highlight_material.shader = Global.highlight_shader
 	# Set any parameters you need
 	#_current_highlight_material.set_shader_parameter("highlight_color", Color(1, 0, 0, 1))
 	
@@ -66,9 +66,25 @@ func exit():
 	player.telekinesis_enabled = false
 	is_holding = false
 	hold_time = 0.0
-	clear_highlights()
+	#clear_highlights()
 	
 	clear_highlights(true) # Pass true to indicate full cleanup
+	
+	# Safe material cleanup
+	if _current_highlight_material:
+		# Remove from any nodes using it first
+		for obj in _object_original_materials:
+			if is_instance_valid(obj):
+				var sprite = obj.get_node_or_null("Sprite2D")
+				if sprite and sprite.material == _current_highlight_material:
+					sprite.material = _object_original_materials[obj]
+		#_current_highlight_material.free()
+					if sprite.material is ShaderMaterial:
+						sprite.material = null  # let GC handle it
+		_current_highlight_material = null
+	
+	player.skill_cooldown_timer.start(0.1)
+	player.attack_cooldown_timer.start(0.1)
 	
 	player.skill_cooldown_timer.start(0.1)
 	player.attack_cooldown_timer.start(0.1)
@@ -134,7 +150,7 @@ func physics_process(delta):
 				do_dash()
 				teleport_select_mode = false
 				
-			clear_highlights()
+			clear_highlights(true)
 			#Global.teleporting = false
 			#teleport_select_mode = false
 			player.telekinesis_enabled = false
@@ -256,6 +272,10 @@ func clear_highlights(full_cleanup: bool = false):
 	_object_original_materials.clear()
 	available_objects.clear()
 	selected_index = 0
+	
+	if full_cleanup:
+		if _current_highlight_material:
+			_current_highlight_material = null  # let GC handle it
 	
 	# DON'T free the material - keep it in memory for next use
 	# The material will be automatically freed when the state is destroyed

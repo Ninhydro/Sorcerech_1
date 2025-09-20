@@ -109,19 +109,19 @@ text = "Exactlyion Town"
 position = Vector2(3048, -840)
 
 [node name="GrapplePoint" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(-528, -176)
+position = Vector2(-536, -168)
 
 [node name="GrapplePoint2" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(-392, -184)
+position = Vector2(-400, -168)
 
 [node name="GrapplePoint3" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(-456, -56)
+position = Vector2(-464, -32)
 
 [node name="GrapplePoint4" parent="." instance=ExtResource("6_kgvqj")]
 position = Vector2(-328, -64)
 
 [node name="GrapplePoint5" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(-240, -128)
+position = Vector2(-232, -128)
 
 [node name="GrapplePoint6" parent="." instance=ExtResource("6_kgvqj")]
 position = Vector2(-512, -344)
@@ -223,7 +223,7 @@ position = Vector2(2736, -648)
 position = Vector2(2576, -640)
 
 [node name="GrapplePoint39" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(2040, -16)
+position = Vector2(2040, -8)
 
 [node name="GrapplePoint40" parent="." instance=ExtResource("6_kgvqj")]
 position = Vector2(2192, -32)
@@ -274,10 +274,10 @@ position = Vector2(2920, -192)
 position = Vector2(2992, -264)
 
 [node name="GrapplePoint56" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(2816, -8)
+position = Vector2(2808, 0)
 
 [node name="GrapplePoint57" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(2880, -104)
+position = Vector2(2864, -96)
 
 [node name="GrapplePoint58" parent="." instance=ExtResource("6_kgvqj")]
 position = Vector2(2424, -256)
@@ -286,7 +286,7 @@ position = Vector2(2424, -256)
 position = Vector2(-120, -352)
 
 [node name="GrapplePoint60" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(552, -88)
+position = Vector2(544, -64)
 
 [node name="GrapplePoint61" parent="." instance=ExtResource("6_kgvqj")]
 position = Vector2(432, -136)
@@ -304,10 +304,10 @@ position = Vector2(816, -192)
 position = Vector2(1040, -168)
 
 [node name="GrapplePoint66" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(1272, -112)
+position = Vector2(1264, -80)
 
 [node name="GrapplePoint67" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(1464, -120)
+position = Vector2(1440, -112)
 
 [node name="GrapplePoint68" parent="." instance=ExtResource("6_kgvqj")]
 position = Vector2(1624, -176)
@@ -316,4 +316,4 @@ position = Vector2(1624, -176)
 position = Vector2(1800, -136)
 
 [node name="GrapplePoint70" parent="." instance=ExtResource("6_kgvqj")]
-position = Vector2(1904, -56)
+position = Vector2(1904, -48)

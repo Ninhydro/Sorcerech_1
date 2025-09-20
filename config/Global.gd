@@ -17,8 +17,11 @@ var attacking := false
 # ADD THIS LINE:
 var is_cutscene_active := false # <--- NEW: Flag to indicate if a cutscene is active
 
+
 var highlight_shader: Shader
-#var highlight_material: ShaderMaterial
+var highlight_materials: Array = []  # Track all created highlight materials
+var camouflage_shader: Shader
+var circle_shader: Shader
 
 func _ready():
 	Dialogic.connect("dialog_started", Callable(self, "_on_dialog_started"))
@@ -30,19 +33,58 @@ func _ready():
 	#autosave_timer.start()
 	#print("Autosave timer started with interval: %s seconds" % autosave_interval_seconds)
 	highlight_shader = load("res://shaders/highlight2.gdshader")
+	camouflage_shader = load("res://shaders/camouflage_alpha.gdshader")
+	circle_shader = load("res://shaders/circle.gdshader")
+	
 	if highlight_shader:
 		print("Global highlight shader loaded successfully")
 	else:
-		print("ERROR: Failed to load highlight shader in Global.gd")
-		# Create a simple fallback shader
-		highlight_shader = Shader.new()
-		highlight_shader.code = """
-		shader_type canvas_item;
-		void fragment() {
-			COLOR = texture(TEXTURE, UV);
-		}
-		"""
+		print("ERROR: Failed to load highlight shader")
+		highlight_shader = _create_fallback_shader()
 
+
+func create_highlight_material() -> ShaderMaterial:
+	var material = ShaderMaterial.new()
+	material.shader = highlight_shader
+	highlight_materials.append(material)
+	return material
+
+func create_camouflage_material() -> ShaderMaterial:
+	var material = ShaderMaterial.new()
+	material.shader = camouflage_shader
+	return material
+
+func create_circle_material() -> ShaderMaterial:
+	var material = ShaderMaterial.new()
+	material.shader = circle_shader
+	return material
+
+func cleanup_all_materials():
+	print("Global: Cleaning up all shader materials")
+	for material in highlight_materials:
+		if material and is_instance_valid(material):
+			if material is ShaderMaterial:
+					material = null  # let GC handle it
+	highlight_materials.clear()
+
+func _create_fallback_shader() -> Shader:
+	var shader = Shader.new()
+	shader.code = """
+	shader_type canvas_item;
+	void fragment() {
+		COLOR = texture(TEXTURE, UV);
+	}
+	"""
+	return shader
+
+func _exit_tree():
+	cleanup_all_materials()
+
+func cleanup_dialogic():
+	if Engine.has_singleton("Dialogic"):
+		var dlg = Dialogic
+		dlg.end_all_dialogs()
+		dlg.clear()
 		
 func _on_dialog_started():
 	is_dialog_open = true

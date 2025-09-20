@@ -435,3 +435,5 @@ func print_debug_moment() -> void:
 	printerr("\tAt event ", current_event_idx+1, " (",current_timeline_events[current_event_idx].event_name, ' Event) in timeline "', DialogicResourceUtil.get_unique_identifier(current_timeline.resource_path), '" (',current_timeline.resource_path,').')
 	print("\n")
 #endregion
+
+

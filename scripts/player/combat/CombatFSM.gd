@@ -27,6 +27,7 @@ func change_state(new_state: CombatState):
 		current_state.exit()
 		if current_state.get_parent():
 			current_state.get_parent().remove_child(current_state)
+			current_state.queue_free()  # or free() depending on your architecture
 
 	#print("CombatFSM: Switching to", new_state)
 	current_state = new_state

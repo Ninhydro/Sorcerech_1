@@ -240,3 +240,19 @@ func switch_to_player_camera():
 
 	else:
 		printerr("World.gd: Failed to switch to player camera: player_camera is invalid.")
+
+func _exit_tree():
+	# Force cleanup of all shader materials
+	Global.cleanup_all_materials()
+	
+	# Force garbage collection
+	#OS.request_rendering_thread_safe_garbage_collection()
+	
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if Engine.has_singleton("Dialogic"):
+			var dlg = Dialogic
+			if dlg:
+				dlg.end_all_dialogs()
+				dlg.clear() # clears loaded subsystems/resources
+		get_tree().quit()

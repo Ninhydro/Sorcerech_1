@@ -21,9 +21,9 @@ var attack_timer := 0.0 # Timer for managing attack duration (if any)
 const PULL_SPEED = 200.0         # Base speed at which player is pulled toward grapple point (when not swinging)
 const PULL_ACCELERATION = 2000.0 # How quickly the player accelerates toward the grapple point
 
-const MAX_GRAPPLE_DISTANCE = 90.0 # Max distance to detect and attach to a grapple target
+const MAX_GRAPPLE_DISTANCE = 70.0 # Max distance to detect and attach to a grapple target
 const SWING_MODE_DISTANCE = 80.0 # When distance is less than this, switch from pull to swing mode
-
+const SWING_ROPE_LENGTH = 70.0
 # === Swing Mechanics (Pendulum Physics) ===
 
 var angular_velocity = 0.0      # Speed of swing (angular), increases with input torque
@@ -53,8 +53,7 @@ const GRAVITY = 1200.0          # Global gravity constant, used for consistency
 const ATTACK_DURATION := 0.2
 
 var wall_jump_force = 300
- 
-const SWING_ROPE_LENGTH = 70.0
+
 
 # Constructor for the state
 func _init(_player):

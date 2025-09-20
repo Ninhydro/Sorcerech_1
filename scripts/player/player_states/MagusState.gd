@@ -46,13 +46,13 @@ func enter():
 
 	# Create a new instance of our ShaderMaterial if it hasn't been created yet.
 	if not _camouflage_shader_material:
-		var shader_resource = load("res://shaders/camouflage_alpha.gdshader") # Ensure this path is correct!
-		if not shader_resource:
+		_camouflage_shader_material = Global.create_camouflage_material()
+		if not _camouflage_shader_material:
 			push_error("MagusState: 'camouflage_alpha.gdshader' not found at the specified path. Camouflage will not work.")
 			return
 
-		_camouflage_shader_material = ShaderMaterial.new()
-		_camouflage_shader_material.shader = shader_resource
+		#_camouflage_shader_material = ShaderMaterial.new()
+		#_camouflage_shader_material.shader = shader_resource
 
 	# Apply our ShaderMaterial to the Sprite2D.
 	_sprite_node.material = _camouflage_shader_material
@@ -120,7 +120,15 @@ func exit():
 func cleanup_shader_materials():
 	# Restore original material and clean up shader
 	if _sprite_node and is_instance_valid(_sprite_node):
-		_sprite_node.material = _original_sprite_material
+		if _sprite_node.material == _camouflage_shader_material:
+			_sprite_node.material = _original_sprite_material
+	
+	# Safe material cleanup
+	#if _camouflage_shader_material:
+		#_camouflage_shader_material.free()
+	if _camouflage_shader_material is ShaderMaterial:
+						_camouflage_shader_material = null  # let GC handle it
+		#_camouflage_shader_material = null
 	
 	# DON'T free _camouflage_shader_material - keep it for next use
 	# It will be automatically freed when the state is destroyed

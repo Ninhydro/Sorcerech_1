@@ -228,7 +228,7 @@ position = Vector2(136, -136)
 position = Vector2(-912, -144)
 
 [node name="GrapplePoint21" parent="." instance=ExtResource("3_62ecm")]
-position = Vector2(-1216, -168)
+position = Vector2(-1200, -168)
 
 [node name="GrapplePoint29" parent="." instance=ExtResource("3_62ecm")]
 position = Vector2(-1336, -208)

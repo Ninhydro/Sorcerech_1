@@ -12,7 +12,9 @@ var hold_time := 0.0
 var hold_threshold := 1
 var is_holding := false
 
-var outline_material = ShaderMaterial.new() 
+var _object_original_materials: Dictionary = {} 
+var _current_highlight_material: ShaderMaterial
+
 const CombatFSM = preload("res://scripts/player/combat/CombatFSM.gd")
 var combat_fsm: CombatFSM
 
@@ -24,13 +26,24 @@ var teleport_reset_timer: float = 0.0
 var teleport_reset_delay: float = 0.8  # Match this to your animation length
 var skill_just_used: bool = false
 
+
+
 func _init(_player):
 	player = _player
 	combat_fsm = CombatFSM.new(player)
 	add_child(combat_fsm)
 
 func enter():
-	outline_material = Global.highlight_material
+	#_previous_material = player.sprite.material
+	
+	# CREATE the highlight material using Global's shader
+	_current_highlight_material = ShaderMaterial.new()
+	_current_highlight_material.shader = Global.highlight_shader
+	# Set any parameters you need
+	#_current_highlight_material.set_shader_parameter("highlight_color", Color(1, 0, 0, 1))
+	
+	# Apply it
+	#player.sprite.material = _current_highlight_material
 	print("Using global highlight material in UltimateMagusState")
 	
 	teleport_select_mode = false
@@ -202,11 +215,16 @@ func update_highlight():
 		if is_instance_valid(obj):
 			var sprite = obj.get_node_or_null("Sprite2D")
 			if sprite:
+				# Store the object's original material if we haven't already
+				if not _object_original_materials.has(obj):
+					_object_original_materials[obj] = sprite.material
+				
 				if i == selected_index:
-					sprite.material = outline_material
+					sprite.material = _current_highlight_material
 					print("Applied outline material to object ", i)
 				else:
-					sprite.material = null
+					# Restore original material for non-selected objects
+					sprite.material = _object_original_materials[obj]
 					
 func debug_object_states():
 	print("=== OBJECT DEBUG ===")
@@ -226,19 +244,22 @@ func debug_object_states():
 	print("===================")
 	
 
-	
+
+
 func clear_highlights(full_cleanup: bool = false):
-	for obj in available_objects:
+	for obj in _object_original_materials:
 		if is_instance_valid(obj):
 			var sprite = obj.get_node_or_null("Sprite2D")
 			if sprite:
-				# DON'T set shader to null - just remove the material reference
-				sprite.material = null
+				sprite.material = _object_original_materials[obj]
 	
-	
-		
+	_object_original_materials.clear()
 	available_objects.clear()
 	selected_index = 0
 	
+	# DON'T free the material - keep it in memory for next use
+	# The material will be automatically freed when the state is destroyed
+	
+	print("UltimateMagusState: Highlights cleared, material kept in memory")
 	#if full_cleanup:
 	#	RenderingServer.call_deferred("free_rids")

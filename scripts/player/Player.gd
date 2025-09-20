@@ -738,12 +738,12 @@ func shoot_rocket():
 
 	var rocket1 = rocket_scene.instantiate()
 	get_tree().current_scene.add_child(rocket1)
-	rocket1.global_position = base_spawn_position + Vector2(-2, -10)
+	rocket1.global_position = base_spawn_position + Vector2(-2, -12)
 	rocket1.set_initial_properties(Vector2(-0.2, -0.1).normalized(), target_enemy)
 
 	var rocket2 = rocket_scene.instantiate()
 	get_tree().current_scene.add_child(rocket2)
-	rocket2.global_position = base_spawn_position + Vector2(2, -10)
+	rocket2.global_position = base_spawn_position + Vector2(2, -12)
 	rocket2.set_initial_properties(Vector2(0.2, -0.1).normalized(), target_enemy)
 
 	print("Player in Ultimate Cyber mode shot two homing rockets!")

@@ -21,7 +21,7 @@ var attack_timer := 0.0 # Timer for managing attack duration (if any)
 const PULL_SPEED = 200.0         # Base speed at which player is pulled toward grapple point (when not swinging)
 const PULL_ACCELERATION = 2000.0 # How quickly the player accelerates toward the grapple point
 
-const MAX_GRAPPLE_DISTANCE = 100.0 # Max distance to detect and attach to a grapple target
+const MAX_GRAPPLE_DISTANCE = 90.0 # Max distance to detect and attach to a grapple target
 const SWING_MODE_DISTANCE = 80.0 # When distance is less than this, switch from pull to swing mode
 
 # === Swing Mechanics (Pendulum Physics) ===
@@ -184,10 +184,10 @@ func perform_grapple():
 		player.grapple_line.add_point(player.to_local(grapple_point)) # Add point 1 (grapple point in player's local space)
 		
 		# Store the initial rope length when the grapple begins
-		initial_grapple_rope_length = (grapple_point - ray_origin).length()
-		original_rope_length = initial_grapple_rope_length # Initialize original_rope_length
+		initial_grapple_rope_length = (grapple_point - player.global_position).length()
+		original_rope_length = initial_grapple_rope_length
 
-		print("Grappling to ", grapple_point)
+		print("Grappling to ", grapple_point, " Rope length: ", initial_grapple_rope_length)
 	else:
 		print("No visible grapple targets found")
 		is_grappling = false
@@ -211,20 +211,13 @@ func handle_grapple_movement(delta):
 	if is_swinging:
 		handle_swing_movement(delta) # This handles lateral movement during swing
 	else:
-		# PULL MODE: Player is pulled towards the grapple point
-		# COMPLETELY override any other movement with grapple physics
-		var acceleration = direction * PULL_ACCELERATION * delta
+		# PULL MODE: Simple direct pull toward grapple point
+		var pull_direction = (grapple_point - player.global_position).normalized()
+		player.velocity = pull_direction * PULL_SPEED
 		
-		# Reset horizontal velocity to prioritize grapple pull
-		player.velocity.x = lerp(player.velocity.x, direction.x * PULL_SPEED, 0.3)
-		
-		# Only add vertical acceleration if moving toward grapple point
-		if sign(acceleration.y) == sign(direction.y):
-			player.velocity.y += acceleration.y
-		
-		# Clamp overall velocity to pull speed
-		if player.velocity.length() > PULL_SPEED:
-			player.velocity = player.velocity.normalized() * PULL_SPEED
+		# Add a small check to transition to swing mode when close
+		if distance < 15.0:
+			enter_swing_mode(distance)
 
 	# Update the visual representation of the grapple rope
 	player.grapple_line.set_point_position(0, player.grapple_hand_point.position)

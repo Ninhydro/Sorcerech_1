@@ -24,12 +24,18 @@ var current_object: TelekinesisObject = null
 #@onready var magic_spot: Area2D = get_node("../MagucSpot")
 var once = false
 var lock_object = false
-@onready var outline_material = ShaderMaterial.new()  # Create empty material
+
+var _object_original_materials: Dictionary = {} 
+var _current_highlight_material: ShaderMaterial
 
 
 func _ready():
 	# Load the shader from your .gdshader file and assign it to the material
-	outline_material = Global.highlight_material
+	#_current_highlight_material = ShaderMaterial.new()
+	#_current_highlight_material.shader = Global.highlight_shader
+	#outline_material = Global.highlight_material
+	_current_highlight_material = ShaderMaterial.new()
+	_current_highlight_material.shader = Global.highlight_shader
 	print("Using global highlight material")
 
 func _process(delta):
@@ -64,8 +70,11 @@ func _process(delta):
 		if Input.is_action_just_released("yes") and current_object:
 			lock_object = false
 			print("Telekinesis4")
-			current_object.stop_levitation()
-			current_object = null
+			if current_object:
+				current_object.stop_levitation()
+				current_object = null
+			#current_object.stop_levitation()
+			#current_object = null
 			close_telekinesis_ui()
 			Global.telekinesis_mode = false
 			
@@ -75,35 +84,43 @@ func _process(delta):
 
 func open_telekinesis_ui():
 	if player.current_magic_spot:
-		#available_objects = player.current_magic_spot.get_nearby_telekinesis_objects()
-		print("Magic spot: ", player.current_magic_spot)
 		available_objects = player.current_magic_spot.get_nearby_telekinesis_objects() 
 		print("Found objects: ", available_objects)
 		if available_objects.size() == 0: return
 		is_ui_open = true
 		selected_index = 0
+		
+		# CREATE the material here, when we actually need it
+		if not _current_highlight_material:
+			_current_highlight_material = ShaderMaterial.new()
+			_current_highlight_material.shader = Global.highlight_shader
+			print("Telekinesis: Highlight material created")
+		
 		update_ui_highlight()
-		#telekinesis_ui.visible = true
 		print("open ui")
 
 
 func close_telekinesis_ui():
-	for obj in available_objects:
+	# First, remove the highlight material from ALL objects
+	 # Restore original materials to all objects
+	for obj in _object_original_materials:
 		if is_instance_valid(obj):
-			var sprite = obj.get_node("Sprite2D")
+			var sprite = obj.get_node_or_null("Sprite2D")
 			if sprite:
-				# Just remove material reference, don't modify the shader
-				sprite.material = null
+				sprite.material = _object_original_materials[obj]  # Restore ORIGINAL material
 	
-	selected_index = 0
-	current_object = null
+	_object_original_materials.clear()
 	available_objects.clear()
-	is_ui_open = false
-	player.telekinesis_enabled = false
-	once = false
+	selected_index = 0
 	
-	update_ui_highlight()
-	#print("close ui")
+	# DON'T free the material - keep it in memory for next use
+	# The material will be automatically freed when this node is destroyed
+	
+	is_ui_open = false
+	once = false
+	player.telekinesis_enabled = false
+	Global.telekinesis_mode = false
+	#print("Telekinesis UI closed, material kept in memory")
 
 func handle_ui_navigation():
 	if Input.is_action_just_pressed("move_right") && lock_object == false:
@@ -123,14 +140,17 @@ func update_ui_highlight():
 			continue
 			
 		var sprite = obj.get_node("Sprite2D")
-		if not sprite:
-			continue
-			
-		if i == selected_index:
-			sprite.material = outline_material
-			print("Applied outline material to object ", i)
-		else:
-			sprite.material = null
+		if sprite:
+				# Store the object's original material if we haven't already
+				if not _object_original_materials.has(obj):
+					_object_original_materials[obj] = sprite.material
+				
+				if i == selected_index:
+					sprite.material = _current_highlight_material
+					print("Applied outline material to object ", i)
+				else:
+					# Restore original material for non-selected objects
+					sprite.material = _object_original_materials[obj]
 
 
 

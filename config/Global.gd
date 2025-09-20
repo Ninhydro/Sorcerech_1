@@ -18,7 +18,7 @@ var attacking := false
 var is_cutscene_active := false # <--- NEW: Flag to indicate if a cutscene is active
 
 var highlight_shader: Shader
-var highlight_material: ShaderMaterial
+#var highlight_material: ShaderMaterial
 
 func _ready():
 	Dialogic.connect("dialog_started", Callable(self, "_on_dialog_started"))
@@ -31,21 +31,18 @@ func _ready():
 	#print("Autosave timer started with interval: %s seconds" % autosave_interval_seconds)
 	highlight_shader = load("res://shaders/highlight2.gdshader")
 	if highlight_shader:
-		highlight_material = ShaderMaterial.new()
-		highlight_material.shader = highlight_shader
 		print("Global highlight shader loaded successfully")
 	else:
 		print("ERROR: Failed to load highlight shader in Global.gd")
-		# Create fallback
-		var fallback_shader = Shader.new()
-		fallback_shader.code = """
+		# Create a simple fallback shader
+		highlight_shader = Shader.new()
+		highlight_shader.code = """
 		shader_type canvas_item;
 		void fragment() {
-			COLOR = vec4(1.0, 0.0, 0.0, 1.0);
+			COLOR = texture(TEXTURE, UV);
 		}
 		"""
-		highlight_material = ShaderMaterial.new()
-		highlight_material.shader = fallback_shader
+
 		
 func _on_dialog_started():
 	is_dialog_open = true

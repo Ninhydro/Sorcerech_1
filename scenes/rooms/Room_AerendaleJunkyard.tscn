@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://cnkwa1lnnfamm"]
+[gd_scene load_steps=9 format=3 uid="uid://cnkwa1lnnfamm"]
 
 [ext_resource type="TileSet" uid="uid://dckcj5o6bchxt" path="res://scenes/tileset/Placeholder_new_tile_set.tres" id="1_56olx"]
 [ext_resource type="Script" path="res://scripts/world/Door.gd" id="1_i5ly2"]
 [ext_resource type="Script" path="res://scripts/rooms/Room_AerendaleJunkyard.gd" id="1_xsv6q"]
 [ext_resource type="PackedScene" uid="uid://dawiya4upgoxx" path="res://scenes/world/test_dialog.tscn" id="4_gr75u"]
 [ext_resource type="Script" path="res://scripts/world/Door_press.gd" id="4_s7p8d"]
+[ext_resource type="PackedScene" uid="uid://bhr7h56wnxj71" path="res://scenes/world/MagusSpot.tscn" id="6_eaq04"]
+[ext_resource type="PackedScene" uid="uid://krbnmqo4s6nb" path="res://scenes/objects/TObject.tscn" id="7_fbcxp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4c7w7"]
 size = Vector2(60.5, 47.5)
@@ -84,3 +86,14 @@ text = "Betael & Maya Room"
 
 [node name="Test_dialog" parent="." instance=ExtResource("4_gr75u")]
 position = Vector2(-13, 60)
+
+[node name="MagusSpot" parent="." instance=ExtResource("6_eaq04")]
+position = Vector2(-360, 56)
+
+[node name="TObject" parent="." instance=ExtResource("7_fbcxp")]
+position = Vector2(-296, 56)
+object_id = "1"
+
+[node name="TObject2" parent="." instance=ExtResource("7_fbcxp")]
+position = Vector2(-408, 56)
+object_id = "2"

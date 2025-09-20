@@ -408,10 +408,10 @@ text = "Village & Boss Part 1"
 position = Vector2(-392, -24)
 
 [node name="GrapplePoint3" parent="." instance=ExtResource("4_halrj")]
-position = Vector2(-464, -160)
+position = Vector2(-464, -168)
 
 [node name="GrapplePoint4" parent="." instance=ExtResource("4_halrj")]
 position = Vector2(-376, -248)
 
 [node name="GrapplePoint2" parent="." instance=ExtResource("4_halrj")]
-position = Vector2(-560, -96)
+position = Vector2(-552, -96)

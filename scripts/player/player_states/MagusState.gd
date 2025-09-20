@@ -20,6 +20,7 @@ var _camouflage_shader_material: ShaderMaterial = null
 # Flag to track if camouflage is currently active (e.g., during the 5-second duration)
 var _is_camouflage_active_timed := false
 
+var _previous_material: Material
 
 func _init(_player):
 	player = _player
@@ -121,16 +122,10 @@ func cleanup_shader_materials():
 	if _sprite_node and is_instance_valid(_sprite_node):
 		_sprite_node.material = _original_sprite_material
 	
-	# Properly free the shader material
-	if _camouflage_shader_material and is_instance_valid(_camouflage_shader_material):
-		_camouflage_shader_material.set_shader(null) # Disconnect shader first
-		_camouflage_shader_material = null
-	if _camouflage_shader_material != null:
-		_camouflage_shader_material.set_shader(null)
-		_camouflage_shader_material = null
-	# Also force garbage collection
-	#RenderingServer.call_deferred("free_rids")
+	# DON'T free _camouflage_shader_material - keep it for next use
+	# It will be automatically freed when the state is destroyed
 	
+	print("MagusState: Camouflage material kept in memory")
 
 func physics_process(delta):
 	combat_fsm.physics_update(delta)

@@ -24,6 +24,7 @@ var bg_holder: DialogicNode_BackgroundHolder
 
 signal transition_finished
 
+var _current_transition_material: ShaderMaterial = null
 
 ## To be overridden by transitions
 func _fade() -> void:
@@ -33,13 +34,33 @@ func _fade() -> void:
 func set_shader(path_to_shader:String=DialogicUtil.get_module_path('Background').path_join("Transitions/default_transition_shader.gdshader")) -> ShaderMaterial:
 	if bg_holder:
 		if path_to_shader.is_empty():
+			# Clean up previous material first
+			if _current_transition_material:
+				_current_transition_material.free()
+				_current_transition_material = null
 			bg_holder.material = null
 			bg_holder.color = Color.TRANSPARENT
 			return null
-		bg_holder.material = ShaderMaterial.new()
-		bg_holder.material.shader = load(path_to_shader)
-		return bg_holder.material
+		
+		# Clean up previous material first
+		if _current_transition_material:
+			_current_transition_material.free()
+			_current_transition_material = null
+		
+		# Create new material
+		_current_transition_material = ShaderMaterial.new()
+		_current_transition_material.shader = load(path_to_shader)
+		bg_holder.material = _current_transition_material
+		return _current_transition_material
 	return null
+
+# Add cleanup function
+func cleanup():
+	if _current_transition_material:
+		_current_transition_material.free()
+		_current_transition_material = null
+	if bg_holder:
+		bg_holder.material = null
 
 
 func tween_shader_progress(_progress_parameter:="progress") -> PropertyTweener:

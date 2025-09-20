@@ -54,6 +54,8 @@ const ATTACK_DURATION := 0.2
 
 var wall_jump_force = 300
  
+const SWING_ROPE_LENGTH = 70.0
+
 # Constructor for the state
 func _init(_player):
 	player = _player
@@ -231,8 +233,9 @@ func enter_swing_mode(distance):
 	is_swinging = true
 	# original_rope_length is already set in perform_grapple, 
 	# or can be explicitly set here to distance for consistency.
-	original_rope_length = distance 
-
+	#original_rope_length = distance 
+	original_rope_length = SWING_ROPE_LENGTH
+	
 	var to_player = player.global_position - grapple_point
 	swing_angle = atan2(to_player.x, to_player.y)
 	angular_velocity = 0.0
@@ -246,7 +249,13 @@ func handle_swing_movement(delta):
 		return
 
 	# --- Calculate force and angular momentum ---
-	var gravity_torque = -sin(swing_angle) * PENDULUM_GRAVITY / original_rope_length
+	#var gravity_torque = -sin(swing_angle) * PENDULUM_GRAVITY / original_rope_length
+	#angular_velocity += gravity_torque * delta
+	
+	var gravity_direction = Vector2.UP
+	var to_player_vector = player.global_position - grapple_point
+	var perpendicular = Vector2(-to_player_vector.y, to_player_vector.x).normalized()
+	var gravity_torque = gravity_direction.dot(perpendicular) * PENDULUM_GRAVITY / original_rope_length
 	angular_velocity += gravity_torque * delta
 
 	# --- Input torque from player movement ---

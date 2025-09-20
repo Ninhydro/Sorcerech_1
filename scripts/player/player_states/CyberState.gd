@@ -129,9 +129,13 @@ func physics_process(delta):
 		if Input.is_action_just_pressed("no") and player.can_skill == true and Global.playerAlive and not Global.is_dialog_open and not Global.ignore_player_input_after_unpause:
 			perform_grapple()
 
-	# Handle grapple movement if currently grappling
+	# Handle grapple movement if currently grappling - COMPLETELY override regular movement
 	if is_grappling:
 		handle_grapple_movement(delta)
+	else:
+		# Only process regular movement if not grappling
+		# Add your regular movement code here if needed
+		pass
 
 	# Release grapple if "move_up" (jump) is pressed while grappling
 	if (Input.is_action_just_pressed("move_up") or  Input.is_action_just_pressed("jump") )and is_grappling:
@@ -196,8 +200,6 @@ func handle_grapple_movement(delta):
 	if not is_grappling:
 		return
 
-	#print("grapp to swing")
-
 	var to_grapple = grapple_point - player.global_position
 	var distance = to_grapple.length()
 	var direction = to_grapple.normalized()
@@ -207,27 +209,27 @@ func handle_grapple_movement(delta):
 			enter_swing_mode(distance)
 
 	if is_swinging:
-		handle_swing_movement(delta) # This is now the pendulum + blocking logic
+		handle_swing_movement(delta) # This handles lateral movement during swing
 	else:
 		# PULL MODE: Player is pulled towards the grapple point
+		# COMPLETELY override any other movement with grapple physics
 		var acceleration = direction * PULL_ACCELERATION * delta
-		player.velocity += acceleration
-		player.velocity = player.velocity.limit_length(PULL_SPEED)
 		
-		# Allow move_and_slide in player.gd to handle actual movement and collision
-		# player.global_position += player.velocity * delta # REMOVED THIS LINE
-		# Player.gd's move_and_slide will use player.velocity
-
-		# Apply lateral forces for control during pull
-		if Input.is_action_pressed("move_left"):
-			player.velocity.x -= SWING_FORCE * delta
-		elif Input.is_action_pressed("move_right"):
-			player.velocity.x += SWING_FORCE * delta
+		# Reset horizontal velocity to prioritize grapple pull
+		player.velocity.x = lerp(player.velocity.x, direction.x * PULL_SPEED, 0.3)
+		
+		# Only add vertical acceleration if moving toward grapple point
+		if sign(acceleration.y) == sign(direction.y):
+			player.velocity.y += acceleration.y
+		
+		# Clamp overall velocity to pull speed
+		if player.velocity.length() > PULL_SPEED:
+			player.velocity = player.velocity.normalized() * PULL_SPEED
 
 	# Update the visual representation of the grapple rope
 	player.grapple_line.set_point_position(0, player.grapple_hand_point.position)
 	player.grapple_line.set_point_position(1, player.to_local(grapple_point))
-
+	
 # Enters the swinging (pendulum) mode
 func enter_swing_mode(distance):
 	is_swinging = true
@@ -262,8 +264,10 @@ func handle_swing_movement(delta):
 	var input_dir = 0.0
 	if Input.is_action_pressed("move_left"):
 		input_dir = -1.0
+		player.facing_direction = 1
 	elif Input.is_action_pressed("move_right"):
 		input_dir = 1.0
+		player.facing_direction = -1
 
 	var effective_torque = 0.0
 

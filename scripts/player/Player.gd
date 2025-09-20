@@ -339,6 +339,7 @@ func _physics_process(delta):
 			if abs(velocity.x) < 50:
 				Global.dashing = false
 
+
 		else: # Normal movement and input processing
 			if facing_direction == -1: # No need for !dead check here, already done above
 				sprite.flip_h = true
@@ -352,7 +353,7 @@ func _physics_process(delta):
 
 
 			# Apply horizontal movement based on input (only if not wall-jumping, dialog, or attacking)
-			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge:
+			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge and not is_grappling_active:
 				#print("movinggggggggg")
 				velocity.x = input_dir * move_speed # Use 'speed' here for normal movement
 			elif wall_jump_just_happened: #or current_form = cyber form,
@@ -363,7 +364,7 @@ func _physics_process(delta):
 				velocity.x = 0 # Stop horizontal movement if dialog is open or attacking
 
 			# Jumping (only if on floor, no dialog, no attacking)
-			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge:
+			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge and not is_grappling_active:
 				velocity.y = -jump_force
 			elif is_grabbing_ledge:
 				velocity.y += gravity+delta

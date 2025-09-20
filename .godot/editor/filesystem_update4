@@ -1,4 +1,4 @@
-res://scenes/player/player.tscn
+res://scenes/ui/MainMenu.tscn
 res://dialogic/Style1.tres
 res://dialogic/PlayerPortrait.gd
 res://scenes/tileset/Placeholder_new_tile_set.tres
@@ -9,11 +9,10 @@ res://shaders/highlight.gdshader
 res://shaders/camouflage_alpha.gdshader
 res://scripts/player/player_states/CyberState.gd
 res://dialogic/characters/Player.dch
-res://scenes/ui/MainMenu.tscn
 res://scenes/ui/game_hud.tscn
+res://scenes/player/player.tscn
 res://scenes/world/World.tscn
 res://scenes/rooms/Room_AerendaleJunkyard.tscn
 res://scenes/rooms/Room_TromarveliaTown.tscn
 res://scenes/rooms/Room_ExactlyionTown.tscn
-res://config/memory_manager.gd
 res://scripts/player/Player.gd

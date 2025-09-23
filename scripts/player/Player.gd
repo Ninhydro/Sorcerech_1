@@ -355,7 +355,7 @@ func _physics_process(delta):
 			# Apply horizontal movement based on input (only if not wall-jumping, dialog, or attacking)
 			if not wall_jump_just_happened and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge and not is_grappling_active:
 				#print("movinggggggggg")
-				velocity.x = input_dir * move_speed # Use 'speed' here for normal movement
+				velocity.x = input_dir * move_speed  #* Global.global_time_scale # Use 'speed' here for normal movement 
 			elif wall_jump_just_happened: #or current_form = cyber form,
 				pass
 			elif is_grabbing_ledge:
@@ -365,7 +365,7 @@ func _physics_process(delta):
 
 			# Jumping (only if on floor, no dialog, no attacking)
 			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge and not is_grappling_active:
-				velocity.y = -jump_force
+				velocity.y = -jump_force # * Global.global_time_scale
 			elif is_grabbing_ledge:
 				velocity.y += gravity+delta
 		

@@ -36,6 +36,7 @@ func exit():
 	player.gravity = 1000
 	#player.allow_time_freeze = false
 	Engine.time_scale = 1
+	Global.normal_time()
 	Global.time_freeze = false
 	
 	player.skill_cooldown_timer.start(0.1)
@@ -73,7 +74,8 @@ func perform_time_freeze():
 	if Global.time_freeze == true:
 		print("Time Frozen - enemies paused")
 		Global.time_freeze = true
-		Engine.time_scale = 0.5
+		Global.slow_time()
+		Engine.time_scale = 0.8
 		#get_tree().paused = !get_tree().paused
 		#if player.animation_player:
 		#	player.animation_player.speed_scale = 1.0
@@ -82,7 +84,9 @@ func perform_time_freeze():
 		await player.get_tree().create_timer(10.0, true, false, true).timeout
 		print("Time Resumed - enemies active")
 		Engine.time_scale = 1
+		Global.normal_time()
 		Global.time_freeze = false
+		# * Global.global_time_scale
 		#Global.time_freeze = !Global.time_freeze
 		#get_tree().paused = !get_tree().paused
 		#if player.animation_player:

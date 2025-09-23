@@ -182,6 +182,24 @@ var ignore_player_input_after_unpause: bool = false
 var unpause_cooldown_timer: float = 0.0
 const UNPAUSE_COOLDOWN_DURATION: float = 0.5  # 100ms cooldown
 
+var global_time_scale: float = 1.0
+func slow_time():
+	global_time_scale = 0.3  # 30% normal speed
+
+func normal_time():
+	global_time_scale = 1.0  # 100% normal speed
+	
+
+#Timeline
+var timepart1_start = true #start of part 1
+var timepart1_end = false #before the end boss fight od part 1
+var timepart2_start = false #start of part 2, could be similar to part 1 but different dialog
+var timepart2_magus = false #magus route
+var timepart2_cyber = false #cyber route
+var timepart2_genocide = false #bad/evil route end
+var timepart2_true = false #true end can be neutral/pacifist
+
+
 
 func _init():
 	# Set initial default values for settings here

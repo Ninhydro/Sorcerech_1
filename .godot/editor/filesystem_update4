@@ -1,4 +1,4 @@
-res://scenes/ui/MainMenu.tscn
+res://scenes/player/player.tscn
 res://dialogic/Style1.tres
 res://dialogic/PlayerPortrait.gd
 res://scenes/tileset/Placeholder_new_tile_set.tres
@@ -7,12 +7,12 @@ res://shaders/OutlineMaterial.tres
 res://shaders/circle.gdshader
 res://shaders/highlight.gdshader
 res://shaders/camouflage_alpha.gdshader
+res://scripts/player/player_states/UltimateCyberState.gd
 res://dialogic/characters/Player.dch
+res://scenes/ui/MainMenu.tscn
+res://scripts/player/Player.gd
 res://scenes/ui/game_hud.tscn
-res://scenes/player/player.tscn
 res://scenes/world/World.tscn
 res://scenes/rooms/Room_TromarveliaTown.tscn
 res://scenes/rooms/Room_TromarveliaBattlefield.tscn
-res://config/Global.gd
-res://scripts/player/Player.gd
-res://scripts/player/player_states/UltimateCyberState.gd
+res://scenes/rooms/Room_ExactlyionTown.tscn

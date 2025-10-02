@@ -365,7 +365,12 @@ func _physics_process(delta):
 
 			# Jumping (only if on floor, no dialog, no attacking)
 			if is_on_floor() and Input.is_action_just_pressed("jump") and not Global.is_dialog_open and not Global.attacking and not is_grabbing_ledge and not is_grappling_active:
-				velocity.y = -jump_force # * Global.global_time_scale
+				if get_current_form_id() != "UltimateCyber":
+					velocity.y = -jump_force
+				elif get_current_form_id() == "UltimateCyber":
+					# Ultimate Cyber jump is handled in its state
+					pass
+				#velocity.y = -jump_force # * Global.global_time_scale
 			elif is_grabbing_ledge:
 				velocity.y += gravity+delta
 		

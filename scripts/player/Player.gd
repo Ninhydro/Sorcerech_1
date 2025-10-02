@@ -1058,5 +1058,22 @@ func enable_player_input_after_cutscene():
 	# visible = true # Example: if player was hidden
 	
 
-
+func emergency_cleanup_shaders():
+	"""Emergency cleanup called right before game exit"""
+	print("PLAYER: Emergency shader cleanup")
+	
+	# Get the sprite and reset its material immediately
+	var sprite = get_node_or_null("Sprite2D")
+	if sprite and is_instance_valid(sprite):
+		# If sprite has any shader material, reset it to prevent exit errors
+		if sprite.material is ShaderMaterial:
+			print("PLAYER: Resetting shader material on sprite to prevent exit errors")
+			sprite.material = null
+	
+	# If currently in Magus state, force its cleanup too
+	if current_state is MagusState:
+		current_state.force_cleanup()
+	elif current_state is UltimateMagusState:
+		current_state.force_cleanup()
+		
 

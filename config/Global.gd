@@ -441,6 +441,15 @@ func _on_autosave_timer_timeout():
 		print("No player node found for timer-based autosave!")
 		
 
+func cleanup_all_shader_materials():
+	"""Global cleanup called during exit"""
+	print("Global: Cleaning up all shader materials")
+	
+	# Call emergency cleanup on player if it exists
+	if playerBody and is_instance_valid(playerBody):
+		if playerBody.has_method("emergency_cleanup_shaders"):
+			playerBody.emergency_cleanup_shaders()
+			
 #func _notification(what):
 #	if what == NOTIFICATION_SCENE_CHANGED:
 #		cleanup_materials()

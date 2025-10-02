@@ -70,24 +70,15 @@ func exit():
 	
 	clear_highlights(true) # Pass true to indicate full cleanup
 	
-	# Safe material cleanup
-	if _current_highlight_material:
-		# Remove from any nodes using it first
-		for obj in _object_original_materials:
-			if is_instance_valid(obj):
-				var sprite = obj.get_node_or_null("Sprite2D")
-				if sprite and sprite.material == _current_highlight_material:
-					sprite.material = _object_original_materials[obj]
-		#_current_highlight_material.free()
-					if sprite.material is ShaderMaterial:
-						sprite.material = null  # let GC handle it
-		_current_highlight_material = null
+	# Clean up references
+	_current_highlight_material = null
 	
-	player.skill_cooldown_timer.start(0.1)
-	player.attack_cooldown_timer.start(0.1)
+	# Start cooldown timers
+	if player and is_instance_valid(player):
+		player.skill_cooldown_timer.start(0.1)
+		player.attack_cooldown_timer.start(0.1)
 	
-	player.skill_cooldown_timer.start(0.1)
-	player.attack_cooldown_timer.start(0.1)
+	print("UltimateMagusState: Cleanup completed")
 	
 	
 		
@@ -260,26 +251,47 @@ func debug_object_states():
 	print("===================")
 	
 
-
-
-func clear_highlights(full_cleanup: bool = false):
+func force_cleanup():
+	"""Emergency cleanup for when game exits forcefully"""
+	print("UltimateMagusState: EMERGENCY FORCE CLEANUP")
+	
+	# Emergency reset of ALL object materials to prevent shader errors
 	for obj in _object_original_materials:
 		if is_instance_valid(obj):
 			var sprite = obj.get_node_or_null("Sprite2D")
-			if sprite:
+			if sprite and is_instance_valid(sprite):
+				# Emergency reset - set to null to prevent shader errors
+				sprite.material = null
+				print("UltimateMagusState: Emergency material reset for object")
+	
+	# Clear all collections
+	_object_original_materials.clear()
+	available_objects.clear()
+	
+	# Null references
+	_current_highlight_material = null
+	current_object = null
+
+func clear_highlights(full_cleanup: bool = false):
+	"""Clear highlights from all objects and optionally clean up materials"""
+	print("UltimateMagusState: Clearing highlights from ", _object_original_materials.size(), " objects")
+	
+	# Restore original materials to ALL objects
+	for obj in _object_original_materials:
+		if is_instance_valid(obj):
+			var sprite = obj.get_node_or_null("Sprite2D")
+			if sprite and is_instance_valid(sprite):
+				# Restore the original material
 				sprite.material = _object_original_materials[obj]
+				print("UltimateMagusState: Restored original material for object")
 	
 	_object_original_materials.clear()
 	available_objects.clear()
 	selected_index = 0
 	
 	if full_cleanup:
-		if _current_highlight_material:
-			_current_highlight_material = null  # let GC handle it
+		_current_highlight_material = null
 	
-	# DON'T free the material - keep it in memory for next use
-	# The material will be automatically freed when the state is destroyed
-	
-	print("UltimateMagusState: Highlights cleared, material kept in memory")
+	print("UltimateMagusState: Highlights cleared")
 	#if full_cleanup:
 	#	RenderingServer.call_deferred("free_rids")

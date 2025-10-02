@@ -43,13 +43,19 @@ func enter():
 
 	# Store the Sprite2D's current material before applying our shader.
 	_original_sprite_material = _sprite_node.material
+	
+	
+	# Clean up any existing shader material first
+	if _camouflage_shader_material and is_instance_valid(_camouflage_shader_material):
+		_camouflage_shader_material.free()
+		_camouflage_shader_material = null
 
-	# Create a new instance of our ShaderMaterial if it hasn't been created yet.
+	# Create a new instance of our ShaderMaterial
+	_camouflage_shader_material = Global.create_camouflage_material()
 	if not _camouflage_shader_material:
-		_camouflage_shader_material = Global.create_camouflage_material()
-		if not _camouflage_shader_material:
-			push_error("MagusState: 'camouflage_alpha.gdshader' not found at the specified path. Camouflage will not work.")
-			return
+		push_error("MagusState: Failed to create camouflage material. Camouflage will not work.")
+		_sprite_node.material = _original_sprite_material
+		return
 
 		#_camouflage_shader_material = ShaderMaterial.new()
 		#_camouflage_shader_material.shader = shader_resource
@@ -58,9 +64,9 @@ func enter():
 	_sprite_node.material = _camouflage_shader_material
 
 	# Check if the Sprite2D now has our ShaderMaterial applied.
-	if not (_sprite_node.material is ShaderMaterial):
-		push_error("MagusState: Failed to apply ShaderMaterial to Sprite2D! Camouflage will not work.")
-		return
+	#if not (_sprite_node.material is ShaderMaterial):
+	#	push_error("MagusState: Failed to apply ShaderMaterial to Sprite2D! Camouflage will not work.")
+	#	return
 
 	_animation_player_node = player.get_node_or_null("AnimationPlayer")
 	if not _animation_player_node:
@@ -71,70 +77,81 @@ func enter():
 	# IMPORTANT: When entering, assume camouflage is OFF unless explicitly turned ON.
 	# If player.allow_camouflage was TRUE from a previous session (e.g., after the 5s timer
 	# finished but before exiting the state), we should reset it here.
-	if Global.camouflage and not _is_camouflage_active_timed:
+	#if Global.camouflage and not _is_camouflage_active_timed:
 		# This condition handles cases where player.allow_camouflage might be true
 		# but the timed camouflage is not active. We want to ensure a clean start.
 		#player.allow_camouflage = false 
-		Global.camouflage = false
+	#	Global.camouflage = false
 
 
 	# Set the shader uniform directly on enter
 	# The default is 1.0 (opaque). We only change it if camouflage is specifically active.
-	_camouflage_target_alpha = 1.0 
-	if Global.camouflage: # This will be false unless forced by another mechanism
-		_camouflage_target_alpha = 0.5 # This line will likely only run if a bug somewhere else keeps player.allow_camouflage true
-	
+	# Reset camouflage state
+	_camouflage_target_alpha = 1.0
+	Global.camouflage = false
+	_is_camouflage_active_timed = false
+
 	if _sprite_node.material:
 		_sprite_node.material.set_shader_parameter("camouflage_alpha_override", _camouflage_target_alpha)
-
+	
 	print("Entered Magus State. ShaderMaterial applied.")
 	#print("DEBUG_ENTER: player.allow_camouflage initial state: ", player.allow_camouflage)
 
 
 func exit():
-	if _sprite_node:
-		# Reset the shader uniform to fully opaque before removing the shader.
-		if _sprite_node.material and (_sprite_node.material is ShaderMaterial):
-			_sprite_node.material.set_shader_parameter("camouflage_alpha_override", 1.0)
-			print("DEBUG_EXIT: camouflage_alpha_override reset to: 1.0")
-
-		# Restore the original material to the Sprite2D.
-		_sprite_node.material = _original_sprite_material
-		print("DEBUG_EXIT: Restored original Sprite2D material.")
-	else:
-		print("DEBUG_EXIT: Sprite node not found, cannot reset material.")
 	
-	# Crucially, ensure camouflage related flags are reset on exit.
-	#player.allow_camouflage = false
 	Global.camouflage = false
 	_is_camouflage_active_timed = false # Reset this flag as well
-	print("Exited Magus State. Camouflage related flags reset.")
+	
+	if _sprite_node and is_instance_valid(_sprite_node):
+		# Reset the shader uniform to fully opaque before removing the shader
+		if _sprite_node.material and (_sprite_node.material is ShaderMaterial):
+			_sprite_node.material.set_shader_parameter("camouflage_alpha_override", 1.0)
 
+		# Restore the original material
+		_sprite_node.material = _original_sprite_material
+	
+	# Clean up the shader material
 	cleanup_shader_materials()
 	
-	player.skill_cooldown_timer.start(0.1)
-	player.attack_cooldown_timer.start(0.1)
+	# Start cooldown timers
+	if player and is_instance_valid(player):
+		player.skill_cooldown_timer.start(0.1)
+		player.attack_cooldown_timer.start(0.1)
+	
+	print("Exited Magus State. Cleanup completed.")
 	
 	
 
 func cleanup_shader_materials():
-	# Restore original material and clean up shader
-	if _sprite_node and is_instance_valid(_sprite_node):
-		if _sprite_node.material == _camouflage_shader_material:
-			_sprite_node.material = _original_sprite_material
+	# Only clean up if we have a valid shader material
+	#if _sprite_node and is_instance_valid(_sprite_node):
+	#	if _sprite_node.material != _original_sprite_material:
+	#		_sprite_node.material = _original_sprite_material
 	
-	# Safe material cleanup
-	#if _camouflage_shader_material:
-		#_camouflage_shader_material.free()
-	if _camouflage_shader_material is ShaderMaterial:
-						_camouflage_shader_material = null  # let GC handle it
-		#_camouflage_shader_material = null
+	# Don't manually free - let Godot handle the cleanup
+	#_camouflage_shader_material = null
+	_camouflage_shader_material = null
+	_original_sprite_material = null
+	_sprite_node = null
 	
-	# DON'T free _camouflage_shader_material - keep it for next use
-	# It will be automatically freed when the state is destroyed
-	
-	print("MagusState: Camouflage material kept in memory")
+	print("MagusState: Camouflage material cleaned up")
 
+func force_cleanup():
+	"""Ultra-safe cleanup for emergency situations"""
+	print("MagusState: EMERGENCY FORCE CLEANUP")
+	
+	# Only try to reset the sprite material if everything is still valid
+	if _sprite_node and is_instance_valid(_sprite_node):
+		# Emergency reset - just set to null to prevent shader errors
+		_sprite_node.material = null
+		print("MagusState: Emergency sprite material reset to null")
+	
+	# Always null references
+	_camouflage_shader_material = null
+	_original_sprite_material = null
+	_sprite_node = null
+	
 func physics_process(delta):
 	combat_fsm.physics_update(delta)
 	
